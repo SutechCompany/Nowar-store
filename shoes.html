@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوار - Nowar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+    
+    <style>
+        @import url(‘https://fonts.googleapis.com/css?family=Cairo‘);
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo';
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: Cairo, 'Cairo';
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); }
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+       
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span ,a { text-decoration: none; font-size: 15px; color: var(--text-muted);margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+         
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px 10%; padding: 15px 10px; background: #fff; margin-bottom: 10px; }
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .category-item img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .category-item span { font-size: 11px; color: #333; line-height: 1.2; }
+
+        /* Filters */
+        .filters { display: flex;
+            width:100%;
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;}
+        .filter-btn {
+             padding: 6px 15px;
+             border-radius: 20px;
+              background: #fff;
+               border: 1px solid #fff; 
+               font-size: 13px; 
+               font-weight: 600;
+                white-space: nowrap;
+                 cursor: pointer;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                 flex:1;
+                text-align: center;
+                }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; }
+        
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+        .price-row { display: flex; flex-direction: column; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .sold-count { font-size: 11px; color: var(--text-muted); direction: rtl; }
+        .rating { font-size: 10px; color: #f5a623; display: flex; gap: 2px; }
+        .rating span { color: var(--text-muted); font-size: 11px; margin-left: 2px;}
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; 
+            position: absolute; 
+            z-index: 100; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: white; 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%;
+            border-radius: 20px 20px 0 0; 
+            padding: 20px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute; right: 20px; top: 15px; 
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; direction: rtl; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; direction: rtl;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+        .modal-sold { font-size: 13px; color: var(--text-muted); }
+        
+        .add-to-cart-btn { 
+            background: var(--text-main); color: white; border: none; 
+            padding: 15px; border-radius: 25px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        #btn {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn{
+            background-color: #000;
+            color:#fff;
+        }
+        .sheinBtn a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="فساتين">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+        <div class="top-nav" id="topNav">
+            <span class="active" ><a href="shoes.html">أحذية</a></span>
+            <span ><a href="women.html">نساء</a></span>
+            <span  > <a href="kids.html">أطفال</a> </span>
+            <span> <a href="index.html">إكسسوارات</a> </span>
+            <span  > <a href="meckup.html">تجميل</a></span>
+            <span>الكل</span>
+            
+        </div>
+    </header>
+
+    <div class="main-content">
+
+        <div class='mySlides fade' style="display: block;">
+            <img src='shoes2.jpg' style='width:100%' alt="ad 1">
+        </div>
+
+        <div class='mySlides fade' style="display: block;">
+            <img src=' first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+        <div class='mySlides fade'>
+            <img src='shoes.jpg' style='width:100%' alt="ad 2">
+        </div>
+      
+
+        <div class="filters">
+            <button class="filter-btn "> الأحدث</button>
+            <button class="filter-btn"> ترند</button>
+            <button class="filter-btn"> الأكثر طلباً  </button>
+            <button class="filter-btn active"> لَك </button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+        
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+
+
+
+
+
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+            <img id="modalImg" src="" alt="Product">
+            <h3 id="modalTitle"></h3>
+            
+            <div class="modal-price-row">
+                <span id="modalPrice" class="modal-price"></span>
+                <span id="modalSold" class="modal-sold"></span>
+            </div>
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="">عرض المنتج في شي إن  </a></button>
+
+            <button class="add-to-cart-btn"> <a id="btn" href="">طلب المنتج </a></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. مصفوفة المنتجات المأخوذة من ملف json_prd.json مباشرة
+
+    const productsData = [
+    {
+        "id": 1,
+        "title": "CUCCOO HITCHD أحذية نسائية ذات كعب عالي وأصبع حاد باللون الأسود، مناسبة للتنقل والمواعدة والحفلات والتسوق والعطلات",
+        "price": "55.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-Fashion-Black-Pointed-Toe-Stiletto-High-Heels-Suitable-For-Commuting-Dating-Party-Shopping-And-Vacation-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-62743518.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/06/13/92/1749795105f46f2c0b9fa20a72d394912241988891_thumbnail_600x.webp"
+    },
+    {
+        "id": 2,
+        "title": "أحذية نسائية مغلقة بكعب عالي أبيض على الطراز الصيني، صندل بتصميم إبزيم مطرز بالدانتيل، أنيقة، مناسبة للحفلات والأزياء الصيفية",
+        "price": "56.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Chinese-Style-White-High-Heel-Mules-Pointed-Toe-Lace-Embroidery-Slip-On-Sandals-For-Women-Elegant-Women-Pumps-Elegant-Party-Outfits-Summer-Outfits-Kitten-Heels-p-139477229.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/07/28/7b/175371551479f00b3f0e941339628f2a151d3ad657_thumbnail_600x.webp"
+    },
+    {
+        "id": 3,
+        "title": "أحذية صينية عصرية بكعب عالي أبيض، صنادل نسائية قابلة للتحويل بأصبع قدم مدبب وتطريز بالدانتيل، ملابس صيفية",
+        "price": "56.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Chinese-Style-White-High-Heel-Mules-Pointed-Toe-Lace-Embroidery-Convertible-Sandals-For-Women-Summer-Outfits-p-412166923.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2026/02/28/51/1772209416d998044f54d316dce9e0a9946f48c8c1_thumbnail_600x.webp"
+    },
+    {
+        "id": 4,
+        "title": "%14-\nMonaNise أحذية نسائية بتصميم مربع بدون كعب مع زخرفة فيونكة، للارتداء اليومي والخارجي، متعددة الاستخدامات باللون البني والبيج والأسود والأبيض والبرغندي والخاكي",
+        "price": "45.53\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/MonaNise-Women-s-Fashion-Square-Toe-Slip-On-Shoes-With-Bow-Accent-Casual-Outdoor-Wear-Versatile-In-Brown-Beige-Black-White-Burgundy-Khaki-Black-p-306695683.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/11/20/64/1763637560b073ebebbd099fb625fbf75367cb70f6_thumbnail_600x.webp"
+    },
+    {
+        "id": 5,
+        "title": "MonaNise نساء 3 سم كعب مغطى بالقماش أسود عصري متعدد الاستخدامات، أزرق داكن، بني، بوردو، ماري جين منخفض كتلي كعب أنيق مسطح",
+        "price": "58.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/MonaNise-Women-s-3cm-Cloth-Covered-Heel-Black-Fashion-Versatile-Navy-Blue-Coffee-Burgundy-Mary-Jane-Low-Chunky-Heel-Elegant-Flats-p-157094484.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/08/19/63/1755610304d58545fe2ae72cc158d2e034704666c1_thumbnail_600x.webp"
+    },
+    {
+        "id": 6,
+        "title": "CUCCOO BIZCHIC أحذية نسائية كلاسيكية منخفضة الكعب سهلة الارتداء، باللون الأسود للأحذية الربيعية في عيد الميلاد",
+        "price": "57.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Classic-Low-Heel-Slip-On-Shoes-Black-For-Christmas-Spring-Shoes-p-164133144.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/09/09/54/1757422095dff4d22741b570a28375fad587622973_thumbnail_600x.webp"
+    },
+    {
+        "id": 7,
+        "title": "Eladyva شقة ماري جين للنساء ذات أصبع القدم المربع، مزينة بالدانتيل والشبك الأزهار، أنيقة وراحة، قابلة للتنفس، سهلة الارتداء، مناسبة للارتداء اليومي والعمل",
+        "price": "32.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Eladyva-Square-Toe-Floral-Lace-Mesh-Women-s-Flat-Mary-Jane-Ballet-Flats-Fashion-Comfortable-Breathable-Slip-On-Casual-Work-Wear-Gentle-Elegant-Spring-Shoes-Bride-Shoes-Wedding-Shoes-Summer-Shoes-p-393720134.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/04/28/1a/17773605453fed013b0387b77d2ad5b8bc67bd82da_thumbnail_600x.webp"
+    },
+    {
+        "id": 8,
+        "title": "CUCCOO BIZCHIC أحذية نسائية ذات كعب عالي وأصبع مدبب، لون بوردو متناسق للاستخدام اليومي والمتعدد الاستخدامات، أحذية كعب مرتفع بسير خلفي",
+        "price": "46.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Pointed-Toe-Stiletto-High-Heel-Shoes-Burgundy-All-Match-Everyday-Versatile-Slingback-Pumps-For-Christmas-Valentine-s-Day-Spring-Shoes-p-89103189.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/09/18/88/1758204804b646880e50bb773fdb78b6b35ec5aad1_thumbnail_600x.webp"
+    },
+    {
+        "id": 9,
+        "title": "أحذية كعب عالي بيضاء على الطراز الصيني الجديد، صنادل نسائية بأصبع قدم مدبب مطرزة بالدانتيل، أنيقة، أحذية كعب للنساء، أنيقة، ملابس حفلات، ملابس زفاف، ملابس صيفية",
+        "price": "55.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Chinese-Style-White-High-Heel-Mules-Women-Pointed-Toe-Lace-Embroidered-Slip-On-Sandals-Elegant-Women-Pumps-Elegant-Party-Outfits-Wedding-Outfits-Summer-Outfits-p-76008130.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/05/10/4a/17468640256772690d1388830259c31d63fc259987_thumbnail_600x.webp"
+    },
+    {
+        "id": 10,
+        "title": "أحذية كعب عالي مطرزة بالدانتيل عصرية، أحذية سهرة ذات كعب عالي جدًا وأصبع قدم مدبب جذاب، صنادل كعب رفيع باللون الأسود للنساء، كعب بوردو، كعب إبرة، أحذية صيفية",
+        "price": "69.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Lace-Embroidered-High-Heel-Shoes-Sexy-Pointed-Toe-Super-High-Heel-Evening-Party-Shoes-Thin-Heel-Black-Sandals-For-Women-Burgundy-Heels-Stiletto-Heels-Summer-Shoes-p-277048118.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/05/47/176232460953ebe91139a09289d197f4bc64fc5b6d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 11,
+        "title": "SHUZIA صنادل مسطحة مريحة للنساء للاستخدام اليومي والعطلات الصيفية",
+        "price": "41.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHUZIA-Women-Comfy-Everyday-Summer-Vacation-Casual-Flat-Sandals-Valentine-s-Day-Summer-Shoes-p-329430284.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/13/dc/17786665509ac3453722662e8971cd2261338f1de0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 12,
+        "title": "CUCCOO HITCHD أحذية كعب عالي من الشبك والدانتيل والخرز الأبيض المزين بخرز اللؤلؤ الاصطناعي، أحذية سهرة أنيقة للزفاف والحفلات، مناسبة للاستخدام في عيد الميلاد",
+        "price": "61.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-White-Pointed-Toe-Stiletto-Heel-Lace-Mesh-Faux-Pearl-Elegant-Wedding-Party-High-Heel-Sandals-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-165665045.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/28/c1/1756353776726c8ffa350ce238e64bfe938f09dc1a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 13,
+        "title": "%6-\nMonaNise حذاء كعب أصابع القدم المربعة بكعب 3 سم باللون البني، مناسبة للعمل والتنقل وحفلات العشاء، بلون أسود عتيق وكاجوال بلون بيج",
+        "price": "53.59\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/MonaNise-3cm-Heel-Mary-Jane-Coffee-Color-Square-Toe-Pumps-Suitable-For-Work-Commute-Dinner-Party-Vintage-Black-Fashionable-Casual-Khaki-Flats-p-176877751.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/04/2c/1756996950d355f9596ed9e846792c9f9718f6949c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 14,
+        "title": "صنادل نسائية بتصميم بسيط وشريحة واحدة، صنادل أنيقة من الجلد الاصطناعي باللون البني، ملابس ربيع وصيف",
+        "price": "10.00",
+        "product_link": "https://ar.shein.com/Women-Minimalist-Single-B-And-Slide-Sandals-Artificial-Leather-Elegant-Sandals-Brown-Spring-Summer-Outfits-p-430820209.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2023/04/03/16805177317ee2b48555f4585f8ff73433dc56f3f0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 15,
+        "title": "أحذية رجالية كلاسيكية بأصابع مستديرة مسطحة مع رباط وطباعة حرفية، أحذية زوجية مريحة وقابلة للتنفس بمقاسات كبيرة، أسطح غير زلقة ناعمة، مناسبة لجميع المواسم؛ أحذية طلابية مريحة للتدريب، أسطح مقاومة للتآكل وغير زلقة، شبكة ناعمة وجلد مدبوغ قابل للتنفس",
+        "price": "65.00",
+        "product_link": "https://ar.shein.com/Men-s-Retro-Flat-Round-Toe-Lace-Up-Letter-Shoes-Breathable-Plus-Size-Couple-Shoes-Soft-Non-Slip-Soles-Suitable-For-All-Seasons-Comfortable-Training-Flat-Student-Shoes-Wear-Resistant-Non-Slip-Soles-Breathable-Soft-Mesh-And-Suede-p-61941257.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/16/cf/17447703785cd1f0bb9cfccee03dc7202e61b73ee4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 16,
+        "title": "صندل مسطح بدون كعب مقاس كبير للنساء، ذو فتحة مربعة للأصابع مرصع بالراين، قاعدة ناعمة مانعة للانزلاق، بنمط أربطة، عصري مع الفساتين، مناسب للشاطئ، خيار ربة المنزل، صيفي",
+        "price": "14.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Plus-Size-Women-s-Slip-On-Flat-Sandals-Black-Square-Toe-Rhinestone-Non-Slip-Soft-Bottom-Lace-Up-Slippers-Fashionable-With-Dresses-Suitable-For-Beach-Housewife-s-Choice-Summer-p-440677332.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/14/35/1731541788c9380ca09f08a59367973e41ec738fe0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 17,
+        "title": "CUCCOO CHICEST حذاء كعب عالي أنيق للنساء مزين بفراشة، رؤوس مدببة، كعب رفيع، تصميم النعل الخلفي المفتوح، كعب وردي أنيق وعصري",
+        "price": "61.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-Stylish-High-Heel-Pumps-With-Bow-Accent-Pointed-Toe-Slim-Heel-Mule-Design-Fashion-And-Elegant-Pink-High-Heels-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-59462527.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/04/5c/1741096450c6e6cef542eb3f1532b5380b38ad2926_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 18,
+        "title": "On feet& in love صنادل نسائية أنيقة ذات كعب عالي بأصبع قدم مدبب مع أشرطة متقاطعة، مناسبة للفساتين والأعراس، صيف",
+        "price": "73.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/On-feet-in-love-Women-s-Elegant-Pointed-Toe-High-Heel-Sandals-With-Crossing-Straps-Suitable-For-Dresses-And-Weddings-Summer-p-58021592.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2025/10/27/8d/17615557344619e1e47b70f96e636afa97fdcd9229_thumbnail_405x552.png"
+    },
+    {
+        "id": 19,
+        "title": "CUCCOO BASICS أحذية نسائية ذات نقاء ونعل سميك ذو كعب عالي باللون الأسود مناسبة للصيف، والتخرج، وحفلات السهرة والعطلات. أحذية كعب عالي أنيقة للبيع في فصل الصيف، عيد الميلاد، رأس السنة الجديدة والعطلاترمضان",
+        "price": "64.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BASICS-Woman-Shoes-Minimalist-Point-Toe-Elegant-Vacation-Chunky-Heeled-Black-Slingback-Pumps-For-Summer-Graduation-Heels-Prom-Heels-Vacation-Shoes-Summer-Elegant-Heels-Spring-Shoes-Spring-Break-Easter-For-Christmas-Spring-Shoes-p-12812032.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/08/21/d5/1724236096e1d53b541f08e86c8cfd3620dcedd82b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 20,
+        "title": "CUCCOO BASICS أحذية نسائية موضة باربطة ملونة أنيقة ذات شكل ماري جين مسطحة للصيف، أحذية العودة إلى المدرسة، أحذية طالبات الجامعة، أحذية عيد الميلاد والسنة الجديدة والخريف",
+        "price": "59.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BASICS-Women-s-Shoes-Fashion-Black-Contrast-Binding-Elegant-Mary-Jane-Flats-For-Summer-Vacation-Shoes-Summer-Back-To-School-Shoes-College-Student-Shoes-Spring-Shoes-Spring-Break-Easter-For-Christmas-Valentine-s-Day-Spring-Shoes-p-7866997.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/11/ec/17496426136622e9e022adae76fb4e70a8a63ba3f4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 21,
+        "title": "Rosivie أحذية نسائية مريحة من الجلد الأزرق الأنيقة، مناسبة للتنقل والخارج والتسوق والعمل والارتداء اليومي",
+        "price": "56.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Rosivie-Women-s-Fashionable-Blue-Suede-Comfortable-On-Flat-Mules-Suitable-For-Commuting-Outdoor-Shopping-Work-Daily-Wear-Valentine-s-Day-p-333594081.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/22/38/1766392162426ea466ac3a3019926771e8132f51cb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 22,
+        "title": "CUCCOO CURVES أحذية نسائية ذات تصميم واسع مع كعب سميك وأشرطة خلفية بيج، أنيقة ومريحة للاستخدام اليومي، أحذية كعب عالي متنوعة الاستخدام للنساء ذوات الأحجام الكبيرة",
+        "price": "59.00",
+        "product_link": "https://ar.shein.com/CUCCOO-CURVES-Women-Shoes-Wide-Fit-Pointed-Thick-High-Heel-Beige-Back-Strap-Stylish-And-Comfortable-Daily-Commuter-Versatile-Fattened-Women-s-High-Heel-Shoes-Women-s-Shoes-Plus-Size-p-408579263.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/08/cf/17729840791954120fed2797d8cab9b06371fff9a5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 23,
+        "title": "أحذية نسائية ذات كعب سميك بتصميم أنيق بأصبع قدم مدبب مغلق، باللون البني، مناسبة للارتداء اليومي والخروج والمناسبات الرسمية والمناسبات العائلية والمهرجانات، مناسبة للربيع والصيف، أحذية عمل أنيقة، أحذية كعب للنساء، أنيقة",
+        "price": "69.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Chain-Decor-Solid-Color-Pointed-Toe-Closed-Toe-Chunky-Heel-Shoes-Elegant-For-Daily-Commute-Outdoor-Family-Gathering-Festival-Formal-Occasion-Suitable-For-Spring-Summer-Brown-Work-Shoes-Elegant-Women-Pumps-Elegant-p-40820026.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/08/14/48/172364433414b992778ae7a9b9f2f519b952011670_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 24,
+        "title": "%4-\nصنادل كعب قطة للنساء بتصميم أنيق مع شبكة تهوية وتطريز الكرنب، كعب عالي بارتفاع 7 سم على الطراز الروماني، بتصميم جذاب وأنيق",
+        "price": "38.35\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Pointed-Toe-Kitten-Heel-Sandals-With-Breathable-Mesh-And-Chrysanthemum-Embroidery-7cm-Black-Roman-Style-Slip-On-High-Heels-Fairy-Aesthetic-p-433358265.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/26/da/17744872363b8ced9c0bb2c358790ff11bd5770083_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 25,
+        "title": "%6-\nWHDXY أحذية بالرينا ذات أصابع مربعة نسائية، لوفرز كاجوال فرنسية سهلة الارتداء، للارتداء في المكتب مع البنطلون الجينز",
+        "price": "48.66\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/WHDXY-Women-s-Fashion-Square-Toe-Ballerina-Flats-French-Style-Slip-On-Casual-Loafers-For-Office-Outfit-Pairing-With-Jeans-p-96396201.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/09/15/1749471286c86997e435a0961986c59cf76227fec1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 26,
+        "title": "أحذية مسطحة ADAMUMU، أحذية رقص للنساء بتطريز من الدانتيل والشبك، أحذية مسطحة كاجوال بلون واحد مريحة وقابلة للتنفس، أحذية مسطحة بأصبع مربع وألوان فاتحة، أنيقة وراحة",
+        "price": "46.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/ADAMUMU-Flat-Shoes-Fashion-Women-s-Ballet-Embroidered-Lace-Mesh-Fabric-Fashion-Dance-Shoes-Solid-Color-Breathable-Casual-Flats-Square-Toe-Light-Color-Flat-Shoes-Fashionable-And-Comfortable-p-59040331.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/10/3b/17627418620230b8c13616b995ffcc500a5b848e37_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 27,
+        "title": "CUCCOO BIZCHIC أحذية نسائية بسيطة ذات لون أحادي بأصبع قدم مدبب، أحذية مسطحة أساسية للتنقل اليومي بلون قهوة بدون ظهر، مناسبة للاستخدام في مكان العمل",
+        "price": "49.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Simple-Solid-Color-Pointed-Toe-Flats-Casual-Commuter-Basic-Matching-Coffee-Color-Backless-Flat-Shoes-Suitable-For-Workplace-For-Christmas-Spring-Shoes-p-190102283.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/11/28/1760194326d5d3230afb5d5413a6a2a2501b081f18_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 28,
+        "title": "CUCCOO HITCHD نعال حفلات أنيقة بكعب عال ذات طبعات زهور أنيقة للنساء باللون الأسود",
+        "price": "63.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-Fashionable-Black-Floral-Elegant-High-Heel-Party-Sandals-For-Christmas-Valentine-s-Day-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-70321669.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/15/bd/1747288807327ff959be6b32665a3b9b6c1440d767_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 29,
+        "title": "CUCCOO DOLLMOD أحذية نسائية ذات أصابع مستديرة، مزينة بزهرة سوداء من الشبك مع بتلات، حلوة وجذابة بكعب سميك من نوع ماري جين",
+        "price": "60.00",
+        "product_link": "https://ar.shein.com/CUCCOO-DOLLMOD-Women-s-Shoes-Round-Toe-Black-Mesh-Flower-Decoration-With-Petals-Cute-Sweet-Thick-Heel-Mary-Jane-Shoes-p-441036176.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/20/85/1776669830727d38897de2f9e7d7574ac6c4081c1c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 30,
+        "title": "كعب عالي أسود من الدانتيل، تنفس، مثير، أحذية ذات أصابع مدببة للحفلات، أنيقة، أحذية نسائية، أنيقة",
+        "price": "67.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Lace-Black-High-Heels-Breathable-Sexy-Pointed-Toe-Party-Fashion-Stilettos-Elegant-Women-Pumps-Elegant-p-67708091.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/16/b7/17448000823a3e80da01e9fecb377d6b8af296343d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 31,
+        "title": "Eladyva صنادل نسائية مغلقة الأصبع بطبعة زهرية على شبكة قابلة للارتداء بطريقتين، كعب عالي بكعب إبرة 7 سم، أحذية كاجوال سهلة الارتداء بتصميم روماني بأصبع مدبب، حذاء كعب أنيقة بحزام الكاحل",
+        "price": "40.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Eladyva-Women-s-2-Way-Wear-Mesh-Floral-Closed-Toe-Sandals-7cm-Stiletto-High-Heel-Pointed-Toe-Roman-Casual-Slip-On-Shoes-Elegant-Ankle-Strap-Pumps-Spring-Shoes-Bride-Shoes-Wedding-Shoes-Summer-Shoes-p-393720466.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/11/36/1773240099cf4097ee83ac9c8402ccc02fa726b1e8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 32,
+        "title": "أحذية بالاييه بيضاء للنساء مزخرفة بفيونكة، مطرزة بزهرة، نسيج شبكي قابل للتنفس، برأس مربع، مناسبة للقدم العريضة أو النحيفة، أحذية مارى جين صيفية",
+        "price": "49.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-White-Ballet-Flats-With-Bow-Decor-Flower-Embroidery-Breathable-Mesh-Vamp-Square-Toe-Suitable-For-Wide-Or-Plump-Feet-Summer-Mary-Jane-Shoes-p-66923219.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/08/d1/1744125176e09f9c640b0d7feac48dd45a579f952b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 33,
+        "title": "%2-\nصنادل نسائية بكعب عالي 7 سم، أسود بتصميم إصبع القدم المدبب وكعب قطة، أحذية فستان سهلة الارتداء، تصميم أنيق بأشرطة",
+        "price": "39.37\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-7cm-High-Heel-Sandals-Black-Pointed-Toe-Kitten-Heel-Slip-On-Dress-Shoes-Elegant-Strappy-Design-p-352817922.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/01/d6/1767280275492fa53d5036aa395a9750d8fd83a12d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 34,
+        "title": "%3-\nMICCOM صندل شقق أنيق للنساء، ذو فتحة للأصبع مربعة، بتصميم انزلاقي باللون الأسود، متعدد الاستخدامات للربيع والصيف، وصول جديد",
+        "price": "23.17\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/MICCOM-Women-s-Fashionable-Flat-Sandals-Square-Toe-Open-Toe-Black-Slip-On-Sandals-Versatile-Spring-Summer-New-Arrivals-p-73861678.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/30/d3/176975725303149f15541a767a698738a5b7e99ab2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 35,
+        "title": "CUCCOO BIZCHIC أحذية لوفر مريحة ذات قاعدة ناعمة، بتصميم مربع للأصبع والحزام المتقاطع باللون البني الداكن، مناسبة للنساء في المكتب والتنقلات اليومية",
+        "price": "55.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Retro-Square-Toe-Flat-Coffee-Color-Criss-Cross-Strap-Soft-Bottom-Comfortable-Loafers-Suitable-For-Daily-Commute-Office-Ladies-For-Christmas-Spring-Shoes-p-86565347.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/26/fe/1748262694ef0b8c775410dc6f062b120560b6a660_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 36,
+        "title": "Mengshangli أحذية نسائية مسطحة سهلة الارتداء للخريف/الشتاء، أحذية جلدية بطراز بريطاني متعدد الاستخدامات",
+        "price": "62.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Mengshangli-Fall-Winter-Women-s-Flat-Slip-On-Loafers-Versatile-British-Style-Leather-Shoes-p-18300617.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2023/06/19/168714124161edc482bc39b742b40ae633072d467d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 37,
+        "title": "CUCCOO HITCHD أحذية كعب عالي مفتوحة الأصبع للنساء مزينة بالدانتيل والخرز الأبيض، أنيقة لحفلات الزفاف والمناسبات الرسمية، مناسبة للاستخدام في عيد الميلاد",
+        "price": "66.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-White-Round-Toe-Faux-Pearl-Lace-Decor-Elegant-Wedding-Party-Women-s-High-Heel-Peep-Toe-Sandals-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-87815146.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/28/03/17483992366d52c13029ab7bad64fa94e23e0ce25a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 38,
+        "title": "Rosivie أحذية نسائية ذات أصابع مربعة وقاعدة مسطحة، مصنوعة من مواد مضفرة ذهبية، أحذية نسائية ذات قاعدة مسطحة بطراز عطلة نهاية الأسبوع، بطراز رجعي وبوهيمي، مريحة للارتداء",
+        "price": "37.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Rosivie-Women-Shoes-Square-Toe-Flat-Bottom-Gold-Braided-Material-Slingback-Women-s-Flat-Bottom-Shoes-Holiday-Style-Wear-Retro-Style-Bohemian-Style-Wear-Comfortable-Flat-Bottom-Women-s-Shoes-Summer-Shoes-p-394453193.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/28/25/1772260257e7cf8abb0c135864d4e3af053ade5520_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 39,
+        "title": "CUCCOO BIZCHIC أحذية كعب عادية بسيطة للنساء للاستخدام اليومي والكاجوال، مناسبة للربيع وعيد الفصح وعيد الميلاد",
+        "price": "47.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Simple-Fashion-Casual-Everyday-Pumps-Spring-Shoes-Spring-Break-Easter-For-Christmas-Valentine-s-Day-Spring-Shoes-p-48728778.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/12/02/48/1733151511b39a663418a41287e93eaedfd89e5c58_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 40,
+        "title": "DAZY صنادل نسائية ذات كعب عالي مفتوحة الأصابع، مصنوعة من شبك تنفس، نعل رفيع مزين بفيونكة، نمط جديد صيفي",
+        "price": "41.00",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Mesh-Breathable-Open-Toe-High-Heel-Sandals-Versatile-Minimalist-Bowknot-Stiletto-Slipper-Summer-New-Style-p-364996517.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/06/87/17412623438a5e783dd18f15fb5131241216a838cb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 41,
+        "title": "CUCCOO HITCHD أحذية كعب عالي زفاف منقوشة بالدانتيل عصرية وجذابة للنساء، أحذية صيفية للإجازات ، خصومات الشتاء والعطلات السنوية الجديدة",
+        "price": "60.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-Fashionable-Sexy-Lace-Wedding-High-Heel-Pumps-Vacation-Shoes-Summer-Summer-Shoes-Summer-Break-Easter-Prom-Heels-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-32386416.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/03/28/64/171162626975efd390a6a8bdcd305e3b616a2ece11_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 42,
+        "title": "On feet& in love أحذية كعب عالي أنيقة للنساء ذات تصميم بسيط وأصبع قدم مدبب مع حزام خلفي، مناسبة للحفلات والملابس الرسمية، هدية عيد الأم",
+        "price": "77.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/On-feet-in-love-Women-s-Fashionable-Elegant-Pointed-Toe-Strap-Minimalist-Backstrap-High-Heel-Pumps-Suitable-For-Party-And-Wedding-Outfits-Mothers-Day-Gift-p-339013980.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/13/0d/1765590275e42a9789d6f9ac969854f8872c556b1d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 43,
+        "title": "كعب سميك مغلق الأصبع ذو لونين للنساء، مناسب للفساتين الرسمية، مريح للارتداء اليومي، التجمعات العائلية، المناسبات، المشي في الأماكن المفتوحة، مناسب للربيع والصيف والخريف والشتاء، كعب عالي بني يتناسب مع الملابس الرسمية الأنيقة",
+        "price": "65.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Pointed-Toe-Closed-Toe-Two-Tone-Thick-Heel-Dress-Pumps-Elegant-For-Everyday-Commute-Family-Gathering-Festival-Outdoor-Walking-Suitable-For-Spring-Summer-Fall-Winter-Brown-High-Heels-To-Match-Formal-Outfit-Elegant-p-38481056.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/07/10/e0/1720572008c2958abebf151d65303dbd173e006993_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 44,
+        "title": "CUCCOO BIZCHIC أحذية لوفر كاجوال مريحة من الغزال الأزرق للنساء، مناسبة للتنقل والخارج والتسوق والعمل والارتداء اليومي",
+        "price": "62.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Fashionable-Blue-Suede-Comfortable-Casual-Loafers-Suitable-For-Commuting-Outdoor-Shopping-Work-Daily-Wear-For-Christmas-Spring-Shoes-p-185400940.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/16/57/1758015736ec8065f4b69d00a7bdd2d8cc95999704_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 45,
+        "title": "CUCCOO BIZCHIC أحذية بكعب عالي سميك بطرف مدبب مريحة ومطاطية ذات مظهر أنيق للعمل والإجازات",
+        "price": "56.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Fashion-Black-Comfortable-Stretch-Material-Pointed-Toe-Chunky-High-Heel-Pumps-For-Work-And-Vacation-For-Christmas-Spring-Shoes-p-65925313.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/04/09/63/1744209421b072c84d1d5a764f70b3ac11a381d582_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 46,
+        "title": "CUCCOO HITCHD صنادل نسائية ذات كعب عالي مزينة بالدانتيل والخرز الاصطناعي للأعراس والأحداث الرسمية، أحذية زفاف وصيفيات مناسبة للعروس",
+        "price": "61.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-Round-Toe-Lace-Faux-Pearl-Decorated-High-Heel-Sandals-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-60875040.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/13/bc/1741857359def89eb0671ae91d23ea28994e1ce40d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 47,
+        "title": "CUCCOO TILAWA أحذية كعب عالي مدبب الأصبع مرصعة بالراين للنساء للحفلات",
+        "price": "58.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-TILAWA-Women-s-Fashion-Party-Pointed-Toe-Stiletto-Heel-Rhinestone-Pumps-For-Christmas-Valentine-s-Day-p-214127795.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/04/ee/1762259782405dd904c1ca2e6e7413f40dcba0c546_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 48,
+        "title": "نعال فليب فلوب بكعب أسطواني ملون بسيط للنساء، أحذية صيف 2025 ذات كعب عالي مفتوحة الأصابع، كعب قطة",
+        "price": "52.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/5cm-Contrast-Color-Minimalist-Wedge-Flip-Flops-For-Women-2025-Summer-Open-Toe-High-Heel-Shoes-Kitten-Heels-p-121936829.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/25/4e/175342333223c4b62c2b455dc2a579a7071519788d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 49,
+        "title": "CUCCOO BIZCHIC أحذية نسائية كلاسيكية ذات كعب سميك منخفض مع فيونكة على الحزام الخلفي باللون البرغندي، متعددة الاستخدامات للارتداء اليومي والذهاب إلى العمل، أحذية مكتبية أنيقة",
+        "price": "57.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Fashion-Burgundy-Bow-Backstrap-Classic-Low-Chunky-Heel-Flats-Versatile-For-Daily-Wear-Commuting-Elegant-Office-Shoes-For-Christmas-Spring-Shoes-p-163476712.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/02/08/1756812819523a6edf4f994e9c1627e78f43d7bc63_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 50,
+        "title": "On feet& in love صنادل نسائية أنيقة وأنيقة ذات كعب عالٍ مع حزام الكاحل، كعب رفيع قابل للتنفس مناسب للفساتين، الصيف وعيد الحب، كعب صغير، أنيق، حذاء كعب نسائية، أنيق، ملابس حفلات، كعب مدبب",
+        "price": "74.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/On-feet-in-love-Women-s-Fashionable-Elegant-Lace-Mesh-High-Heel-Sandals-With-Ankle-Strap-Breathable-Thin-High-Heels-Suitable-For-Dresses-Summer-Valentine-s-Day-Kitten-Heels-Elegant-Women-Pumps-Elegant-Party-Outfits-Pointed-Heels-p-84804259.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/25/a4/17613829358b1a947ffbda20310e02388afc37e81f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 51,
+        "title": "CUCCOO CHICEST أحذية نسائية أنيقة ذات رؤوس مستديرة وكعب مسطح، من خامة الدانتيل والشبك اللون البيج ، مزينة بفيونكة، تصميم أنثوي أنيق بسيط",
+        "price": "55.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-s-Round-Toe-Flat-Shoes-Beige-Lace-Mesh-Material-Bow-Detail-Fashionable-Minimalist-Elegant-Beige-Women-Flats-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-62746353.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/25/6c/1742913227b1c495361ed17d2e555b05f5c3846794_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 52,
+        "title": "أحذية نسائية عصرية ومريحة ذات كعب رفيع مفرغة، صنادل كاحل مفتوحة الأصابع جذابة، قاع ناعم منخفض الكعب، ملابس ربيعية وصيفية",
+        "price": "71.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Comfortable-Women-s-Hollow-Out-Stilettos-Sexy-Peep-Toe-Ankle-Strap-Sandals-Soft-Bottom-Low-Heels-Spring-Summer-Outfits-p-34951009.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/05/10/4d/1715351124ed87cff8ccd1b8b25d25bb183d60c82d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 53,
+        "title": "CUCCOO BIZCHIC أحذية كعب صغير بنقطة أمامية لون بوردو مع حزام خلفي، متعددة الاستخدامات للارتداء اليومي والتنقل",
+        "price": "47.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Pointed-Toe-Kitten-Heel-Burgundy-Backstrap-Slingback-Pumps-Versatile-For-Daily-Wear-And-Commute-For-Christmas-Spring-Shoes-p-171125591.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/13/bd/175775424757106529a41e53783f36387eab20f8d7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 54,
+        "title": "CUCCOO BIZCHIC صنادل نسائية بسيطة بلون بني وإبزيم، صنادل مسطحة",
+        "price": "45.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Fashion-Brown-Simple-Buckle-Color-Block-Flat-Sandals-Spring-Shoes-Summer-Shoes-p-143854886.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/11/43/17549116639a33baf4f5d23c9be7de1bab63aec6de_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 55,
+        "title": "CUCCOO SZL أحذية نسائية ذات كعب عالي بتصميم كلاسيكي بسيط مع إبزيم، مناسبة للارتداء في المكتب والتنقل اليومي، بكعب رفيع",
+        "price": "62.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-SZL-Women-s-Shoes-Black-Fashion-Classic-Simple-Buckle-Commuter-Office-Wear-Stiletto-Heel-High-Heel-Shoes-p-423252577.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/17/a2/1773754078115e0f050473d1fac856461b1e135c7e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 56,
+        "title": "CUCCOO CHICEST نساء أسود من المخمل أحذية كعب عالي سميك بتصميم مدبب للأصبع، مناسبة للمكتب ، التاريخ ، الحزب ، الزفاف ، الإجازات",
+        "price": "64.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-Fashion-Black-Velvet-Elastic-Strap-Pointed-Toe-Chunky-High-Heel-Pumps-Office-Date-Party-Wedding-Holiday-Summer-Shoes-Summer-Break-Easter-Prom-Heels-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-53891491.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/01/16/cf/173703071706271737099b66618a8d8a1ef152f566_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 57,
+        "title": "%2-\nصنادل نسائية بكعب عالي بتطريز زهري على شبكة، كعب عالي بتصميم أنيق مدبب، كعب عالي منفذ للهواء بتطريز أنيق",
+        "price": "39.37\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Mesh-Floral-Stiletto-Sandals-Fashion-Pointed-Toe-High-Heels-Fashion-Embroidered-Breathable-Slip-On-High-Heels-p-429348153.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/22/5e/1774144394730a2c011e1ef10cc60215dfc26782c0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 58,
+        "title": "CUCCOO DOLLMOD أحذية لوفر كاجوال بسيطة وأنيقة للنساء بكعب منخفض",
+        "price": "45.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-DOLLMOD-Women-Plain-Minimalist-Casual-Flat-Loafers-For-Christmas-Spring-Shoes-p-51731323.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/01/03/f0/1735872107f63d48df465f0d717da57688f718f57e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 59,
+        "title": "%6-\nMonaNise أحذية كعب مربعة للنساء بارتفاع 3 سم، مناسبة للعمل والتنقل وحفلات العشاء، مزينة بفيونكة على الطراز القديم، باللون الأزرق الداكن، أحذية كاجوال عصرية سهلة الارتداء",
+        "price": "53.59\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/MonaNise-Women-s-Square-Toe-3cm-Heel-Pumps-Suitable-For-Work-Commute-Dinner-Party-Vintage-Bow-Accent-Navy-Blue-Fashionable-Casual-Slip-On-Shoes-p-227983827.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/20/ec/176093600575e7d82551eef94262a6e29a3d35334f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 60,
+        "title": "أحذية نسائية مفتوحة الخلف ذات كعب عالي أبيض على الطراز الصيني، صندل بنعل مدبب مطرز بالدانتيل، كعب قطة، أحذية صيفية",
+        "price": "54.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Chinese-Style-White-High-Heel-Mules-Pointed-Toe-Lace-Embroidery-Slip-On-Sandals-For-Women-Kitten-Heels-Summer-Shoes-p-281885773.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/03/c8/1756829717e7e6b3838d781c52a7c102e043f1ef59_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 61,
+        "title": "أحذية ماري جينز ذات المقدمة المربعة ذات كعب 3 سم، مناسبة للعمل والتنقل والتجمعات الاجتماعية، بلون أسود كلاسيكي وبيج عادي عصري",
+        "price": "63.00",
+        "product_link": "https://ar.shein.com/Mary-Janes-Coffee-Square-Toe-3cm-Heel-Pump-Shoes-Suitable-For-Work-Commute-Social-Gatherings-Retro-Black-Fashionable-Beige-Casual-Shoes-p-440677468.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/30/8f/1751287031c78b9c15189f7c9debd63dd754e9bd47_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 62,
+        "title": "CUCCOO CHICEST أحذية حفلات وزفاف للنساء ذات كعب عالي مع رباط الكاحل، أصابع قدم مدببة، شبكة دانتيل مفرغة، باللون الأسود",
+        "price": "60.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-s-Lace-Mesh-Pointed-Toe-Hollow-Out-Ankle-Strap-High-Heel-Party-Wedding-Shoes-Black-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-59509495.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/19/77/1773909611cd00bf5eababc6d8af71a4fd859c45da_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 63,
+        "title": "CUCCOO CHICEST أحذية فساتين نسائية بتطريز زهري على الدانتيل، برأس مستدير، أنيقة وحلوة ومريحة، من الشبك الأبيض، مناسبة للخدم في الحفلات، أحذية ماري جين، مناسبة لحفلات الشاي بعد الظهر، المواعيد، الحفلات، حفلات الزفاف، هالوين، لوليتا، عيد الميلاد،",
+        "price": "57.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-s-Floral-Embroidered-Lace-Round-Toe-Flat-Elegant-Sweet-Romantic-Comfortable-White-Mesh-Dress-Shoes-Bridesmaid-Shoes-Mary-Jane-Shoes-Suitable-For-Afternoon-Tea-Dates-Parties-Weddings-Halloween-Lolita-Christmas-Thanksgiving-Birthdays-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-157388359.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/20/3e/17556706716b53cad12dedde560e5a91e65294a61e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 64,
+        "title": "Sleekvia أحذية لوفر مسطحة كاجوال مزينة بالمعدن للتنقل اليومي للنساء",
+        "price": "71.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Sleekvia-Women-s-Metal-Decor-Casual-Flat-Loafers-For-Daily-Commute-For-Christmas-p-247090295.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/07/87/1762508899dd875ed351ac82edb47d60413ee0026d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 65,
+        "title": "Sleekvia صنادل نسائية ذات كعب عالي جديدة، كعب رفيع، مزينة بشبك أنيق ومزخرف بفيونكات، صنادل كعب عالي مريحة مناسبة للمواعيد والتنقل والحفلات",
+        "price": "56.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Sleekvia-Women-s-New-High-Heeled-Sandals-Thin-Heels-Elegant-Mesh-Spliced-With-Bows-Comfortable-High-Heeled-Sandals-Suitable-For-Dates-Commuting-And-Weddings-Summer-Shoes-p-432920322.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/30/da/17748404232f9d9189928eb6d13c6ea5eb882955d1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 66,
+        "title": "DAZY أحذية نسائية مسطحة على شكل ماري جين ذات رؤوس مربعة بطراز عتيق، أحذية كاجوال مريحة بحزام إبزيم واحد للارتداء السهل",
+        "price": "50.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Square-Toe-Mary-Jane-Vintage-Style-Flat-Shoes-Comfortable-Slip-On-Casual-Shoes-With-One-Buckle-Strap-p-315422833.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/23/a7/1747991520066d043c8ecac88ba3b1d23ea99d9821_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 67,
+        "title": "Rosivie أحذية ماري جين مسطحة للنساء ذات أصابع مربعة، مزودة بإبزيم معدني أسود، خفيفة الوزن ومريحة للارتداء، مناسبة للفساتين",
+        "price": "50.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Rosivie-Women-s-Square-Toe-Flat-Black-Metal-Buckle-Mary-Jane-Flats-Lightweight-Comfortable-Slip-On-Suitable-For-Dresses-Valentine-s-Day-p-333231985.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/22/15/17663925173ee78656be8dd35180dcedaf31f603f8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 68,
+        "title": "Mengshangli صندل نسائي مسامي مفتوح من الشبك لخريف 2025، صندل كاجوال مسطح بدون كعب",
+        "price": "60.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Mengshangli-2025-Autumn-Women-Hollow-Out-Breathable-Mesh-Closed-Toe-Slippers-Flat-Slip-On-Casual-Sandals-Mule-p-81438459.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/19/cb/1747634054ba89da4c4e2a1e8c565c059f489d20af_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 69,
+        "title": "Sleekvia نساء كاجوال مريحة مسطحة لوفرز، متعددة الاستخدامات للارتداء اليومي",
+        "price": "70.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Sleekvia-Women-s-Casual-Comfortable-Flat-Loafers-Versatile-For-Daily-Wear-For-Christmas-p-144606323.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/20/a5/1776655349f7e252ad739d1a02be594391f5d899d5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 70,
+        "title": "Mengshangli صندل نسائي بدون كعب، صندل شاطئ بوهيمي مفرغ، متعدد الاستخدامات للشاطئ والعطلات والربيع/الصيف/الخريف",
+        "price": "63.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Mengshangli-Women-s-Slip-On-Mule-Sandals-Bohemian-Hollow-Out-Flat-Beach-Slippers-Versatile-For-Beach-Vacation-Spring-Summer-Autumn-p-85687706.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/25/95/1750781038414d8184bb815a12355e676f64729c00_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 71,
+        "title": "CUCCOO BIZCHIC أحذية نسائية ذات كعب عالي مدبب باللون البرغندي، أساسية وبسيطة للارتداء اليومي والتنقل والتسوق، أحذية كعب عالي نسائية مع حزام خلفي",
+        "price": "45.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-Shoes-Pointed-Stiletto-Burgundy-Fashion-Simple-Basic-Daily-Versatile-Commute-To-Work-Shopping-Women-s-High-Heels-Shoes-Rear-Strap-Slingback-Shoes-Women-s-Shoes-Spring-Shoes-p-394291129.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/03/4c/1770117194a9efd273a951bed7b950f020a5f229ee_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 72,
+        "title": "Travachic صندل شرائح مسطح 2025 جديد، زوج واحد من الصنادل المسطحة الأنيقة والعتيقة ذات إبزيم ذهبي، أحذية كاجوال للشاطئ والعطلات والموضة، مناسبة للشاطئ والعطلات والزفاف والحفلات والمكتب والمنزل",
+        "price": "25.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Travachic-2025-New-Flat-Slide-Sandals-1-Pair-Elegant-Vintage-Gold-Buckle-Flat-Sandals-Fashion-Vacation-Beach-Casual-Shoes-Suitable-For-Beach-Holiday-Wedding-Party-Office-Home-p-197514315.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/23/55/17611913247c69e8d00a034967cb5318e4ff965ddf_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 73,
+        "title": "CUCCOO CHICEST أحذية نسائية أنيقة متعددة الاستخدامات مريحة ذات كعب منخفض مربع وأصبع قدم مدبب من الشبكة السوداء والدانتيل",
+        "price": "54.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-s-Elegant-Versatile-Comfortable-Black-Mesh-Lace-Pointed-Toe-Low-Block-Heel-Slingback-Flats-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-126953546.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/15/00/1752563230b3771b5e0fbc6366067777898bf60849_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 74,
+        "title": "%20-\nGlitzique صنادل ذات تصميم كعب عالي مصنوعة يدويًا بأصبع قدم مدبب، عصرية وشاملة للصيف، كعب إبرة",
+        "price": "59.80",
+        "product_link": "https://ar.shein.com/Glitzique-Unique-Handwoven-High-Heel-Design-Pointed-Toe-Sandals-Fashionable-Versatile-For-Summer-Stiletto-Heels-p-447600743.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/28/38/177738195160b60dd7119100e7f4465c9e0d86bab0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 75,
+        "title": "planare أحذية لوفر مسطحة بيج وأسود بتصميم بسيط للنساء، مع حزام قابل للتعديل وإبزيم للارتداء الآمن والمريح، أحذية باليه، أحذية صيفية",
+        "price": "28.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/planare-Women-s-Minimalist-Fashion-Slip-On-Flat-Beige-Black-Loafers-With-Adjustable-Strap-Buckle-For-Secure-Comfortable-Commuting-Wear-Ballet-Shoes-Summer-Shoes-p-435353968.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/30/42/1774855374f1e9d390dbbf7642142eccd6286a7389_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 76,
+        "title": "Solecia نساء كعب سميك متدرج انزلاقي، أحذية كاجوال ربيع/خريف",
+        "price": "57.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Solecia-Women-s-Spring-And-Autumn-New-Models-Wear-Platform-Shoes-Half-Drag-Bag-Head-Shoes-Lazy-People-Pedal-Women-s-Shoes-p-91228099.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/03/7a/17489617531aad9bd239fa612aa62a42d3e7791bc7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 77,
+        "title": "CUCCOO BASICS حذاء فلات للنساء ذو كعب منخفض وفتحة مربعة، من قماش بني قهوائي، له حزام سلسلة، مناسب للتنقل والمواعيد والحفلات والعطلات",
+        "price": "56.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BASICS-Women-s-Fashion-Coffee-Brown-Fabric-Chain-Backstrap-Low-Heel-Square-Toe-Flats-Suitable-For-Commute-Date-Party-Holiday-For-Christmas-Spring-Shoes-p-88831263.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/29/96/17485183391e703a8c62904365131770911573779f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 78,
+        "title": "CUCCOO HITCHD صنادل نسائية ذات كعب عالي وأصبع مدبب مزخرف بالشريط الأنيق والرومانسي، بتصميم شبكي باللون الشمبانزي، مناسبة للحفلات والزفاف وسهرات المساء",
+        "price": "67.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-New-Summer-Embroidery-Lace-Pointed-Toe-High-Heel-Sandals-Elegant-Romantic-Champagne-Mesh-Ladies-Party-Shoes-Bridal-Wedding-Guest-Evening-Wear-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-67096476.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/17/07/174488489626a6484309a758bff10ad024d8d71d3e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 79,
+        "title": "Bholvia أحذية نسائية مسطحة بفيونكة بلون المشمش ذات أصبع مربع، أحذية كاجوال متعددة الاستخدامات للخارج باللون البني، الأسود، الأبيض، الأحمر ، الخاكي، مناسبة للخريف",
+        "price": "53.00",
+        "product_link": "https://ar.shein.com/Bholvia-Women-s-Fashion-Square-Toe-Brown-Slip-On-Apricot-Bow-Flat-Shoes-Casual-Outdoor-Versatile-Wear-In-Black-White-Wine-Red-Khaki-Suitable-For-Autumn-p-447560674.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/28/1a/17773657509532771bfa17f77300b007e075fd03d6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 80,
+        "title": "Rosivie حذاء بالرينا فلات أنيق بفيونكة على الطراز الفرنسي، حذاء لوفر مخمل بأصبع مربع",
+        "price": "59.00",
+        "product_link": "https://ar.shein.com/Rosivie-Women-s-New-Fashion-French-Style-Soft-Ballerina-Flats-Bow-Decor-Suede-Loafers-Square-Toe-Valentine-s-Day-p-364776913.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/26/b1/1769407230396fe76be343810a200da497fd4c91cd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 81,
+        "title": "CUCCOO BIZCHIC أحذية نسائية أنيقة من الجلد الأزرق الفاخر، مريحة وسهلة الارتداء، أحذية كاجوال مسطحة مناسبة للخارج والعمل والاستخدام اليومي",
+        "price": "53.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Fashionable-Blue-Suede-Comfortable-Slip-On-Mules-Flat-Casual-Loafers-Suitable-For-Outdoor-Work-Daily-Wear-For-Christmas-Spring-Shoes-p-185061981.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/16/da/1758015747a079e6368920402b8f3e019d849c3f07_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 82,
+        "title": "CUCCOO CHICEST أحذية نسائية موديل بوان سوداء من الدانتيل ذات كعب عالي مناسبة للذهاب إلى العمل والمواعيد والحفلات والتسوق والعطلات'",
+        "price": "56.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-s-Fashion-Black-Lace-Point-Toe-Stiletto-High-Heel-Pumps-Suitable-For-Commuting-Dating-Party-Shopping-And-Holiday-For-Christmas-Elegant-Shoes-Wedding-Shoes-p-418859457.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/21/e2/1745235606ac347a927be6a882dd60cc5cf751aa8e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 83,
+        "title": "Solecia صنادل نسائية مسطحة، صنادل شاطئية صيفية للخارج",
+        "price": "58.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Solecia-Women-s-Fashion-Flat-Sandals-Summer-Beach-Vacation-Sandals-p-144775276.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/01/24/1754015613469ec743911840e101bd7322162122e1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 84,
+        "title": "صنادل نسائية ذات كعب عالي بتطريز من الدانتيل والشبك بلون المشمش، تصميم أنيق وعملي مناسب للمناسبات الخارجية والحفلات والزفاف، كعب سميك",
+        "price": "64.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/2026-Spring-Summer-New-Apricot-Embroidered-Lace-Mesh-Pointed-Toe-High-Heel-Fashion-Mules-Pointed-Toe-High-Heel-Backstrap-Comfortable-Slingback-Women-s-Shoes-Versatile-Elegant-Suitable-For-Outdoor-Gatherings-Parties-Weddings-High-End-Women-s-Sandals-Chunky-Heels-p-369525847.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/12/d2/17682178567bfb678b0b1850e4a43d76eb3e06465a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 85,
+        "title": "Eladyva أحذية شقة بشريط عقدة الأنيقة من الدانتيل والشبك، أحذية ماري جين بالية للنساء بتصميم مفتوح وقابلة للتنفس، لوفرز مريحة للارتداء اليومي",
+        "price": "28.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Eladyva-Fashionable-Bow-Knot-Lace-Mesh-Flat-Shoes-Women-s-Hollow-Breathable-Slip-On-Mary-Jane-Ballet-Shoes-Comfortable-Loafers-For-Daily-Wear-p-432083116.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/15/02/17762391238c47ab7ff89f78b27fb8bdd8a35ab8ad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 86,
+        "title": "On feet& in love أحذية كعب رفيع مدبب الأصبع أنيقة للسيدات، مناسبة للفساتين والحفلات، أنيقة",
+        "price": "69.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/On-feet-in-love-Women-s-Elegant-Pointed-Toe-Stiletto-Heel-Slingback-Pumps-Suitable-For-Dresses-And-Weddings-Elegant-p-32393268.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/25/50/1761379756ab95bbc14d5df807debd406c1d95abad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 87,
+        "title": "FRIFUL حذاء ماري جين الفرنسي الأسود الفاخر الجديد لربيع 2025، ذو تصميم كلاسيكي مربع الأصبع وكعب سميك، أنيق",
+        "price": "56.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/FRIFUL-2025-Spring-New-French-Vintage-Black-Mary-Jane-Pumps-Retro-Square-Toe-Chunky-Heel-Slingback-Shoes-Elegant-p-326309123.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/12/1c/17417424171b7f558d9701fc4e34e038c92b59f233_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 88,
+        "title": "كعب عالي مفتوح بشكل صيني جديد بفيونكة بيضاء وشبكة، صنادل نسائية بفتحة للقدم مزينة بالتطريز والدانتيل، كعب رفيع/سميك، ملابس صيفية",
+        "price": "56.00",
+        "product_link": "https://ar.shein.com/New-Chinese-Style-White-Bow-Mesh-High-Heel-Mules-Women-Pointed-Toe-Lace-Embroidery-Slip-On-Sandals-Thin-Thick-Heels-Summer-Outfits-p-437304721.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/01/7b/17750319000741b8aea97b8f2d20f9cdb40e33a79f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 89,
+        "title": "صنادل نسائية ذات كعب عالي مع شريط منسوج، بنمط حلزوني ذهبي، صنادل نسائية ذهبية متعددة الاستخدامات للخارج بفتحة للأصابع وكعب سميك، صنادل نسائية أنيقة للعطلات والحفلات والشاطئ، ملابس ربيعية وصيفية",
+        "price": "65.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-High-Heel-Sandals-With-Woven-Strap-Gold-Spiral-Pattern-Versatile-Gold-Ladies-Outdoor-Slip-On-Peep-Toe-Slip-On-One-Piece-Thick-Heel-Ladies-Slippers-For-Holiday-Party-Beach-Elegant-Women-s-Sandals-Spring-Summer-Outfits-p-10793295.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/06/09/165477375774cce17eb470f708f6fc4d9cd2569c96_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 90,
+        "title": "CUCCOO CHICEST صنادل ستيليتو ذات كعب عال بشريط وفيونكة مرصعة بالراين جديدة وعصرية متعددة الاستخدامات",
+        "price": "58.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-New-Fashionable-Versatile-Rhinestone-Bow-Strap-Stiletto-High-Heel-Sandals-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-63565011.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/03/41/1762141005ae504afc47edcf19de9d3ea8943f440a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 91,
+        "title": "صنادل نسائية خضراء، صنادل كعب عالي للعطلات، صنادل نسائية مطرزة مزينة بسلسلة ذات كعب عالي وأصبع مدبب مفتوح مع حزام خلفي، صنادل نسائية أنيقة مناسبة لتنسيق الملابس الصيفية للعطلات والاستخدام اليومي والعمل والحفلات والفساتين الرسمية، أحذية كعب عالي خضراء أنيقة، أحذية كعب عالي مدببة الأصبع عصرية ومريحة للربيع والصيف",
+        "price": "68.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Green-Sandals-Vacation-High-Heel-Sandals-Women-s-Embroidered-Chain-Decor-High-Heel-Pointed-Toe-Open-Toe-Backstrap-High-Heel-Pumps-Elegant-Women-s-Sandals-Suitable-For-Matching-Summer-Outfits-For-Vacation-Daily-Work-Party-Formal-Dress-Elegant-Green-High-Heel-Shoes-Fashionable-And-Comfortable-Pointed-Toe-High-Heel-Shoes-For-Spring-And-Summer-p-33867539.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/07/07/65/17203446133c16c96d44460844c05b0b516beb0795_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 92,
+        "title": "CUCCOO BIZCHIC أحذية كعب عالي بطرف مدبب للنساء، كعب رفيع، بدون رباط، مناسبة للحفلات والربيع، أحذية عيد الميلاد",
+        "price": "56.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Pointed-Toe-Stiletto-High-Heel-Slip-On-Pumps-Low-Vamp-With-Ankle-Strap-Party-Spring-Shoes-For-Christmas-Spring-Shoes-p-56436559.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/02/13/22/1739419284a3fecc4093246cab28f26b5b19dfaf04_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 93,
+        "title": "Eladyva نساء كعب عال مفتوح الأصابع من القماش الشبكي المتنفس، تصميم مبسط متعدد الاستخدامات، كعب إبزيم رفيع وشريحة، صنادل صيفية جديدة",
+        "price": "44.00",
+        "product_link": "https://ar.shein.com/Eladyva-Women-s-Mesh-Fabric-Breathable-Open-Toe-High-Heel-Sandals-Versatile-Minimalist-Design-Bowknot-Slim-Stiletto-Slide-Mules-Summer-New-Arrival-Spring-Shoes-Bride-Shoes-Wedding-Shoes-Summer-Shoes-p-393727010.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/16/f2/1773653072a2ad4459e9336520675955fd614b0be1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 94,
+        "title": "On feet& in love صندل نسائي أنيق وعصري برقبة مزين بالترتر، أصبع القدم مدبب، مفتوح من الأمام، سهل الارتداء، كعب عالي، مناسب للارتداء مع الفساتين في فصلي الربيع والصيف",
+        "price": "70.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/On-feet-in-love-Women-s-Fashionable-Elegant-Sequin-Pointed-Toe-Strap-Open-Toe-Slip-On-Mules-High-Heel-Sandals-Suitable-For-Pairing-With-Dresses-Spring-Summer-Outfits-p-341527775.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/14/d1/17656993873eacbd1bcbc3831c6144bf8ff839f806_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 95,
+        "title": "Livesso صنادل نسائية ذات كعب عالي مفتوحة الأصبع، مصنوعة من شبكة تنفس، مزينة بعقدة، متعددة الاستخدامات بطراز بسيط، موديل صيفي جديد",
+        "price": "41.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Livesso-Women-s-Breathable-Mesh-Open-Toe-High-Heel-Sandals-Bowknot-Decor-Versatile-Minimalist-Style-Summer-New-Arrival-p-315463149.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/02/8a/1751434829f50cd8b9045cdd1e6ca24d2a26c4f3f4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 96,
+        "title": "CUCCOO DOLLMOD أحذية نسائية ذات أصابع مستديرة مطرزة بزهور وكلمات بتصميم ماري جين، أنيقة وحلوة",
+        "price": "52.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-DOLLMOD-Women-s-Shoes-Fashion-Round-Toe-Flower-Embroidery-Word-With-Mary-Jane-Flats-Cute-And-Sweet-p-419381491.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/13/80/1773369357274d4e83ab1541d7c8fcdd26dbdf16f2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 97,
+        "title": "SHUZIA صنادل سهلة الارتداء بتصميم مقطوع من الجلد الاصطناعي الأسود بتفاصيل من البولي يوريثان",
+        "price": "51.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/SHUZIA-Faux-Leather-Cutout-Design-Black-Pu-Detailing-Slip-On-Sandals-Valentine-s-Day-Summer-Shoes-p-328697245.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/15/04/1768412626d8dd92391f7e281d94f1f9c3d583e7f8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 98,
+        "title": "SHEIN BAE كعب عالي أسود من الدانتيل، تنفس، جذاب، أحذية ذات رؤوس مدببة، موضة حفلات، كعب رفيع",
+        "price": "69.00",
+        "product_link": "https://ar.shein.com/SHEIN-BAE-Lace-Black-High-Heels-Breathable-Sexy-Pointed-Toe-Party-Fashion-Stilettos-p-158656639.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/16/b7/17448000823a3e80da01e9fecb377d6b8af296343d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 99,
+        "title": "صنادل نسائية ذات كعب عالي وأصبع مدبب وقطع على شكل V باللون الأسود، متعددة الألوان، ملابس ربيع وصيف",
+        "price": "64.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Black-Pointed-Toe-V-Cut-High-Heel-Sandals-Multi-Color-Spring-Summer-Outfits-p-49233086.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/28/90/17328068195ccf0c5d272f59e528f6bcc3b65b2d6d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 100,
+        "title": "CUCCOO CHICEST صنادل ذات كعب رفيع مزينة بربطة الشريط المرصع بالراين، موضة جديدة متعددة الاستخدامات",
+        "price": "57.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-New-Fashion-Versatile-Rhinestone-Bowknot-Strap-Stiletto-Heel-Sandals-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-63327242.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/18/e4/17738341340cd39d18e15501de885fac362eeade3c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 101,
+        "title": "صندل نسائي بكعب سميك مزخرف بزهرة من اللؤلؤ الاصطناعي، مناسب للارتداء خارج المنزل موديل صيف 2025، بتصميم مفتوح للأصابع وكعب متوسط، متعدد الاستخدامات، صندل فليب فلوب",
+        "price": "61.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/French-Chunky-Heel-Faux-Pearl-Flower-Strap-Slides-Women-Outdoor-Wear-2025-Summer-New-Open-Toe-Mid-Heel-Slippers-Versatile-Flip-Flops-p-63102881.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/25/2f/17429128119579df9d81fc0a73980ccc13c6b3b0c0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 102,
+        "title": "أحذية كعب عالي قابلة للتعديل للنساء، كعب مدبب 9 سم أنيق وأنيق، مصنوعة من مادة بولي يوريثان لامعة، كعب أحمر أنيق وراحة للارتداء اليومي والحفلات والمناسبات الرسمية كعيد الحب وعيد الميلاد",
+        "price": "75.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Adjustable-High-Heel-Pumps-9CM-Pointed-Toe-Elegant-Stilettos-Glossy-PU-Material-Sexy-Black-High-Heels-Comfortable-Versatile-For-Daily-Wear-Party-Christmas-Valentine-s-Day-Formal-Occasions-Red-Bottoms-Heels-p-317067973.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/02/fc/1764663854198bed5861534d9cc923d34e8fe19516_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 103,
+        "title": "أحذية كعب عالي بيضاء للنساء، أصبع قدم مدبب، تطريز بالدانتيل، صندل قابل للارتداء بطريقتين بأسلوب صيني حديث، كعب قطة، ملابس زفاف",
+        "price": "52.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/White-High-Heel-Mules-For-Women-Pointed-Toe-Lace-Embroidery-Dual-Wear-Sandals-In-Neo-Chinese-Style-Kitten-Heels-Wedding-Outfits-Summer-Shoes-p-223405586.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/17/df/1760713524ee8c4c4fbd3bebf39f23aba06b57c98b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 104,
+        "title": "CUCCOO DOLLMOD صنادل حريمي لون أحادي بزينة عقدة للموضة الصيفية المريحة، مضادة للانزلاق ذات كعب عالي، مناسبة لحفلات العام الجديد والأعياد",
+        "price": "61.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-DOLLMOD-Ladies-Solid-Color-Bow-Decoration-New-Summer-Leisure-Fashion-Non-Slip-High-Heel-Sandals-Party-Spring-Shoes-Spring-Break-Easter-For-Christmas-Spring-Shoes-Summer-Shoes-p-42203478.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/09/06/65/1725587506fc3dbc0b911dd3cac834a5c57c0bb023_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 105,
+        "title": "MOTF PREMIUM النعال الشبشب النسائية المسطحة ذات رؤوس مربعة بسيطة ومريحة للصيف، عودة إلى المدرسة والجامعة، للكريسماس والخريف والرأس السنة الجديدة وعيد الحب",
+        "price": "73.00\n\n200+. تم بيع\n65.70\n\nبعد الكوبون",
+        "product_link": "https://ar.shein.com/MOTF-PREMIUM-SQUARE-TOE-SIMPLE-AND-COMFORTABLE-WOMEN-FLAT-SANDALS-FOR-SUMMER-VACATION-BACK-TO-SCHOOL-COLLEGE-STUDENT-SHOES-FOR-NEW-YEAR-HOLIDAY-SPRING-SHOES-SPRING-BREAK-EASTER-FOR-CHRISTMAS-SPRING-SHOES-SUMMER-SHOES-p-33637321.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/27/af/17457364903a3010e0a6f69d4f8fbe125a51885cbb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 106,
+        "title": "أحذية نسائية ذات كعب عالي بأصبع مدبب، مزينة بإبزيم، من الجلد اللامع، بتصميم سلينغباك، أنيقة وأنيقة",
+        "price": "74.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-High-Heels-Pointed-Toe-Fashion-Buckle-Decor-Patent-Leather-Slingback-Pumps-Elegant-Elegant-p-43432294.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/09/14/7b/1726248019ab2ebd6104fe536c7410162ce5a28366_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 107,
+        "title": "CUCCOO CHICEST أحذية نسائية موضة ربيع وصيف، لون المشمش مرصعة بالراين ستون، شبكة من الخيوط، فيونكة صغيرة، أحذية نسائية مسطحة أنيقة ومريحة وقابلة للتنفس، أحذية نسائية جميلة وحلوة، أحذية نسائية أنيقة، أحذية زفاف",
+        "price": "50.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-CHICEST-Women-Shoes-Summer-And-Summer-Fashion-Apricot-Full-Rhinestone-Mesh-Yarn-Small-Bow-Women-s-Flat-Shoes-Elegant-Comfortable-Breathable-Cute-Sweet-Flat-Women-s-Shoes-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-395459572.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/04/b4/1772624229538c6571079cd904aa23c8f49d4f0d8a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 108,
+        "title": "CUCCOO DOLLMOD أحذية ماري جين بفراشة فرنسية، أحذية نسائية جديدة للربيع والصيف، أحذية باليه مريحة للنساء للتنقل، أحذية جدة، هدية عيد الحب",
+        "price": "54.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-DOLLMOD-French-Fairy-Bow-Mary-Jane-Shoes-Women-s-Shoes-Spring-And-Summer-New-Ballet-Shoes-Comfortable-Women-s-Commuting-Beanie-Grandma-Shoes-Valentine-s-Day-Spring-Shoes-p-387263690.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/23/5e/177424611774f1188b8abb599a2a38a3995f6e718f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 109,
+        "title": "CUCCOO HITCHD أحذية كعب عالي أنيقة مزينة بزهرة من اللؤلؤ الاصطناعي وأصابع قدم مدببة للنساء",
+        "price": "65.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-Pointed-Toe-Faux-Pearl-Flower-Decor-Elegant-High-Heels-For-Christmas-Valentine-s-Day-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-283488269.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/24/09/176398060608246ee7f20633697d8da96f3e4fcfb1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 110,
+        "title": "صنادل مسطحة كاجوال بطراز كوري للنساء، للارتداء في الخارج، مفتوحة من الأمام، صنادل رومانية مضفرة جديدة لفصلي الربيع والصيف للشاطئ، صنادل مسطحة عصرية للنساء مناسبة للبس مع التنانير للخروج إلى الشاطئ أو البيت، باللون الأبيض والمسطح والسير والبيج والأسود والبرتقالي والأبيض والأصفر والبنفسجي والرمادي والذهبي والفضي والأزرق والأخضر والأحمر الوردي والبني وبطبعة نمر فرنسية، أحذية رسمية، صنادل عطلات، أحذية بأسلوب بوهيمي لناعومة لون الأزرق الداكن للمشي، أحذية كريستال للنساء، أحذية لوفر مسطحة جميلة، صنادل مسطحة بنعول سميكة، مربوطة، براقة ولامعة، أحذية الْمَحِلَّة، نعال",
+        "price": "25.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Korean-Style-Casual-Flat-Sandals-Women-Shoes-Outdoor-Wear-Open-Toe-Spring-Summer-New-Woven-Roman-Beach-Sandals-Fashionable-French-Flats-For-Women-With-Skirts-When-Going-Out-To-The-Beach-Or-Apartment-White-Flat-Strap-Beige-Black-Orange-White-Yellow-Purple-Grey-Gold-Silver-Blue-Green-Rose-Red-Brown-French-Leopard-Print-Formal-Shoes-Holiday-Sandals-Bohemian-Style-Toe-Beach-Navy-Blue-Walking-Shoes-Crystal-Shoes-For-Women-Cute-Flat-Loafers-Flat-Sandals-With-Thick-Soles-Tie-Up-Shiny-Glittering-Mule-Shoes-Slippers-p-34474517.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/04/29/7d/171439243302c7ddccf879bfc9d1de002730548fad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 111,
+        "title": "CUCCOO BIZCHIC أحذية كلاسيكية منخفضة الكعب للنساء، سهلة الارتداء، باللون الأسود للكريسماس",
+        "price": "59.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-BIZCHIC-Women-s-Classic-Low-Heel-Slip-On-Pumps-Black-For-Christmas-Spring-Shoes-p-190179751.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/09/59/17599963816dec9b914e6ef8876fe1d30c4a221bf7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 112,
+        "title": "صنادل نسائية أنيقة ذات كعب عالي بأصبع قدم مدبب وفيونكة باللون الأسود، كعب كيتن مدبب مغلق الأصبع، أحذية كوكو لفصلي الصيف والشتاء، هدايا عيد الميلاد",
+        "price": "68.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Summer-Elegant-Women-s-Black-Pointed-Toe-Bowknot-High-Heel-Sandals-Wedge-Kitten-Heel-Closed-Toe-Cuccoo-Shoes-Winter-Gifts-p-149221501.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/26/2e/1756202055aab96b6c45c503c092e3f28df0dd8058_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 113,
+        "title": "Sleekvia صنادل نسائية ذات كعب عالي وحزام، وصول جديد للصيف",
+        "price": "57.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Sleekvia-Women-s-Strap-High-Heel-Mule-Sandals-Summer-New-Arrival-Summer-Shoes-p-405947694.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/03/5f/177250564250338c29681fd934407021998ee80e65_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 114,
+        "title": "حذاء بالية نسائي ذو رؤوس مستديرة موديل خريف 2025، مصنوع من شبكة، مزين بتطريز زهري وخرز، تصميم أنيق وبسيط، قابل للتنفس بطراز ماري جين الرجعي، قابل للارتداء اليومي، أحذية صيفية",
+        "price": "65.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/2025-Autumn-Women-s-Round-Toe-Mesh-Ballet-Flats-Embroidered-Floral-Pearl-Decor-Design-Elegant-Minimalist-Breathable-Retro-Mary-Jane-Slip-On-Style-Fashionable-And-Comfortable-For-Everyday-Wear-p-71689339.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/29/d4/1745941701c9e55e14d2ed1632f067a0973bca4b21_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 115,
+        "title": "CUCCOO HITCHD صنادل نسائية ذات كعب قطري صغير بلون المشمش، مزينة بالدانتيل والشبك واللؤلؤ، مناسبة للحفلات والمناسبات الخاصة، صنادل مفتوحة الأصبع",
+        "price": "59.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-HITCHD-Women-s-Fashion-Round-Toe-Kitten-Heel-Apricot-Lace-Mesh-Pearl-Wedding-Party-Occasion-High-Heel-Sandals-Open-Toe-Sandals-For-Christmas-Elegant-Shoes-Wedding-Shoes-Summer-Shoes-Bride-Shoes-p-126921220.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/15/db/1752560982b6647ed07ed50a4d2f0794cd976c9d39_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 116,
+        "title": "أحذية بط أزرق داكن مطرزة بزهور، أحذية شبكية منفذة للهواء مريحة بفتحات مربعة الأصبع، مناسبة للأقدام العريضة أو السمينة، أحذية جيري ماري للصيف",
+        "price": "55.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/Navy-Blue-Floral-Embroidered-Flat-Ballet-Shoes-For-Women-Breathable-Hollow-Out-Mesh-Sandals-With-Square-Toe-For-Wide-Fat-Feet-Summer-Mary-Jane-Shoes-p-69552030.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/24/61/1745465455b62e8e164b0eca38bf4221c22295427e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 117,
+        "title": "CUCCOO TILAWA صنادل نسائية ذات كعب رفيع أنيقة وجذابة، مناسبة للارتداء اليومي والمناسبات الرسمية",
+        "price": "63.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-TILAWA-Women-s-Pointed-Toe-Elegant-Sexy-Stiletto-Sandals-Convenient-For-Daily-Commute-And-Formal-Occasions-Summer-Shoes-p-218807167.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/17/57/17580976714ed8ce150c308260bd521c0afe9adf33_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 118,
+        "title": "SHUZIA صنادل نسائية بكعب عالي عصرية ، مقاسات كبيرة، للعيد ، عيد الميلاد ، الخريف والشتاء",
+        "price": "61.00",
+        "product_link": "https://ar.shein.com/SHUZIA-Women-s-Fashionable-High-Heel-Sandals-Plus-Size-Summer-Shoes-Spring-Shoes-Spring-Break-Easter-Mother-s-Day-Present-For-Christmas-Valentine-s-Day-p-26463731.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/01/18/05/17055086118b2ffc12ab38625ab663b4c1a21a2dda_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 119,
+        "title": "CUCCOO TILAWA أحذية كعب عالي مزينة بالراين ستون ذات أصبع قدم مدبب بلون الشمبانيا للحفلات والزفاف للنساء",
+        "price": "66.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/CUCCOO-TILAWA-Champagne-Color-Rhinestone-Embellished-Pointed-Toe-High-Heel-Party-Wedding-Pumps-For-Women-Valentine-s-Day-p-320248339.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/14/75/17656460066032b9898a21110ec99aa682fb5cafae_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 120,
+        "title": "SHUZIA نساء السيدات الرياضيةذات أصبع القدم المدبب، مريحة وناعمة من البوليوريثان المضفور، سهلة الارتداء",
+        "price": "54.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHUZIA-Women-s-Pointed-Toe-Comfort-Brained-Soft-PU-Slip-On-Flats-p-110994699.html?src_identifier=fc%3DSports%20%26%20Outdoors%60sc%3DShoes%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab14navbar09menu01dir01%60jc%3Dreal_3636&src_module=topcat&src_tab_page_id=page_home1779140783114&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/30/33/17512523748334a680cb807d1e03351231449c8285_thumbnail_405x552.jpg"
+    }
+];
+    const productGrid = document.getElementById('productGrid');
+    // غير القيم دي براحتك حسب سعر اليوم والعمولة الحاببها
+const EXCHANGE_RATE = 1200;     // سعر الصرف اليوم (مثلاً الدولار أو الريال مقابل العملة المحلية)
+const FIXED_COMMISSION = 10;   // العمولة الثابتة التي تريد زيادتها لكل منتج
+  productsData.forEach(product => {
+    // 1. تنظيف وفصل السعر عن عدد المبيعات كالمعتاد
+    const priceInfo = product.price.split('\n\n');
+    const soldCount = priceInfo[1] ? priceInfo[1] : '';
+
+    // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+    const originalPrice = parseFloat(priceInfo[0].replace('', '').trim());
+
+    // 3. العملية الحسابية: (السعر الأصلي × سعر الصرف) + العمولة الثابتة
+    const localPriceNumber = (originalPrice + FIXED_COMMISSION) *  EXCHANGE_RATE;
+
+    // 4. تنسيق السعر النهائي ليظهر بشكل أنيق (مثال: ج.س 13,800) بدون كسور
+    const cleanPrice = "ج.س " + Math.round(localPriceNumber).toLocaleString('en-US');
+    
+    // الآن المتغير cleanPrice أصبح يحمل السعر المحلي الجديد وجاهز للعرض في الكارت...
+      let imgUrl = product.image_url.trim().startsWith('//') ? 'https:' + product.image_url.trim() : product.image_url;
+      
+      
+      
+      const cardHTML = `
+            <div class="product-card"
+                 data-title="${product.title}"
+                 data-price="${cleanPrice}"
+                 data-sold="${soldCount}"
+                 data-img="${product.image_url}"
+                  data-link="${product.product_link}">
+
+
+                 
+                 
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${product.title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <div class="rating"></div>
+                    <div class="price-row">
+                        <span class="price">${cleanPrice}</span>
+                        ${soldCount ? `<span class="sold-count">${soldCount}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // --- أكواد القوائم والفلتر الأصلية ---
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // --- كود السلايدر الأصلي ---
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // --- كود النافذة المنبثقة (MODAL JAVASCRIPT) بعد حقن العناصر المضافة حديثاً ---
+    const modal = document.getElementById("productModal");
+    const closeBtn = document.querySelector(".close-modal");
+    const productCards = document.querySelectorAll(".product-card");
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.getAttribute("data-title");
+            const price = this.getAttribute("data-price");
+            const rawImg = this.getAttribute("data-img"); 
+            
+        // 2. جلب وتصحيح رابط شي إن للمنتج (الجديد)
+        const rawLink = this.getAttribute("data-link");
+        const sheinLink = rawLink && rawLink.trim().startsWith('//') ? 'https:' + rawLink.trim() : rawLink;
+
+        // 2. فحص وتعديل الرابط طائراً (السطر السحري)
+        const img = rawImg.trim().startsWith('//') ? 'https:' + rawImg.trim() : rawImg;
+            const sold = this.getAttribute("data-sold");
+            
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalPrice").innerText = price;
+            document.getElementById("modalImg").src = img;
+            document.getElementById("modalSold").innerText = sold;
+                const whatsappMessage = `الاسم: ${title}\n
+                السعر: ${price}\n
+                رابط الصورة: ${img}\n
+                رابط المنتج ${rawLink}`;
+
+            document.getElementById("btn").href = "https://Wa.me/249128039027?text=" + encodeURIComponent(whatsappMessage);
+            document.getElementById("sheinBtn").href = sheinLink;
+            modal.style.display = "block";
+        });
+    });
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

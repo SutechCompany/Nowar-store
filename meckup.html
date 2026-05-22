@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوار - Nowar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+    
+    <style>
+        @import url(‘https://fonts.googleapis.com/css?family=Cairo‘);
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo';
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: Cairo, 'Cairo';
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); }
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+      
+      
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span ,a { text-decoration: none; font-size: 15px; color: var(--text-muted);margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+         
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px 10%; padding: 15px 10px; background: #fff; margin-bottom: 10px; }
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .category-item img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .category-item span { font-size: 11px; color: #333; line-height: 1.2; }
+
+        /* Filters */
+        .filters { display: flex;
+            width:100%;
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;}
+        .filter-btn {
+             padding: 6px 15px;
+             border-radius: 20px;
+              background: #fff;
+               border: 1px solid #fff; 
+               font-size: 13px; 
+               font-weight: 600;
+                white-space: nowrap;
+                 cursor: pointer;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                 flex:1;
+                text-align: center;
+                }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; }
+        
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+        .price-row { display: flex; flex-direction: column; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .sold-count { font-size: 11px; color: var(--text-muted); direction: rtl; }
+        .rating { font-size: 10px; color: #f5a623; display: flex; gap: 2px; }
+        .rating span { color: var(--text-muted); font-size: 11px; margin-left: 2px;}
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; 
+            position: absolute; 
+            z-index: 100; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: white; 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%;
+            border-radius: 20px 20px 0 0; 
+            padding: 20px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute; right: 20px; top: 15px; 
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; direction: rtl; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; direction: rtl;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+        .modal-sold { font-size: 13px; color: var(--text-muted); }
+        
+        .add-to-cart-btn { 
+            background: var(--text-main); color: white; border: none; 
+            padding: 15px; border-radius: 25px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        #btn {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn{
+            background-color: #000;
+            color:#fff;
+        }
+        .sheinBtn a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="فساتين">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+       <div class="top-nav" id="topNav">
+            <span ><a href="shoes.html">أحذية</a></span>
+            <span ><a href="women.html">نساء</a></span>
+            <span  > <a href="kids.html">أطفال</a> </span>
+            <span> <a href="index.html">إكسسوارات</a> </span>
+            <span  class="active"> <a href="meckup.html">تجميل</a></span>
+            <span>الكل</span>
+            
+        </div>
+    </header>
+
+    <div class="main-content">
+        
+     
+        <div class='mySlides fade'>
+            <img src='meckup2.jpg' style='width:100%' alt="ad 2">
+        </div>
+
+           <div class='mySlides fade' style="display: block;">
+            <img src=' first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+
+        <div class='mySlides fade'>
+            <img src='meckup.jpg' style='width:100%' alt="ad 2">
+        </div>
+
+      
+
+      
+
+        <div class="filters">
+            <button class="filter-btn "> الأحدث</button>
+            <button class="filter-btn"> ترند</button>
+            <button class="filter-btn"> الأكثر طلباً  </button>
+            <button class="filter-btn active"> لَك </button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+        
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+
+
+
+
+
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+            <img id="modalImg" src="" alt="Product">
+            <h3 id="modalTitle"></h3>
+            
+            <div class="modal-price-row">
+                <span id="modalPrice" class="modal-price"></span>
+                <span id="modalSold" class="modal-sold"></span>
+            </div>
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="">عرض المنتج في شي إن  </a></button>
+
+            <button class="add-to-cart-btn"> <a id="btn" href="">طلب المنتج </a></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. مصفوفة المنتجات المأخوذة من ملف json_prd.json مباشرة
+ const productsData = [
+    {
+        "id": 1,
+        "title": "%19-\nRare Beauty رير بيوتي من سيلينا غوميز بلاشر سوفت بينش سائل طازج 0.11 أونصة / 3.2 مل",
+        "price": "80.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Rare-Beauty-By-Soft-Pinch-Blush-Liquide-Frais-0-11-Oz-3-2-ML-p-46967394.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_spmp/2024/11/30/46/1732948870bcec73e176504db4c6362ab986fa7d4a_thumbnail_600x.webp"
+    },
+    {
+        "id": 2,
+        "title": "كريم CC+ من IT Cosmetics، بدون زيت، نهاية مطفأة، واقي شمس SPF 40، لون بني متوسط، 32 مل/1.08 أونصة | تغطية كاملة، صيغة خالية من الزيوت، نهاية مطفأة، واقي شمس SPF 40 | صيغة خفيفة وقابلة للبناء، تعادل لون البشرة، تغطي العيوب | مُنقى بمكونات مرطبة مثل حمض الهيالورونيك والمضادات الأكسدة لبشرة ناعمة ولينة",
+        "price": "36.00",
+        "product_link": "https://ar.shein.com/IT-Cosmetics-Your-Skin-But-Better-CC-Cream-Oil-Free-Matte-Finish-SPF-40-Sunscreen-Medium-Tan-32ml-1-08oz-Full-Coverage-Oil-Free-Formula-Matte-Finish-SPF-40-Sunscreen-Lightweight-Buildable-Formula-Evens-Skin-Tone-Covers-Imperfections-Infused-With-Hydrating-Ingredients-Like-Hyaluronic-Acid-And-Antioxidants-For-Smooth-Supple-Skin-p-84811734.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/11/19/10/1763544127e939a8849fd390ce6bdfa7127794f05f_thumbnail_600x.webp"
+    },
+    {
+        "id": 3,
+        "title": "%17-\nSHEGLAM أحمر خدود سائل Color Bloom بلمسة نهائية غير لامعة-Love Cake Gel Cream Blush يدوم طويلاً ولا يتلاشى، ذو صبغة عالية، خفيف الوزن، يدوم طويلاً، ناعم، أحمر خدود هدايا ، عيد الميلاد، الشتاء، وردي، بني حمره بلشر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n3.5k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Color-Bloom-Liquid-Blush-Matte-Finish-Love-Cake-Gel-Cream-Blush-Long-Lasting-Non-Fading-Highly-Pigmented-Lightweight-Long-Wear-Smooth-Blusher-Pink-Brown-Blush-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-11305456.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/12/19/ca/17661296270aeb00fb9fdd538285a421996a924fdd_thumbnail_600x.webp"
+    },
+    {
+        "id": 4,
+        "title": "12 لون مكياج اخفاء العيوب & احمر الخدود كريم لوحة مكياج",
+        "price": "13.00\n\n1.5k+. تم بيع",
+        "product_link": "https://ar.shein.com/12-color-Concealer-Blush-Cream-Palette-p-18767470.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2026/01/13/a2/176827471126ccff759fa7c45b8859ade0d5ec350a_thumbnail_600x.webp"
+    },
+    {
+        "id": 5,
+        "title": "%7-\nSHEGLAM Fall In Line محدد شفاه قابل للتقشير-Pinky Promise روج محدد قوس شفايف علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "14.00\n\n4.7k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Fall-In-Line-Peel-Off-Lip-Liner-Stain-Pinky-Promise-Henna-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-67554655.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/02/09/01/17706351693fdb0a6fadce10b1acca86634f2d2b25_thumbnail_600x.webp"
+    },
+    {
+        "id": 6,
+        "title": "%29-\nSHEGLAM قلم تحديد الشفاه واللمعان ليب رولز من بلاي فير 2 في 1 أحمر شفاه سائل مرطب عالي الصبغة مجموعة الشفاه مرطب يقلل من الخطوط الدقيقة على الشفاه مكياج الشفاه روج ملمع شفاه شفاف جلوس علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "15.00\n\n4.2k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Lip-Rules-Liner-Gloss-Pen-Play-Fair-2-In-1-Moisturizing-Liquid-Lipstick-Dewy-High-Pigment-Lipliner-Lip-Combo-Hydrating-Reduce-Lip-Fine-Lines-Lip-Makeup-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-37695134.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/09/02/42/175681809334e27700f6399ee7f1912946b27facdf_thumbnail_600x.webp"
+    },
+    {
+        "id": 7,
+        "title": "%17-\nSHEGLAM Glass Lock Air ملمع شفاه-High Key علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n2.3k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Glass-Lock-Air-Gloss-High-Key-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-231745205.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/05/20/6d/17792596293040928e3d680bbaccdb96269eb79594_thumbnail_600x.webp"
+    },
+    {
+        "id": 8,
+        "title": "%20-\nSHEGLAM Brows On Demand 2-In-1 قلم حواجب-11 Ebony علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "12.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Brows-On-Demand-2-In-1-Brow-Pencil-11-Ebony-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-456879617.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/04/29/11/1777444958af09cba38250e4fd24eaee4a2d6cef65_thumbnail_600x.webp"
+    },
+    {
+        "id": 9,
+        "title": "Pudaier طقم لمعة الشفاه المرطبة وقلم تحديد الشفاه (أحمر غامق 03+03) - تحديد شفاه ثلاثي الأبعاد دقيق، يخلق مظهر مكياج مرطب، مناسب لأي مناسبة، متعدد الاستخدامات لجميع إطلالات المكياج!",
+        "price": "9.00\n\n4.3k+. تم بيع",
+        "product_link": "https://ar.shein.com/Pudaier-Moisturizing-Lip-Gloss-And-Lip-Liner-Set-Deep-Red-03-03-3D-Precise-Lip-Contouring-Creates-Hydrated-Makeup-Look-Suitable-For-Any-Occasion-Versatile-For-All-Makeup-Looks-p-221307782.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/10/09/85/1759992612008336049a28038183ae980a333796a7_thumbnail_600x.webp"
+    },
+    {
+        "id": 10,
+        "title": "%26-\nSHEGLAM Marshmallow Puff قلم تمويه الشفاه-032 Soft Bounce علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "17.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Marshmallow-Puff-Lip-Blur-Pen-032-Soft-Bounce-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-449074372.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/05/07/f2/1778149027dd0e891640aa45c6434dc56284a42082_thumbnail_600x.webp"
+    },
+    {
+        "id": 11,
+        "title": "مجموعة أحمر الشفاه مرطب ماتي مقاوم للتلاشي، أحمر شفاه، لامع شفاه لامع جميل، علبة هدية لعيد الأم و عيد الحب",
+        "price": "19.00\n\n600+. تم بيع",
+        "product_link": "https://ar.shein.com/12pcs-Lip-Gloss-Set-Moisturizing-Matte-Not-Easy-To-Fade-Lip-Stain-Lipstick-Fine-Glitter-Lip-Glaze-Gift-Box-For-Mother-Day-Valentine-Day-p-20643738.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/07/29/1690620880054731c3b3947673493e07b78ad6b2a5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 12,
+        "title": "%13-\nSHEGLAM رذاذ تثبيت المكياج Lock'D In ذو التأثير غير اللامع سريع الجفاف يدوم طويلاً رذاذ تثبيت المكياج غير الدهني للتحكم في الزيوت رذاذ تثبيت المكياج علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "21.00\n\n2.3k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Lock-D-In-Setting-Spray-Mattifying-Effect-Quick-Drying-Long-Lasting-Makeup-Locking-Spray-Oil-Control-Non-Greasy-Makeup-Setting-Setting-Spray-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-22534568.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/02/3c/17751101693a2e35679a467ace57c12985a4aacf02_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 13,
+        "title": "MAANGE 6/7/11/12/16 قطعة مجموعة فرش مكياج ذات طرفين، طقم فرش مكياج احترافية للسفر تشمل فرشاة أساس، فرشاة بودرة، فرشاة أحمر خدود، فرشاة ظلال العيون، فرشاة آيلاينر، فرشاة حواجب، فرشاة كونسيلر، فرشاة تحديد الوجه، فرشاة تحديد الأنف، فرشاة تفاصيل، فرشاة تبريز، فرشاة الوجه، فرشاة خلط، فرشاة الشفاه، مناسبة للمكياج اليومي للوجه، طقم فرش مكياج للعيون للسفر، اكسسوارات مكياج، هدية للأصدقاء",
+        "price": "15.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/MAANGE-6-7-11-12-16pcs-Double-Ended-Makeup-Brush-Set-Professional-Travel-Makeup-Brush-Kit-Includes-Foundation-Brush-Powder-Brush-Blush-Brush-Eyeshadow-Brush-Eyeliner-Brush-Eyebrow-Brush-Concealer-Brush-Contour-Brush-Nose-Contour-Brush-Detail-Brush-Highlighter-Brush-Face-Brush-Blending-Brush-Lip-Brush-Suitable-For-Daily-Facial-Makeup-Travel-Eye-Makeup-Brush-Set-Makeup-Accessories-Gift-For-Friends-p-319620430.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/14/28/176837063849aaf8ecc6b72915bd48e23430e7ef78_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 14,
+        "title": "%4-\n ماكينة حلاقة الجسم Itel IHR-01 SilkyCare، 3 شفرات لحلاقة ناعمة بدون سحب، تصميم ثنائي السرعة، شاشة LED، مقاوم للماء IPX7 للاستخدام الرطب والجاف، طقم ماكينة حلاقة كهربائية",
+        "price": "72.00",
+        "product_link": "https://ar.shein.com/Itel-IHR-01-SilkyCare-Body-Shaver-3-In-1-Blades-For-No-Pull-Smooth-Shave-Dual-Speed-Design-LED-Display-IPX7-Waterproof-For-Wet-Dry-Use-Electric-Trimmer-Kit-p-472485493.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/14/1c/17787528334f1de66bef1bc1103e6ca65cd6eada9f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 15,
+        "title": "طلاء أظافر جديد لعام 2026 بلون الخاكي والأحلام الكونية، 1 زجاجة/10مل، بدون خبز، جفاف سريع، قابل للتقشير، طويل الأمد، خالي من الروائح، طلاء أظافر مائي - مناسب للنساء والفتيات - طلاء أظافر جديد للخريف/الشتاء، مناسب للخريف/الشتاء، أفضل خيار هدية للأظافر",
+        "price": "6.00\n\n2.8k+. تم بيع",
+        "product_link": "https://ar.shein.com/2026-New-Khaki-Galaxy-Dream-Nail-Polish-1-Bottle-10ml-No-Baking-Quick-Drying-Peel-Off-Long-Lasting-Odorless-Water-Based-Nail-Polish-Suitable-For-Women-And-Girls-Autumn-Winter-New-Nail-Polish-Suitable-For-Autumn-Winter-Best-Gift-Choice-Nails-p-121911676.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/27/9d/1751010376d1aba4ab12e58d2aae981802ad9a89f5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 16,
+        "title": "MAANGE مجموعة فرش مكياج احترافية 9/18/20/28 قطعة، تشمل فرشاة أساس، فرشاة بودرة، فرشاة أحمر الخدود، فرشاة تحديد الوجه، فرشاة ظلال العيون، فرشاة كونسيلر. ضروريات السفر.",
+        "price": "26.00\n\n1k+. تم بيع",
+        "product_link": "https://ar.shein.com/MAANGE-9-18-20-28pcs-Professional-Makeup-Brush-Set-Includes-Foundation-Brush-Powder-Brush-Blush-Brush-Contour-Brush-Eyeshadow-Brush-Concealer-Brush-A-Travel-Essential-p-50535461.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/12/13/48/173405793062b999d23bc4e29016f29c7a5489fe49_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 17,
+        "title": "عطر فيري الملاك 50 مل، عطر نسائي برائحة وردة وردية، عطر طويل الأمد، رائحة الورد، بدون كرة، مولود للحب، أنيق وجذاب، يبرز ثقة المرأة",
+        "price": "15.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/50ml-Angel-Fairy-Perfume-Pink-Rose-Scent-Women-s-Perfume-Long-Lasting-Fragrance-Rose-Aroma-Rollerball-Free-Born-For-Love-Elegant-Graceful-Showcase-Women-s-Confidence-p-163755595.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/12/ba/175498371543b417a8ca8e65b5a5dc7af0e7cd8468_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 18,
+        "title": "%30-\nSHEGLAM خافي عيوب Like Magic بتغطية كاملة لمدة 12 ساعة-خافي عيوب سائل غير لامع يدوم طويلاً ومصحح للون مشرق وخفيف الوزن يدوم طوال اليوم ومرطب لوجهك طوال اليوم وخافي عيوب كونسيلر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "16.00\n\n2.5k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Like-Magic-12Hr-Full-Coverage-Concealer-Shell-Matte-Liquid-Concealer-Long-Lasting-Brightening-Color-Corrector-Weightless-All-Day-Long-Lasting-Hydrating-Concealer-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-17025930.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/04/9f/176224231780437aec3e7382b43ac3af9405ee4b04_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 19,
+        "title": "Pudaier طقم ضد للماء مادة محدد الشفاه قلم 12 قطعة",
+        "price": "13.00\n\n1.5k+. تم بيع",
+        "product_link": "https://ar.shein.com/Pudaier-Waterproof-Lipliner-12pcs-Matte-Lipliner-Pencil-Set-p-16240911.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2023/05/16/16842512472a15cc1e2a6e8b1cadac6cc51bb58f26_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 20,
+        "title": "%26-\nSHEGLAM Hideaway كونسيلر تغطية كاملة-Almond مصحح اللون والهايلايتر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "17.00",
+        "product_link": "https://ar.shein.com/SHEGLAM-Hideaway-Full-Coverage-Concealer-Almond-Color-Corrector-And-Highlighter-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-461988095.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/08/6c/17782046645e99cceafa2655d428d0358984692265_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 21,
+        "title": "%28-\nSHEGLAM ماسكارا تكثيف وطول الكل في واحد 2 في 1 مقاومة للماء بفرشاة مزدوجة الأطراف لإطالة الرموش وتجعيدها ورفع الرموش بشكل كثيف ماسكارا تدوم طويلاً مكياج العيون ماسكارا حفلات عيد الميلاد ماسكرا علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "23.00\n\n3.4k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-All-In-One-Volume-Length-Mascara-2-In-1-Waterproof-Volumizing-Dual-Ended-Brush-Lengthening-Curling-Thick-Lash-Lifting-Long-Lasting-Mascara-Eye-Makeupmascara-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-1273706.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/24/47/1745487433e2205c1b4b41ea7508abca3b7ff4611e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 22,
+        "title": "%18-\nSHEGLAM جل الحواجب Set Me Up جل حواجب شفاف مقاوم للماء يدوم طويلاً، يدوم طويلاً، مرطب للحواجب، مكياج حواجب وعيد الميلاد محدد علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "14.00\n\n5.4k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Set-Me-Up-Brow-Gel-Long-Lasting-Waterproof-Clear-Eyebrow-Gel-Long-Wear-Smudge-Proof-Moisturizing-Eyebrow-Makeup-Eyebrow-Brow-Pomade-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-11139230.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/23/df/1747987862bd8d1478055ca564631eeb094c3cd5f4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 23,
+        "title": "%16-\nSHEGLAM ملمع شفاه Power Bouquet-ملمع شفاه Power Petals Shiny Tinted Moisturizing Lip Gloss زيت شفاه غير لاصق مرطب بخلاصة زهرة الكرز للعناية بالشفاه ملمع شفاه Rosa روج ملمع شفاه شفاف جلوس علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "16.00\n\n600+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Power-Bouquet-Lip-Gloss-Power-Petals-Shiny-Tinted-Moisturizing-Lip-Gloss-Plumping-Non-Sticky-Lip-Oil-Repairing-Cherry-Blossom-Extract-Lip-Care-Rosa-Lip-Gloss-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-10773325.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/24/50/17612864310d17f5a6399ea58e7311368d0b1c02c1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 24,
+        "title": "%18-\nThe Powerpuff Girls X SHEGLAM مجموعة كاملة من مستحضرات التجميل مع ملمع الشفاه وأحمر الخدود ولوحة ظلال العيون وصندوق هدايا مجموعة المكياج علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "250.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/The-Powerpuff-Girls-X-SHEGLAM-Full-Collection-Set-Makeup-Set-With-Lip-Gloss-Blush-Balm-Eyeshadow-Palette-Box-Makeup-Kit-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-41132558.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/09/87/17520445801253763d803e16d3e009f52a6e9b783d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 25,
+        "title": "%17-\nSHEGLAM قلم تحديد الشفاه So Lippy-ولكن أولاً، قلم تحديد الشفاه الكريمي غير اللامع بلون القهوة، ذو صبغة عالية لا يتلاشى بسهولة، ناعم حريري، لون غير لامع، مكياج الشفاه، حفلة عيد الميلاد يوم ، قلم تحديد الشفاه روج محدد قوس شفايف علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "10.00\n\n4.7k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-So-Lippy-Lip-Liner-But-First-Coffee-Creamy-Matte-Lip-Liner-Pencil-High-Pigment-Not-Easy-To-Fade-Silky-Smooth-Matte-Contour-Tint-Lip-Makeup-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-3202458.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/91/17641265764fc0e7c518d1abeb975e6c8d5d4238da_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 26,
+        "title": "%30-\n10 أزواج من رموش مزيفة نصفية سوداء، ساق شفاف، طبيعية وواقعية، تعزز شكل العين، مناسبة للاستخدام اليومي، للمبتدئين، للعطلات، للمواعدة، للمكياج",
+        "price": "7.00",
+        "product_link": "https://ar.shein.com/10-Pairs-Half-Eye-Black-False-Eyelashes-Transparent-Stem-Natural-And-Realistic-Enhances-Eye-Shape-Suitable-For-Daily-Wear-Beginners-Vacation-Dating-Makeup-p-470624843.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/14/52/177874918180e0ca7ba35520267d8b22952bb917a7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 27,
+        "title": "Asiteo أسيتيو 7 أزواج من رموش مستعارة نصفية، خفيفة وناعمة، تخلق تأثير مكياج عين القطة، تطيل زوايا العين بشكل طبيعي، ساق شفافة، مناسبة للمكياج اليومي، طويلة الأمد وقابلة لإعادة الاستخدام.",
+        "price": "9.00\n\n800+. تم بيع",
+        "product_link": "https://ar.shein.com/Asiteo-7-Pairs-Half-Eye-False-Eyelashes-Lightweight-Soft-Create-Cat-Eye-Makeup-Effect-Naturally-Elongate-Eye-Corners-Transparent-Stem-Suitable-For-Daily-Makeup-Long-Lasting-Reusable-p-124192921.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/10/28/1752132376722638464489fbb2850b7d70e97bb168_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 28,
+        "title": "%13-\nSHEGLAM بخاخ تثبيت المكياج المنعش والمرطب، بخاخ تثبيت المكياج طويل الأمد، التحكم في الزيوت، بخاخ تثبيت المكياج غير الدهني، ، ، الشتاء، الوردي، البني علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "21.00\n\n4.8k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Press-Refresh-Setting-Spray-Moisturizing-Long-Lasting-Makeup-Setting-Spray-Oil-Control-Non-Greasy-Makeup-Setting-Pink-Brown-Setting-Spray-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-2991971.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/23/cc/1747968087f70b7e662a4f650d86f1a9f5d586dd8f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 29,
+        "title": "Misscheering مجموعة 2 قطعة غراء أظافر صناعية فائق القوة 20 جرام، سريع الجفاف وناعم، مناسب للمبتدئين في فن الأظافر",
+        "price": "8.00\n\n2.2k+. تم بيع",
+        "product_link": "https://ar.shein.com/Misscheering-2pcs-Set-20g-Super-Strong-Fake-Nail-Glue-Soft-Quick-Drying-Suitable-For-Beginner-Nail-Art-p-46889972.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/06/68/17780348654ab4d864bd56f6d996239f8e451b3986_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 30,
+        "title": "Cappuvini احادي مخملي مادة ضبابي ملمع شفاه , ضد للماء غير لاصق فنجان ملمع شفاه ليس من السهل خلع المكياج لا تتلاشى احمر الشفاة سائل",
+        "price": "7.00\n\n800+. تم بيع",
+        "product_link": "https://ar.shein.com/Cappuvini-Single-Velvet-Matte-Mist-Lip-Gloss-Waterproof-Non-Stick-Cup-Lip-Glaze-Smudge-Proof-Not-Fade-Liquid-Lipstick-p-17696428.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/06/10/1686404065a034fe664f563660dbd708e4e5193f14_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 31,
+        "title": "%17-\nSHEGLAM Hydra Jelly Pocket بلسم شفاه-Guava Glow روج ملمع شفاه شفاف جلوس علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Hydra-Jelly-Pocket-Lip-Jam-Guava-Glow-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-57302745.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/11/1b/1778496393015e4fdbdd22339b90cb3656804d0b9a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 32,
+        "title": "NEW1 قطعة حقيبة أدوات تجميل شفافة ذات طبعة كرة قدم، حقيبة تجميل شفافة ذات طبعة هدف كرة قدم لموضوع كأس العالم 2026، حقيبة مكياج شفافة معتمدة للملاعب للرجال، حقيبة غوص، حقيبة مستلزمات مقاومة للماء قابلة للحمل بسحاب للرجال والمراهقين وعشاق كرة القدم، مثالية لأحداث الرياضة والسفر وعطلات الشاطئ والرحلات البحرية والنادي الرياضي والفندق وتنظيم الحمام",
+        "price": "3.00",
+        "product_link": "https://ar.shein.com/1pc-Soccer-Print-Theme-New-Style-Transparent-Travel-Toiletry-Bag-2026-World-Cup-Themed-Soccer-GOAL-Print-Clear-PVC-Cosmetic-Bag-Men-s-Stadium-Approved-Transparent-Makeup-Bag-Diving-Bag-Portable-Waterproof-Zipper-Makeup-Organizer-Pouch-For-Men-Teens-Soccer-Fans-Ideal-For-Sports-Events-Travel-Beach-Vacation-Cruise-Gym-Hotel-Bathroom-Organization-p-472522326.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/12/ad/17785698819d6b3eeaed51c9ce9afc7a4b683a7977_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 33,
+        "title": "Gege Bear رطب مرآة مرطب ملمع شفاه , ضد للماء يدوم طويلا ارتداء غير لاصق فنجان ملمع شفاه Y2K احمر الشفاة سائل",
+        "price": "7.00\n\n900+. تم بيع",
+        "product_link": "https://ar.shein.com/Gege-Bear-Watery-Mirror-Moisturizing-Lip-Gloss-Waterproof-Long-Lasting-Wear-Non-Stick-Cup-Lip-Glaze-Y2K-Liquid-Lipstick-p-17696430.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/06/11/1686473406de5e0f33f614adc7bf940deef587a7e7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 34,
+        "title": "%32-\nSHEGLAM أحمر شفاه سائل من It'S Chili يدوم طويلاً بلمسة نهائية غير لامعة، أحمر خدود خفيف الوزن سهل الاستخدام، أحمر شفاه سائل مرطب، هدية ، أحمر شفاه سائل روج تنت علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "13.00\n\n1.4k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-For-The-Flush-Lip-Cheek-Tint-It-S-Chili-Long-Lasting-Matte-Finish-Lip-Tint-Easy-To-Use-Lightweight-Blush-Moisturizing-Lip-Stain-Liquid-Lipstick-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-22120015.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/11/ae/1744343299c83e546746cc2ab1956aba88091beadb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 35,
+        "title": "Asiteo 10 أزواج من رموش عينين صناعية خفيفة الوزن وناعمة، رموش مزيفة ثلاثية الأبعاد من الفرو للمظهر الطبيعي، قابلة لإعادة الاستخدام للمكياج اليومي، رموش صناعية",
+        "price": "11.00\n\n2.1k+. تم بيع",
+        "product_link": "https://ar.shein.com/Asiteo-10-Pairs-Fluffy-Lightweight-Soft-Half-Eye-False-Eyelashes-3D-Faux-Mink-Lashes-For-Natural-Look-Reusable-For-Daily-Makeup-Strip-Eyelashes-p-43601955.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/09/24/42/172714056597abb3cf5eb51d863c31f6dc2bc283c5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 36,
+        "title": "%68-\nSHEGLAM HAIR فرشاة الهواء الساخن Blowout Bliss Volumizing، فرشاة مجفف الشعر، فرشاة مجفف الشعر، مجفف شعر 4 في 1 ومصفف الشعر لتجفيف الشعر وتمليسه وتجعيده، طلاء GLOSS PRO™، رعاية مدمجة للشعر اللامع، سرعة المحرك 33000 دورة في الدقيقة، تجفيف سريع، 3 إعدادات لدرجة الحرارة قابلة للتعديل، لا شد، لا تشابك ولا فرشاة تمويج، فرشاة تمليس حرارية، حرارية فرشاة النفخ، فرشاة كهربائية لتصفيف جميع الأطوال والأنسجة - قابس بريطاني عيد ميلاد هدية عطلة لون القرنفل الاهتزاز ماكياج شاطئ مدرسة المهرجانات وَردَة بنت العناية بالشعر Y2K عيد الأم مستلزمات السفر الأساسية أجازة صيف أساسيات الرحلات البحرية عيديات هدايا توزيعات استشوار الشعر سيروم شعر استشوار ميكب هدايا مكياج",
+        "price": "83.00\n\n1.1k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-HAIR-Blowout-Bliss-Volumizing-Hot-Air-Brush-Hair-Dryer-Brush-Blow-Dryer-Brush-4-In-1-Hair-Dryer-And-Styler-Volumizer-For-Drying-Straightening-Curling-Volumizing-Hair-GLOSS-PRO-Coating-Built-In-Care-For-Shiny-Hair-Motor-Speed-33000RPM-Quick-Blow-Dry-3-Adjustable-Temp-Settings-No-Tugs-No-Tangles-No-Snags-Curling-Brush-Thermal-Straightening-Brush-Thermal-Blowout-Brush-Electric-Brush-For-Style-All-Lengths-Textures-UK-Plug-Birthday-Gift-Holiday-Pink-Vibe-Makeup-Beach-School-Festivals-Rose-Girl-Hair-Care-Y2K-Mother-s-Day-Travel-Essential-Vacation-Summer-Cruise-Essentials-Curly-Hair-Hair-Curler-Hair-Straightener-Hair-Products-Wax-Hair-Stuff-p-64069198.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/13/03/1778654441946d51b98e3580475f59c3daab4fddbe_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 37,
+        "title": "%20-\n13 قطعة مجموعة فرش مكياج احترافية، تشمل فرشاة أساس مائلة، فرشاة تحديد الوجه، فرشاة أحمر الخدود، فرشاة البودرة، فرشاة ظلال العيون، فرشاة الكونسيلر، فرشاة البرايتنر، فرشاة الخلط، بالإضافة إلى 2 إسفنجة مكياج بنية، مناسبة لظلال العيون والأساس وكريم BB والكونسيلر، أدوات مكياج ناعمة متعددة الوظائف مصممة للنساء، هدايا",
+        "price": "6.40",
+        "product_link": "https://ar.shein.com/13pcs-Professional-Makeup-Brush-Set-Including-Angled-Foundation-Brush-Contour-Brush-Blush-Brush-Powder-Brush-Eyeshadow-Brush-Concealer-Brush-Highlighter-Brush-Blending-Brush-2-Brown-Makeup-Sponges-Suitable-For-Eyeshadow-Foundation-BB-Cream-Concealer-Soft-Multi-Functional-Makeup-Tools-Designed-For-Women-Giveaways-p-442497209.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2026/04/09/53/17757272040316162d95e01f788694f99bf6cce2b6_thumbnail_405x552.png"
+    },
+    {
+        "id": 38,
+        "title": "NEWأجنحة الفراشات الملونة الخيالية على أطراف أصابعك! 10 قطع من الأظافر الطويلة المدببة المصنوعة يدويًا، مانيكير فرنسي شفاف مع زخارف فراشات ملونة، أنماط منقولة غير منتظمة، تزيينات زركونية صغيرة، مليئة بالشعور الشفاف، أسلوب العطلات، مناسبة لأظافر الربيع والصيف، مثالية للارتداء في تجمعات الأصدقاء والخروجات. هدية أظافر الصيف، مجموعة أظافر مصنوعة يدويًا قابلة لإعادة الاستخدام مع قطعة واحدة من غراء الجيلي وملف أظافر صغير.",
+        "price": "17.00",
+        "product_link": "https://ar.shein.com/Dreamlike-Colorful-Butterflies-At-Your-Fingertips-10pcs-Handmade-Long-Pointed-Nails-Translucent-French-Manicure-With-Colorful-Butterfly-Decorations-Irregular-Transferred-Patterns-Small-Zirconia-Embellishments-Full-Of-Translucent-Feel-Vacation-Style-Suitable-For-Spring-And-Summer-Nails-Perfect-For-Wearing-At-Friends-Gatherings-And-Outings-Summer-Nail-Gift-Reusable-Handmade-Press-On-Nail-Set-With-One-Piece-Of-Jelly-Glue-And-One-Mini-Nail-File-p-468405185.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/12/3d/17785681779a43ee5b6984bc2547653fd8205b8220_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 39,
+        "title": "طلاء أظافر قابل للتقشير 10مل مائي بدون خبز، طويل الأمد وسريع الجفاف، سهل الاستخدام مناسب للمبتدئين",
+        "price": "6.00\n\n2.9k+. تم بيع",
+        "product_link": "https://ar.shein.com/10ml-Peelable-New-Nail-Polish-Water-Based-No-Bake-Tear-Off-Long-Lasting-Quick-Drying-Nail-Polish-Easy-To-Use-Suitable-For-Beginners-Nails-p-193269733.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/20/2a/1758330616a8165791733e5c15f158158c378d1dd3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 40,
+        "title": "%12-\nSHEGLAM MatinéE In L.A. باليت 15 لون علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "30.00\n\n1.9k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Matin-E-In-L-A-15-Pan-Palette-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-76980855.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/21/2d/17767577878ed789bc52ef0dc9ae6664ee7b781074_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 41,
+        "title": "%20-\n9 أزواج من رموش مستعارة قصيرة ناعمة شفافة نصف شريط من الحرير الصناعي ثلاثية الأبعاد، مناسبة للمكياج الطبيعي، شرائط رموش مستعارة",
+        "price": "7.20\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/9-Pairs-Of-Half-Strip-Transparent-Cat-Eye-Short-Soft-3D-Faux-Mink-Eyelashes-Suitable-For-Natural-Makeup-Fake-Eyelash-Strips-p-424700962.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/14/56/17734708764cb313f555d5a8ef92c9060d921f9e89_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 42,
+        "title": "HelloKiss زيت الشفاه المرطب، زيت الشفاه الشفاف، زيت الشفاه الملون، غير لزج، مغذي وطويل الأمد، يعالج تجاعيد الشفاه، يقلل من تجاعيد الشفاه، يرطب الشفاه الجافة، منتج العناية بالشفاه",
+        "price": "7.00\n\n2.7k+. تم بيع",
+        "product_link": "https://ar.shein.com/HelloKiss-Moisturizing-Lip-Oil-Clear-Lip-Oil-Tinted-Lip-Oil-Non-Sticky-Nourishing-Long-Lasting-Repairing-Lip-Lines-Fading-Lip-Lines-Moisturizing-Dry-Lips-Lip-Care-Product-p-19765878.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/07/15/1689406051307920e03bd566aa8aeb5ab8b1efb4e8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 43,
+        "title": "9 أزواج من رموش نصفية ذات مظهر طبيعي، رموش مستعارة على شكل عين القطة، رموش مانجا طبيعية ذات شريط شفاف، رموش قصيرة ناعمة ثلاثية الأبعاد من الفرو الصناعي الناعم والخفيف، أدوات تمديد الرموش، رموش مستعارة",
+        "price": "11.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/9-Pairs-Half-Lashes-Natural-Look-Cat-Eye-False-Eyelashes-Manga-Eyelashes-Natural-Clear-Band-Lashes-Short-Soft-3d-Faux-Mink-Eyelashes-Wispy-Fluffy-Faux-Mink-Lashes-Eyelash-Extension-Tool-Strip-Lashes-Lashes-Eyelashes-Fake-Lashes-p-56738754.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/12/12/173935200238a6895873b03ca684fe54450b205d4d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 44,
+        "title": "%24-\n12 قطعة ملصقات أظافر القدم الوردية اليدوية، مناسبة للصيف، أظافر قدم صناعية، فن أظافر القدم القصيرة، أظافر قدم لاصقة، فن أظافر القدم الاصطناعية، هدية عيد الحب، فن أظافر الربيع/الصيف، فن أظافر دائرية، فن أظافر الربيع، قابلة للإزالة وإعادة الاستخدام",
+        "price": "11.36",
+        "product_link": "https://ar.shein.com/12pcs-Handmade-Pink-Toe-Nail-Stickers-Suitable-For-Summer-False-Toe-Nails-Short-Toe-Nail-Art-Adhesive-Toes-Artificial-Toe-Nail-Art-Valentine-s-Day-Gift-Spring-Summer-Nail-Art-Round-Nail-Art-Spring-Nail-Art-Removable-And-Reusable-Short-Pressed-Nail-Art-p-468110499.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/22/df/1776838950295d4da642e0208a7ace4f64d80e3e60_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 45,
+        "title": "%33-\nSHEGLAM قلم تحديد العيون Big N' Bright-قلم تحديد لامع متعدد الاستخدامات-مكياج الوجه المتوهج هايلايت هايلايتر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "8.00\n\n1.1k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Big-N-Bright-Eye-Pencil-Frost-Highlighter-Pen-Shimmer-Multi-Use-Pigment-Glow-Face-Makeup-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-39475048.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/18/1a/1752839753e8092bb2ced192bd3c61a753a599ec12_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 46,
+        "title": "%21-\nSHEGLAM Cinnamon Spice باليت ظلال عيون 9 ألوان علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "15.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Cinnamon-Spice-9-Pan-Eyeshadow-Palette-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-86320463.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/27/dd/1764241044856c7466a5708cf5217b330a80983a43_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 47,
+        "title": "%23-\nSHEGLAM Camera On ناعم و ضبابي برايمر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "23.00\n\n8.6k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Camera-On-Smooth-Blur-Primer-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-165869699.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/06/34/177035803487274ead4d9d906f9746ba6416deaac6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 48,
+        "title": "%20-\n5 قطع/10 قطع/20 قطع/30 قطع/50 قطع/100 قطع/200 قطع/300 قطع منظف الرؤوس السوداء شرائط مسام الأنف، للأنف المبلل، تطبيق لمدة 10 دقائق، تقشير الرؤوس السوداء",
+        "price": "3.20\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-10pcs-20pcs-30pcs-50pcs-100pcs-200pcs-300pcs-Blackhead-Remover-Nose-Pore-Strips-Wet-Nose-Apply-For-10-Minutes-Peel-Off-Blackheads-p-268946216.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2026/04/10/a3/17757947756b7550761c3d3e57004d18c21a39a4d7_thumbnail_405x552.png"
+    },
+    {
+        "id": 49,
+        "title": "%70-\nSHEGLAM HAIR مكواة تجعيد الشعر الاحترافية One Touch Airflow Styler Pro مقاس 32 مم، فضي-بنفسجي، مكواة تجعيد ذاتية الدوران بالهواء البارد، تصفيف سريع في 5 دقائق، تدفق هواء تبريد 360 درجة، تشغيل بلمسة واحدة، نتائج تدوم طويلاً، 5 درجات حرارة، حماية من الحروق، إيقاف تشغيل تلقائي، جهد مزدوج للشعر متوسط ​​الطول والطويل وجميع أنواع الشعر - قابس بريطاني عيد ميلاد هدية عطلة لون القرنفل الاهتزاز ماكياج شاطئ مدرسة المهرجانات وَردَة بنت العناية بالشعر Y2K عيد الأم مستلزمات السفر الأساسية أجازة صيف أساسيات الرحلات البحرية عيديات هدايا توزيعات استشوار الشعر سيروم شعر استشوار ميكب هدايا مكياج",
+        "price": "107.97\n\n500+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-HAIR-One-Touch-Airflow-Styler-Pro-32mm-Silver-Purple-Cool-Air-Auto-Rotating-Curling-Iron-5-Min-Quick-Styling-360-Cooling-Airflow-One-Touch-Operation-Long-Lasting-Results-5-Temps-Anti-Scald-Auto-Off-Dual-Voltage-For-Medium-Length-Hair-Long-Hair-All-Hair-Types-UK-Plug-Birthday-Gift-Holiday-Pink-Vibe-Makeup-Beach-School-Festivals-Rose-Girl-Hair-Care-Y2K-Mother-s-Day-Travel-Essential-Vacation-Summer-Cruise-Essentials-Curly-Hair-Hair-Curler-Hair-Straightener-Hair-Products-Wax-Hair-Stuff-p-326443145.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/20/1f/17739965417f9160032e5a0023508558f0599a21e9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 50,
+        "title": "NEW10 قطعة مجموعة أظافر بشكل منقار البط الأنيق من طراز Y2K - مصنوعة يدويًا، أظافر وردية، أظافر زرقاء، أظافر بطرف فرنسي أزرق، زخرفة أظافر بأزهار زرقاء ثلاثية الأبعاد مصنوعة يدويًا، تصميم بنقوش دانتيل أبيض ونمط توت أزرق مرسوم باليد، أظافر بتدرج أزرق مرسوم باليد",
+        "price": "24.00",
+        "product_link": "https://ar.shein.com/-10pcs-Y2K-Nails-Chic-Duckbill-Press-On-Nails-Set-Handcrafted-Pink-Nails-Blue-Nails-Blue-French-Tip-Nails-Handmade-3D-Blue-Flowers-Nail-Art-Hand-Drawn-White-Lace-And-Blueberry-Pattern-Design-Hand-Drawn-Blue-Gradient-Nails-p-468389685.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/06/68/1778083169b1cbf095d00a0a9fad27eca4feab314e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 51,
+        "title": "%23-\nSHEGLAM Melt Touch برايمر فائق الترطيب علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "23.00\n\n3.8k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Melt-Touch-Ultra-Hydrating-Primer-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-359627777.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/16/27/17736543194f551682a4f6b507b40b900c150d06f7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 52,
+        "title": "زيت شفاه جيلي ملون - نكهات فواكه متنوعة، لمعة شفاه زجاجية، مرطب وملطف، إنهاء لامع من النهار إلى الليل",
+        "price": "7.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Colorful-Jelly-Lip-Oil-Assorted-Fruit-Flavors-Glass-Lips-Gloss-Hydrating-Smoothing-Day-To-Night-Glossy-Finish-p-283920453.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/12/f2/1762936636a21ede2181a91f41c0b2e2668be526ea_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 53,
+        "title": "24 قطعة/مجموعة ملصقات أظافر فرنسية قصيرة بشكل اللوز، ظلال بيج وأبيض حليبي، شرائط أظافر للضغط، تشمل 1 ملف أظافر و 1 زجاجة طلاء جل، لوازم الأظافر",
+        "price": "6.00\n\n5k+. تم بيع",
+        "product_link": "https://ar.shein.com/24pcs-Set-Short-Almond-Shaped-French-Manicure-Nail-Stickers-Ombre-Nude-Milky-White-Press-On-Nail-Strips-Includes-1-Nail-File-Block-And-1-Bottle-Of-Gel-Polish-Nail-Supplies-Nails-p-26443996.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/02/21/7d/17084960549f9fa1f714d6a190fae88dfd11b7db82_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 54,
+        "title": "%24-\nSHEGLAM ماسكارا 2 في 1 من لاش بيستيس لتكثيف الرموش برأسين، سهلة الإزالة، لا تلطخ، تدوم طويلاً، تحديد كثيف، إطالة الرموش، حجم الرموش، ماسكارا للعيون الكبيرة، ماسكارا حفلات عيد الميلاد المجيد، ماسكرا علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n5.2k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Lash-Besties-2-In-1-Mascara-Volumizing-Double-Head-Brush-Easy-To-Remove-No-Smudge-Long-Lasting-Define-Thick-Lengthening-Volume-Big-Eyes-Mascara-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-25117132.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/27/ee/1774592395fd1d001012b120710ccfafe519a7946f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 55,
+        "title": "%29-\nSHEGLAM كونسيلر معزز للبشرة-إسفنجة كريمية زبدية-رأس تطبيق-كونسيلر سائل غير لامع-مصحح لوني يدوم طويلاً-كونسيلر مرطب خفيف الوزن يدوم طوال اليوم-كونسيلرشتاء كونسيلر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "17.00\n\n600+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Complexion-Boost-Concealer-Buttercream-Sponge-Head-Applicator-Matte-Liquid-Concealer-Long-Lasting-Brightening-Color-Corrector-Weightless-All-Day-Long-Lasting-Hydrating-Concealer-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-20536560.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/15/a0/1776251820c191611821573ef9366e73b7b39a8c78_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 56,
+        "title": "NEW10 قطعة أظافر صناعية قصيرة بتصميم عين القطة باللونين الأسود والوردي مع زهور ذهبية، تشمل 1 ورقة من ملصقات الأظافر و 1 مبرد أظافر صغير",
+        "price": "18.00",
+        "product_link": "https://ar.shein.com/10pcs-Black-Pink-Flower-Gold-Cat-Eye-Short-False-Nails-Set-Includes-1-Sheet-Of-Nail-Stickers-And-1-Mini-Nail-File-p-468829261.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/23/12/1771840612726eb6cfc9f3b8b4b1e55c3752fefb3c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 57,
+        "title": "%1-\nLAIKOU مجموعة العناية بالبشرة اليابانية من شيري بلوسوم لايكو المكونة من 7 قطع، تشمل قناع النوم المضيء للسفر، كريم اليد، قناع الطين المرطب، جوهر مضاد للتجاعيد، قناع الشفاه، قناع العين. هدية مثالية للنساء، الأمهات، الزوجات، الأخوات، المراهقات، الصديقات. مناسبة للعناية اليومية والمكياج والعناية بالبشرة.",
+        "price": "7.89\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/7-Piece-LAIKOU-Japan-Cherry-Blossom-Skincare-Set-Includes-Brightening-Travel-Sleep-Mask-Hand-Cream-Moisturizing-Mud-Mask-Anti-Wrinkle-Essence-Lip-Mask-Eye-Mask-Ideal-Gift-For-Women-Mothers-Wives-Sisters-Teens-Girlfriends-Suitable-For-Daily-Care-Makeup-And-Skincare-p-68987468.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/01/3b/176456793624a3e25e62c499651edc347c28dacf84_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 58,
+        "title": "قناع للعين 60 قطعة قطع تحت العينين للتخلص من الهالات السوداء والانتفاخات بزبدة الأفوكادو والذهبي والكولاجين لترطيب ومكافحة التجاعيد والعناية بجلد العين",
+        "price": "12.00\n\n900+. تم بيع",
+        "product_link": "https://ar.shein.com/60pcs-Eye-Mask-Under-Eye-Patch-Anti-Dark-Circles-Eye-Bags-Avocado-Golden-Collagen-Moisturizing-Anti-Wrinkle-Eye-Patches-Eye-Skin-Care-Mask-p-28239032.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/12/22/b7/1703251613cde8481176b56f85e3d6f5eeac9683e0_thumbnail_405x552.png"
+    },
+    {
+        "id": 59,
+        "title": "%5-\n14 قطعة مجموعة فرش مكياج للعين الدقيقة، تشمل فرشاة خط ، فرشاة خط العين فائقة الدقة وفرشاة الحواجب، مناسبة للحواجب وخط العين والظلال، تساعد على إنشاء مكياج عيون جذاب. مصنوعة من مواد ألياف، مصنوعة بدقة، مناسبة للمكياج الرقيق للعين، محمولة وسهلة الاستخدام، هدية مثالية للنساء والفتيات. تشمل المجموعة فرشاة الحواجب وفرشاة الظلال والفرشاة اللولبية وما إلى ذلك.",
+        "price": "2.85\n\n700+. تم بيع",
+        "product_link": "https://ar.shein.com/14pcs-Precise-Eye-Makeup-Brush-Set-Including-Angled-Eyeliner-Brush-Ultra-Fine-Eyeliner-Brush-And-Eyebrow-Brush-Suitable-For-Eyebrows-Eyeliner-And-Eyeshadow-Easily-Create-Charming-Eye-Makeup-Made-Of-Fiber-Material-Finely-Crafted-Suitable-For-Delicate-Eye-Makeup-Portable-And-Easy-To-Use-An-Ideal-Gift-For-Women-And-Girls-The-Set-Includes-Eyebrow-Brush-Eyeshadow-Brush-Spiral-Brush-Etc-p-415909468.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/28/95/17722608550ba781a34cc338ec1339107755caad35_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 60,
+        "title": "%33-\nSHEGLAM قلم عين أبيض كبير وساطع",
+        "price": "8.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Big-N-Bright-Eye-Pencil-White-p-81733931.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/19/a8/17476352633d0bf728dd50142d28739b84a9f49344_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 61,
+        "title": "13 قطعة مجموعة فرش مكياج، ناعمة وريشية، فرشاة أساس احترافية، فرشاة بودرة، فرشاة خلط ظلال العيون، طقم أدوات مكياج مع حقيبة مكياج وإسفنجة مكياج، مناسبة للمبتدئين، درجات بنية عشوائية",
+        "price": "7.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/13pcs-Makeup-Brush-Set-Soft-Fluffy-Professional-Foundation-Brush-Powder-Brush-Eyeshadow-Blending-Brush-Makeup-Tools-Kit-With-Makeup-Bag-Makeup-Sponge-Suitable-For-Beginners-Random-Brown-Tones-p-31763088.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/03/17/2e/171065831951035042df883992ee8752bef926bb1b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 62,
+        "title": "NEW10 قطعة/مجموعة من أطراف الأظافر المصنوعة يدويًا للضغط عليها، أظافر طويلة مدببة بطراز Y2K، ملصقات أظافر جل بنفسجية مزينة بالكريستال والعين القطة والوردة، مثالية للحفلات والكرات والارتداء اليومي، تصميم محايد للجنسين، مناسب للنساء والفتيات، يأتي مع الاكسسوارات، خيار هدية مثالي. ملصقات الأظافر، اكسسوارات الأظافر، ديكورات الأظافر اليدوية.",
+        "price": "18.00",
+        "product_link": "https://ar.shein.com/10pcs-Set-Handmade-Press-On-Nail-Tips-Y2K-Style-Long-Pointed-Nails-Purple-Gel-Nail-Stickers-With-Crystal-Cat-Eye-And-Rose-Elements-Perfect-For-Parties-Balls-And-Daily-Wear-Gender-Neutral-Design-Ideal-For-Women-And-Girls-Comes-With-Accessories-Makes-A-Perfect-Gift-Choice-Nail-Stickers-Nail-Accessories-Handmade-Nail-Decorations-p-468705410.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/10/b5/1778417018df3c3336b609801c42f04923f3b2b7d1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 63,
+        "title": "زيت شفاه ملون خفيف الوزن، عالي اللمعان. يرطب ويرطب، ويوفر ترطيبًا طويل الأمد، ويكسب الشفاه نعومة، ويمنع تشقق الشفاه، ويقلل من خطوط الشفاه، وهو غير لزج. يعتني بالشفاه ليجعلها أكثر امتلاءً. زيت شفاه ذو لون غني مناسب للرجال والنساء في فصلي الخريف والشتاء. مناسب للمبتدئين، مثالي كهدية لطلاب، وأعياد الميلاد، وعيد الحب، وهدايا المناسبات الأخرى.",
+        "price": "7.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Lightweight-High-Shine-Tinted-Lip-Oil-Moisturizes-And-Hydrates-Provides-Long-Lasting-Hydration-Plumps-Lips-Prevents-Chapped-Lips-Reduces-Lip-Lines-And-Is-Non-Sticky-Cares-For-Lips-To-Make-Them-Fuller-A-Richly-Colored-Lip-Oil-Suitable-For-Men-And-Women-In-Autumn-And-Winter-Beginner-Friendly-Perfect-For-Students-Birthdays-Valentine-s-Day-And-Other-Holiday-Gifts-p-395945739.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/30/26/1769752731d58401ca3c09e1bf5ffdc3e6e581940d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 64,
+        "title": "Pudaier 1 قطعة أحمر شفاه وردي عاري مقاوم للماء وثابت اللون، مناسب لجميع ألوان البشرة، هدية عيد الحب المثالية للمرأة",
+        "price": "12.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Pudaier-1pc-Pink-Nude-Waterproof-Non-Fading-Lipstick-Suitable-For-All-Skin-Tones-Perfect-Valentine-s-Day-Gift-For-Her-p-394922595.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/21/a5/1776758133a81a60efd0ad2c99a491515af4f21165_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 65,
+        "title": "%17-\nSHEGLAM ملمع الشفاه المرطب Crystal Glaze-ملمع شفاه شفاف مرطب بنكهة كوكي الكاكاو ملمع شفاه شفاف مائي مرآوي مرطب يقلل من الخطوط الدقيقة على الشفاه مكياج الشفاه روج ملمع شفاه شفاف جلوس علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n1k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Crystal-Glaze-Moisturizing-Lip-Gloss-Cocoa-Cookie-Moisturizing-Clear-Lip-Gloss-Clear-Watery-Mirror-Lip-Gloss-Hydrating-Reduce-Lip-Fine-Lines-Lip-Makeup-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-39264984.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/16/20/1760608414684676f34d9f2c0a1292014f25a03f8d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 66,
+        "title": "%17-\nSHEGLAM ملمع شفاه Pout-Perfect Shine Lip Plumper-Sepia Kiss مرطب شفاه صلب غير لاصق مغذي لتكبير الشفاه مصل أحمر شفاه بزيت جوز الهند مستحضرات تجميل الشفاه تخفيضات هدية عيد الميلاد ملمع شفاه بني روج تنت جلوس علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n700+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Pout-Perfect-Shine-Lip-Plumper-Sepia-Kiss-Moisturizing-Plumping-Solid-Lip-Gloss-Non-Stick-Nourishing-Lip-Plumping-Serum-Coconut-Oil-Lipstick-Lip-Cosmetics-Brown-Lip-Plumper-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-13260939.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/14/51/177873973341f7761fc1437131ac9711aa45487e7b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 67,
+        "title": "%17-\nSHEGLAM Buttery Bling عصا إضاءة-Pink Satin هايلايت هايلايتر علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "19.00\n\n1k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Buttery-Bling-Highlight-Stick-Pink-Satin-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-227128371.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/12/0c/17655213126c8a56678debca13573fd6d87177fb02_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 68,
+        "title": "%18-\n10 قطع أظافر طويلة بشكل اللوز ذات طراز أنيق، أظافر صناعية بيج فاتح مزينة برصاصات الراين المتناثرة، لامعة وقابلة لإعادة الاستخدام، إطلالة فاخرة ولطيفة، مناسبة للارتداء اليومي والمناسبات والحفلات والزفاف، هدية مثالية للسيدات والفتيات.",
+        "price": "17.28",
+        "product_link": "https://ar.shein.com/10pcs-Elegant-Style-Long-Almond-Press-On-Nails-Nude-Beige-Fake-Nails-With-Scattered-Rhinestone-Design-Glossy-Reusable-Luxurious-And-Gentle-Vibe-Suitable-For-Daily-Wear-Dating-Parties-And-Weddings-Perfect-Gift-For-Ladies-And-Girls-p-468313616.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/12/a9/177857373930414ddb0d35a6d8fd0d99dd5e07963e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 69,
+        "title": "قطعتان إسفنجة استحمام مقشرة فائقة اللين (عبوتان). تتميز بنسيج قشر السمك ثلاثي الأبعاد للتقشير اللطيف وبدون ألم. مصممة للنساء، تعمل كفرشاة جسم احترافية وإكسسوار حمام أساسي. إمدادات الاستحمام والحمام المثالية.",
+        "price": "4.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Ultra-Soft-Exfoliating-Shower-Sponge-2-Packs-Features-3D-Fish-Scale-Texture-For-Gentle-Painless-Exfoliation-Designed-For-Women-It-Works-As-A-Professional-Body-Scrubber-And-Essential-Bath-Accessory-Perfect-Shower-Bathroom-Supply-p-318014093.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/02/fa/1764643786408e5ea7aff032fb9eb2b23a1f8273b3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 70,
+        "title": "240 قطعة أظافر صناعية بشكل اللوز ذات تصميم بسيط، أظافر صناعية ذات موحد اللون، أظافر صناعية ذات نقوش جرافيكية متباينة، لوازم فن الأظافر",
+        "price": "12.00\n\n1.1k+. تم بيع",
+        "product_link": "https://ar.shein.com/240pcs-Almond-Shaped-Minimalist-Press-On-Nails-Solid-Color-Artificial-Nails-Contrasting-Graphic-Pattern-Fake-Nails-Nail-Art-Supplies-p-46095458.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/10/25/93/17298149617a550ff4c99bd19036b4e018d165be3b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 71,
+        "title": "مجموعة فرش مكياج FSJF FIX 13 قطعة + 2 إسفنجة مكياج بنية، تشمل فرشاة ظلال العيون، فرشاة أساس المكياج، فرشاة كريم BB، فرشاة كونسيلر، أدوات مكياج متعددة الوظائف ناعمة، محمولة للسفر، هدية مثالية للنساء والفتيات، ضرورية للصيف، مثالية لموسم العودة إلى المدرسة. المجموعة تشمل: فرشاة أساس، فرشاة كونسيلر، فرشاة أحمر الخدود، فرشاة تحديد الوجه، فرشاة البودرة، فرشاة أساس المكياج، فرشاة أحمر الخدود.",
+        "price": "10.00\n\n500+. تم بيع",
+        "product_link": "https://ar.shein.com/FSJF-FIX-13pcs-Makeup-Brush-Set-2pcs-Brown-Makeup-Sponges-Including-Eyeshadow-Brush-Foundation-Brush-BB-Cream-Brush-Concealer-Brush-Soft-Multi-Functional-Makeup-Tools-Portable-For-Travel-Ideal-Gift-For-Women-And-Girls-Essential-For-Summer-Perfect-For-Back-To-School-Season-Set-Includes-Foundation-Brush-Concealer-Brush-Blush-Brush-Contour-Brush-Powder-Brush-Foundation-Brush-Blush-Brush-p-76672292.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2025/05/17/4e/17474730391c3ac2dd49cd629f11f4914ef4383591_thumbnail_405x552.png"
+    },
+    {
+        "id": 72,
+        "title": "زجاجة طلاء أظافر مائي سعة 10 مل، قابل للتقشير، طويل الأمد، سريع الجفاف، مناسب للطلاب، تجميل الأظافر",
+        "price": "6.00\n\n4.6k+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-10ml-Water-Based-Nail-Polish-Peel-Off-Long-Lasting-Quick-Drying-For-Students-Manicure-Nails-p-48061485.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/18/4e/1742307083548ccd50802f82098bfcea09ecd7dd5f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 73,
+        "title": "Pudaier 3 قطع من لمعان الشفاه ذو المرآة المرطبة، ملمس منعش غير دهني، أحمر شفاه سائل لامع طويل الأمد، هدية للنساء",
+        "price": "17.00\n\n1.1k+. تم بيع",
+        "product_link": "https://ar.shein.com/Pudaier-3PCS-Moisturizing-Mirror-Effect-Lip-Gloss-Lip-Glaze-Refreshing-Non-Greasy-Texture-Glossy-Long-Lasting-Liquid-Lipstick-The-Gift-For-Women-p-422154681.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/10/10/1773148298c31f4578c7339d8d85a560e29a5b3c7b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 74,
+        "title": "%23-\nأظافر وهمية بطبعة نمر وردية، أظافر طويلة بشكل تابوت مع تلميح فرنسي وتركيب فراشة ثلاثية الأبعاد من الراين، لامعة وحلوة وباردة، قابلة لإعادة الاستخدام للحفلات واليوم العادي. أظافر وهمية حلوة وباردة من طراز Y2K، تلميح فرنسي بتدرج وردي فاتح، طبعة نمر مرسومة باليد مع فراشة بلورية لامعة وراين كبير، أظافر وهمية كاملة القطع قابلة لإعادة الاستخدام للنساء في الملابس الشارعية",
+        "price": "16.90",
+        "product_link": "https://ar.shein.com/Pink-Leopard-Print-Press-On-Nails-Long-Coffin-French-Tip-With-3D-Butterfly-Rhinestone-Inlay-Glossy-Sweet-Cool-Reusable-Wearable-Nails-For-Party-Daily-Y2K-Sweet-Cool-Press-On-Nails-Nude-Pink-Gradient-French-Tip-Hand-Drawn-Leopard-Print-With-Shiny-Crystal-Butterfly-Big-Rhinestone-Full-Cover-Reusable-False-Nails-For-Women-Streetwear-p-468224902.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/29/49/17774527049953a5818a2bfef0ba68cadd045e9738_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 75,
+        "title": "%63-\nSHEGLAM HAIR مكواة تجعيد تلقائية بلمسة واحدة من It-مجعد، أداة تجعيد الشعر التلقائي، أداة تجعيد الشعر الأوتوماتيكية مقاس 32 مم مع 3 درجات حرارة، تسخين سريع ودوران في اتجاهين، إيقاف تلقائي، عصا تجعيد دوارة مضادة للحرق ومضادة للتشابك، أداة تجعيد فورية تعمل باللمس لتصفيف الشعر عيد ميلاد هدية عطلة لون القرنفل الاهتزاز ماكياج شاطئ مدرسة المهرجانات وَردَة بنت العناية بالشعر Y2K عيد الأم مستلزمات السفر الأساسية أجازة صيف أساسيات الرحلات البحرية عيديات هدايا توزيعات استشوار الشعر سيروم شعر استشوار ميكب هدايا مكياج",
+        "price": "86.52\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-HAIR-It-Curl-One-Touch-Instant-Curler-Automatic-Curling-Iron-Auto-Hair-Curler-32mm-Automatic-Hair-Curler-With-3-Temperatures-Fast-Heating-2-Way-Rotation-Automatic-Shut-Off-Anti-Scald-Anti-Tangle-Rotating-Curling-Wand-Touch-Instant-Curler-For-Hair-Styling-Birthday-Gift-Holiday-Pink-Vibe-Makeup-Beach-School-Festivals-Rose-Girl-Hair-Care-Y2K-Mother-s-Day-Travel-Essential-Vacation-Summer-Cruise-Essentials-Curly-Hair-Hair-Curler-Hair-Straightener-Hair-Products-Wax-Hair-Stuff-p-43336456.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/23/49/1750684947d2cc8ad2f59ee48b9c85f6671fc8af8e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 76,
+        "title": "YZIMENG 4 قطع مجموعة فرش مكياج محترفة ذات طرفين - فرشاة أساس مائلة ومدببة، فرشاة تحديد، فرشاة أحمر الخدود، فرشاة بودرة، فرشاة ظلال العيون، فرشاة كونسيلر، فرشاة تبريز، فرشاة خلط. فرش ألياف ناعمة، محمولة للسفر، هدية رائعة للنساء والفتيات.",
+        "price": "6.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/YZIMENG-4pcs-Professional-Dual-Ended-Makeup-Brush-Set-Angled-Tapered-Foundation-Brush-Contour-Brush-Blush-Brush-Powder-Brush-Eyeshadow-Brush-Concealer-Brush-Highlighter-Brush-Blending-Brush-Soft-Fiber-Brushes-Portable-For-Travel-Great-Gift-For-Women-And-Girls-p-427925094.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/16/e4/1776310771875455843315b855d82fa75e99c1158d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 77,
+        "title": "عطر نسائي بطبعة نمر، عطر بطراز عربي لتعزيز السحر والتعطير",
+        "price": "20.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Leopard-Print-Perfume-For-Women-Middle-Eastern-Arabian-Style-Fragrance-To-Enhance-Charm-And-Deodorize-p-346923153.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2025/06/18/c9/1750238189965144ee45229e34bf664342e1b18afa_thumbnail_405x552.png"
+    },
+    {
+        "id": 78,
+        "title": "%15-\nSHEGLAM لوحة ظلال العيون غير اللامعة بورغوندي 12 لونًا، ظلال عيون لامعة معدنية لؤلؤية ناعمة وناعمة ذات صبغة عالية، مستحضرات تجميل العيون، ظلال عيون لحفلات عيد الميلاد السوداء علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "29.00\n\n800+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Burgundy-Palette-12-Color-Matte-Eyeshadow-Palette-Satin-Metallic-Pearlescent-Soft-Smooth-High-Pigment-Eyeshadow-Eye-Makeup-Cosmetics-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-1200029.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/23/1770626890e71900ab739445b4f4e1b25451fd7388_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 79,
+        "title": "%18-\nSHEGLAM أحمر شفاه Dynamatte Boom طويل الأمد غير لامع-أحمر شفاه كريمي غير لامع مقاوم للماء 20 لونًا-أحمر شفاه رائع غير لاصق مقاوم للنقل-تخفيضات -هدية عيد الميلاد-أحمر شفاه وردي روج تنت علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "23.00\n\n1.8k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Dynamatte-Boom-Long-Lasting-Matte-Lipstick-High-Key-20-Colors-Creamy-Matte-Waterproof-Lipstick-Amazing-Non-Stick-Cup-Transfer-Proof-Lipstick-Pink-Lipstick-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-13209931.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/03/39/1762157310d17962c7ec0479d9ee9890573b58cb01_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 80,
+        "title": "%3-\n10 قطعة ملصقات أظافر بتصميم عين القطة المربعة الزرقاء اللامعة، أنيقة وجذابة مناسبة لحفلات النساء، مناسبة للنساء والفتيات، قابلة للاستخدام في الحفلات والزفاف واليومي والتخرج والعطلات والصيف، مناسبة للأصابع القصيرة",
+        "price": "12.67",
+        "product_link": "https://ar.shein.com/10pcs-Blue-Glitter-Square-Cat-Eye-Nail-Stickers-Elegant-Sexy-Style-Suitable-For-Women-s-Parties-Suitable-For-Women-And-Girls-Applicable-For-Party-Wedding-Daily-Graduation-Vacation-Summer-Suitable-For-Short-Toes-p-468426553.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/11/94/1778486394c351e0c77df6d620f498eed99e2fcafb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 81,
+        "title": "قناع العينين بحمض الهيالورونيك و الورد المضاد للهالات السوداء و الانتفاخات و الريبوز المرطب و المضاد للتجاعيد و غشاء العناية بالجلد للعينين - 60 قطعة",
+        "price": "12.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/60pcs-Rose-Hyaluronic-Acid-Eye-Mask-Anti-Dark-Circles-Eye-Bags-Rose-Collagen-Moisturizing-Anti-Wrinkle-Eye-Patches-Eye-Skin-Care-Mask-p-30155396.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/12/28/79/1703778211e465360bad134e4439fa60207b4e1bc0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 82,
+        "title": "%50-\nSHEGLAM Boldline مبراة لقلم الجل المحدد للعيون علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "2.00\n\n1.5k+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Boldline-Gel-Liner-Sharpener-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-355840195.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/30/4b/1769765306085adad8d2368c51113011d5406f3b94_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 83,
+        "title": "KOEC مجموعة العناية بالبشرة 3 قطع: فيلودندرون مغذي + فيتامين مشرق + جوهر مفعل بالببتيد NAD، منظف المسام، ملطف، طقم العناية لتحسين البشرة",
+        "price": "33.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/KOEC-3-PiecesSkincare-Set-Phellodendron-Enriching-Vitamin-Brightening-NAD-Peptide-Activating-Essence-Pore-Refining-Smoothing-Complexion-Improving-Care-Kit-p-294663347.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/19/2d/17635152787bda387071f63c13a879d418801ba182_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 84,
+        "title": "%10-\nزيت شفاه مرطب خفيف الوزن، مرطب ومغذي، طويل الأمد، منتفخ، يمنع التشقق، يخفف خطوط الشفاه، غير لزج، يعتني بالشفاه ليجعلها أكثر امتلاءً، مناسب للرجال والنساء في فصلي الخريف والشتاء، مناسب للمبتدئين، الطلاب، عيد الميلاد، عيد الحب، هالوين، عيد الميلاد، هدية العطلات",
+        "price": "7.17\n\n2k+. تم بيع",
+        "product_link": "https://ar.shein.com/Lightweight-Hydrating-Lip-Oil-Moisturizing-Nourishing-Long-Lasting-Plumping-Prevents-Chapping-Fades-Lip-Lines-Non-Sticky-Cares-For-Lips-To-Make-Them-Fuller-Suitable-For-Men-Women-In-Autumn-Winter-Beginner-Friendly-Student-Birthday-Valentine-s-Day-Halloween-Christmas-Holiday-Gift-p-174823630.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/02/03/1756791288e0e3da0c6e71dd45af856985f7c1be43_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 85,
+        "title": "%6-\n10 قطعة/مجموعة أظافر مصنوعة يدويًا بشكل لوز، طراز بسيط، طرف فرنسي أبيض مرسوم باليد على سرير الأظافر بلون عاري، أظافر اصطناعية أكريليك عالية الجودة، مناسبة للنساء والفتيات للاستخدام اليومي، مع ملحقات الأظافر أظافر مصنوعة يدويًا للضغط",
+        "price": "14.10\n\n1.6k+. تم بيع",
+        "product_link": "https://ar.shein.com/10Pcs-Set-Almond-Shaped-Handmade-Nail-Tips-Simple-Style-Handpainted-White-French-Tip-On-Nude-Color-Nail-Bed-Premium-Acrylic-False-Nails-Suitable-For-Women-And-Girls-Daily-Wear-With-Nail-Accessories-Press-On-Nails-Nail-Supplies-Nails-Handmade-Press-On-Nails-p-49606117.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/12/01/43/1733060570e1b1e58d08305a5cdf94682cf6c261a7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 86,
+        "title": "NEWقطع أظافر مربعة الشكل مصنوعة يدويًا بأسلوب فتاة ساخنة Y2K مع درع، تتميز بألوان عارية وقطع أظافر بألوان عارية مع عناصر حافة فرنسية. لكل قطعة درجة حرارة مصنوعة يدويًا، والاختلاف الصغير فريد. مصنوعة بحب، يمكن للنساء والفتيات ارتداء قطع الأظافر اللامعة. مجموعة من 10 قطع تأتي في 4 أحجام وتناسب الارتداء اليومي في الحفلات والرقص. تأتي مع ملف أظافر صغير وملصق لاصق كهدية للنساء والفتيات.",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/Square-Shaped-Handmade-Wearing-Armor-With-Y2K-Hot-Girl-Style-Featuring-Nude-Color-And-Nude-Color-Nail-Pieces-With-French-Edge-Elements-Each-Piece-Has-A-Handmade-Temperature-And-The-Small-Difference-Is-Unique-Handmade-With-Love-Both-Women-And-Girls-Can-Wear-Sparkling-Nail-Pieces-The-10-Piece-Set-Comes-In-4-Sizes-And-Is-Suitable-For-Daily-Wear-At-Parties-And-Dances-Comes-With-1-Mini-Nail-File-And-1-Self-Adhesive-Label-As-A-Gift-For-Women-And-Girls-p-468831601.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/11/be/17784618947c3cd16df1a594b501176c50bd80a935_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 87,
+        "title": "6 قطع قناع الوجه المرطب العميق بالكولاجين - مشبع بحمض الهيالورونيك والنياسينامايد، خالي من الكحول، قناع وجه الكولاجين لمكافحة الشيخوخة، الترطيب العميق، تنعيم الخطوط الدقيقة، قناع ليلي، بشرة نضرة، إحكام، تنقية المسام، بشرة مشرقة فوراً | مناسب للجنسين، مناسب لجميع أنواع البشرة، لون بيج فاتح، عودة إلى المدرسة، هدية عيد الحب. 3 قطع/1 قطعة",
+        "price": "5.00\n\n1k+. تم بيع",
+        "product_link": "https://ar.shein.com/6pcs-Collagen-Deep-Hydrating-Face-Mask-Infused-With-Hyaluronic-Acid-And-Niacinamide-Alcohol-Free-Collagen-Face-Mask-For-Anti-Aging-Deep-Hydration-Smoothing-Fine-Lines-Overnight-Mask-Radiant-Skin-Firming-Pore-Refining-Instantly-Glowing-Skin-Unisex-Suitable-For-All-Skin-Types-Light-Beige-Back-To-School-Valentine-s-Day-Gift-3pcs-1pc-p-266361651.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/01/87/17619802611e61996ef21e5af8a48e392bea915f92_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 88,
+        "title": "%20-\nSHEGLAM Smoke Clouds Kohl كحل للعيون-Jet Set محدد كحل علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "12.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Smoke-Clouds-Kohl-Eyeliner-Jet-Set-Kohl-Kajal-Henna-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-20403996.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/19/a6/175032470679e2681e19f315768305aeddaa9da684_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 89,
+        "title": "%20-\n30 ورقة من الوشم المزخرف المقاوم للماء لاصق الوشم المؤقت عالي الجودة",
+        "price": "4.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/30Sheets-Floral-Pattern-Water-Proof-Tattoo-Sticker-Water-Proof-Long-Lasting-Fake-Tattoo-p-17124693.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/07/27/1690472755c594380d2fea8aba91e90fa66117cc36_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 90,
+        "title": "%1-\nقلم تحديد الحواجب الفاتح للون، يمنح الاناقة والنضارة",
+        "price": "3.96\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Eyebrow-Highlighter-Pencil-Solid-Color-Brightening-Highlighting-p-81703018.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/20/8f/1747710235bc489d2826098433f857b1e17fca58c8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 91,
+        "title": "HANDAIYAN مبرز الوجه الماسي من هاندايان، مضيء للبشرة، معزز للتباين، بتشطيب بودرة، هدية عيد، مكياج لحفلات العيد والهالوين والكريسماس والسفر والتخييم في الخريف/الشتاء، دهان الوجه، مستحضرات تجميل، مناسب للنساء، مثالي لموضة Y2K، مناسب كهدية عيد ميلاد/عيد الحب/عيد الأم، ضروري لحفلات الاحتفالات، أفضل خيار للألوان",
+        "price": "9.00\n\n700+. تم بيع",
+        "product_link": "https://ar.shein.com/HANDAIYAN-Diamond-Rhombus-Highlighter-Skin-Brightening-Contour-Enhancing-Powder-Finish-Holiday-Gift-Makeup-For-Party-Halloween-Christmas-Travel-Autumn-Winter-Camping-Face-Painting-Cosmetics-Suitable-For-Women-Ideal-For-Y2K-Fashion-Suitable-As-Birthday-Valentine-s-Day-Mother-s-Day-Gift-Essential-For-Celebration-Parties-Best-Color-Choice-p-17028028.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/14/ec/17734513775f8f2e3c4e3046f5b9c69b8005867d75_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 92,
+        "title": "NEW10 قطعة أظافر قصيرة بيضاوية بنفسجية مصنوعة يدويًا بشكل كامل، أظافر بنفسجية وبيضاء بطبعات نجمية ونقاط وحلزونية ومرصعة بالراين ستون، أظافر جميلة وملائمة للاستخدام اليومي للنساء والفتيات، مناسبة للاستخدام في المناسبات والأعياد والحفلات خلال فصول الربيع والصيف والخريف والشتاء",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/10pcs-Pure-Handmade-Press-On-Nails-Short-Nails-Oval-Nails-Purple-Nails-Y2k-Sweet-Cool-Style-Purple-And-White-Press-On-Nails-With-Hand-Painted-Star-Polka-Dot-Spiral-And-Rhinestone-Accents-Cute-And-Daily-Nails-For-Women-And-Girl-Spring-Summer-Fall-Winter-Festivals-Party-And-Dailys-Life-Use-p-468751464.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/09/e4/1778317181bc1e9055429c6b3e1eb20e65cb6c1bd5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 93,
+        "title": "60 قطعة مجموعة رموش فردية ذاتية اللصق بشكل C، من 8 إلى 16 مم، طقم إطالة الرموش DIY مع ملقط وكيماشة الرموش، بدون حاجة لصمغ، رموش عنقودية، رموش فردية، رموش مستعارة",
+        "price": "14.00\n\n1.5k+. تم بيع",
+        "product_link": "https://ar.shein.com/60pcs-C-Curl-Self-Adhesive-Individual-Lashes-Set-8-16mm-DIY-Eyelash-Extension-Kit-With-Tweezers-And-Lash-Curler-No-Glue-Needed-Cluster-Lashes-Single-Lashes-False-Eyelashes-p-32514692.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/03/28/5c/1711611786be5ad1b8a968afa9973eb940d0e34a46_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 94,
+        "title": "بلسم شفاه بنكهة الفراولة 1/4، يزيد من نضارة الشفاه، ترطيب طويل الأمد، رعاية مغذية، يصلح تشققات شفاه السيدات، هدية مثالية لعيد الميلاد وعيد الهالوين",
+        "price": "6.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/1-4-Strawberry-Flavored-Lip-Balm-Increases-Lip-Plumpness-Long-Lasting-Moisturizing-Nutritious-Care-Repairs-Women-s-Lip-Lines-Perfect-Christmas-Halloween-Gift-p-386153807.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/09/db/1773044546dc9ceda03c0f34c19a6dc7b984d3edf3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 95,
+        "title": "Pudaier قلم تحديد شفاه مقاوم للماء 1 قطعة، قلم تحديد شفاه ثلاثي الأبعاد، هدية عيد الحب الحلوة",
+        "price": "7.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Pudaier-1pc-Waterproof-Nude-Lip-Liner-Pencil-3D-Lip-Contour-Pencil-Sweet-Valentine-s-Day-Gift-p-389776082.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/27/83/1769478074c12940ebaaff7360c0f676d186628130_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 96,
+        "title": "جهاز إزالة الشعر من الوجه اللاسلكي وجهاز إزالة شعر الوجه الكامل، مناسب للاستخدام المنزلي والسفر - مناسب للبشرة الحساسة، ويمكن استخدامه على الوجه والذقن والشفاه وخط البكيني والجبهة والحواجب والفك والرقبة وغيرها من المناطق.",
+        "price": "9.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/Wireless-Facial-Hair-Removal-Device-And-Full-Face-Hair-Removal-Device-Suitable-For-Home-And-Travel-Hair-Removal-Suitable-For-Sensitive-Skin-Can-Be-Used-On-Face-Chin-Lips-Bikini-Line-Forehead-Eyebrows-Jawline-Neck-And-Other-Areas-p-189798056.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/17/23/17580885181e8faae4d0d5c57dcc4800b9ca79336a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 97,
+        "title": "%20-\n9 أزواج من رموش القطة الصناعية من الفرو الصناعي | شريط شفاف خفيف الوزن 3D قصير | يخلق تأثير طبيعي ناعم وفاخر، مناسب للتنقل اليومي والمواعيد والغداء وإجراء مكالمات الفيديو وصور جواز السفر وحضور حفلات الزفاف والسفر والعطلات. رموش صناعية",
+        "price": "6.40\n\n1.7k+. تم بيع",
+        "product_link": "https://ar.shein.com/9-Pairs-Cat-Eye-Faux-Mink-Eyelashes-Transparent-Band-3D-Lightweight-Short-Create-A-Natural-Soft-Fluffy-Effect-Suitable-For-Everyday-Commute-Dates-Brunch-Video-Calls-Passport-Photos-Wedding-Guests-Travel-And-Holiday-Makeup-Fake-Eyelashes-Lashes-False-Eyelashes-Eyelashes-p-156963356.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/18/0b/1755450873d9c422d7603ccce21728820f4a776941_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 98,
+        "title": "NEW10 قطعة أظافر مصنوعة يدويًا بالكامل ، أظافر متوسطة على شكل لوز ، أظافر وردية ، أسلوب فتاة حلوة Y2k ، ألوان عاري خوخي مع تفاصيل وردية وزرقاء ، مرسومة باليد بنجوم وفيونكات ، أظافر ضغط جميلة وأنثوية للنساء والفتيات ، مناسبة للاستخدام في المناسبات والحياة اليومية في الربيع والصيف والخريف والشتاء",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/10pcs-Pure-Handmade-Press-On-Nails-Medium-Nails-Almond-Nails-Pink-Nails-Y2k-Sweet-Girl-Style-Nude-Peach-With-Pink-And-Blue-Accents-Hand-Painted-Stars-And-Bows-Cute-Girly-Press-On-Nails-For-Women-And-Girl-Spring-Summer-Fall-Winter-Festivals-Party-And-Dailys-Life-Use-p-468696523.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/08/f7/1778222349faef094d2e635fcec6b12ca8df7aee7a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 99,
+        "title": "%42-\nHello Kitty｜SHEGLAM المجموعة الكاملة علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "173.60\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Hello-Kitty-SHEGLAM-Full-Collection-Set-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-54325804.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/11/71/1752209478a9581bfdbcc2cf6dfcbc95a5c347af0b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 100,
+        "title": "%3-\n400 قطعة رموش مينك 3D فلوفي بتقوس C، جودة عالية وأقل سعر، رموش مستعارة DIY جديدة، ناعمة وكثيفة، مناسبة للمكياج وتمديد الرموش، رموش قصيرة، رموش DIY، رموش بألوان فاتحة، تمديد رموش DIY في المنزل",
+        "price": "12.63\n\n800+. تم بيع",
+        "product_link": "https://ar.shein.com/400pcs-C-Curl-Fluffy-3D-Mink-Eyelashes-High-Quality-Lowest-Price-New-DIY-False-Eyelashes-Soft-Voluminous-Suitable-For-Makeup-Eyelash-Extension-Short-Lashes-DIY-Lashes-Light-Color-Lashes-DIY-Eyelash-Extension-At-Home-p-175315374.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/04/76/1756978066a644f4e3a5a582e30c22c3c81c938cad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 101,
+        "title": "2026 جديد 10مل طلاء أظافر قابل للإزالة على أساس الماء، لون أرجواني-أحمر متوسط، طويل الأمد وسريع الجفاف، طلاء أظافر على أساس الماء مبيض وصحي - مناسب للربيع/الصيف - للنساء والفتيات",
+        "price": "6.00\n\n2.3k+. تم بيع",
+        "product_link": "https://ar.shein.com/2026-New-10ml-Removable-Water-Based-Nail-Polish-Medium-Purple-Red-Color-Long-Lasting-Quick-Drying-Whitening-Healthy-Water-Based-Nail-Polish-Suitable-For-Spring-Summer-For-Women-And-Girls-Nails-p-34118963.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/04/23/75/1713857213ae9b679c5a9cb2a49a185d864372f312_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 102,
+        "title": "EOLOVA طقم غسالة الأسنان الكهربائية، غسالة أسنان لاسلكية ب- 4 فوهات، رأس دوار 360 درجة، مناسب للجنسين، عناية يومية بالأسنان واللثة، هدية رائعة",
+        "price": "28.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/EOLOVA-Electric-Oral-Irrigator-Set-Wireless-Water-Flosser-With-4-Nozzles-360-Rotating-Tip-Unisex-Daily-Teeth-Gum-Care-Great-Gift-p-50421893.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2025/10/31/98/17618985880abd6922346d34b7f438a94771d6c660_thumbnail_405x552.png"
+    },
+    {
+        "id": 103,
+        "title": "25 لون لوحة ظلال العيون , قطعة واحدة متين ليس من السهل خلع المكياج مكياج العين منتج مع فرشاة مكياج",
+        "price": "12.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/25-Color-Eyeshadow-Palette-1pc-Long-Wearing-Smudge-Proof-Eye-Makeup-Product-With-Cosmetic-Brush-p-18584333.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/06/19/1687154713d4d7bc69089c3bfb389834046f7dac09_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 104,
+        "title": "NEW10 قطع أظافر مصنوعة يدويًا خالصة، أظافر قصيرة بشكل بيضاوي، أظافر متعددة الألوان بطراز ربيعي ناعم وحلو، أظافر جيلي بألوان وردي فاتح وأرجواني مزينة بزهور ثلاثية الأبعاد ونقاط وخطوط، أظافر جميلة وأنثوية للنساء والفتيات، مناسبة للاستخدام في المناسبات والحفلات والحياة اليومية في فصول الربيع والصيف والخريف والشتاء",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/10pcs-Pure-Handmade-Press-On-Nails-Short-Nails-Oval-Nails-Multicolor-Nails-Spring-Soft-Sweet-Style-Jelly-Nude-Pink-And-Lavender-With-3d-Flower-Polka-Dot-And-Line-Accents-Cute-Girly-Press-On-Nails-For-Women-And-Girl-Spring-Summer-Fall-Winter-Festivals-Party-And-Dailys-Life-Use-p-468680273.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/08/1d/1778228400cd8db4b26bd37538a5e6fb0cd4d0260d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 105,
+        "title": "%24-\nSHEGLAM مجموعة أحمر شفاه سائل صغيرة غير لامعة-Feel Real 3 قطع/مجموعة أحمر شفاه يدوم طويلاً مغذي بزيت عباد الشمس يقلل من الخطوط الدقيقة على الشفاه مجموعة أحمر شفاه سائل للسفر أحمر شفاه سائل لحفلات في روج تنت جلوس علامة تجارية جمال مكياج ميكب مستحضرات تجميل للنساء الفتيات مثالي لفصل الصيف الربيع مثالي ل- Y2K أزياء أنيقة عيد الأم هدية حفلة جاهز أفضل لون",
+        "price": "26.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Matte-Allure-Mini-Liquid-Lipstick-Set-Feel-Real-3-Pcs-Set-Long-Lasting-Lipstick-Nourishing-Sunflower-Oil-Reduce-Lip-Fine-Lines-Liquid-Lipstick-Travel-Set-Lip-Combo-Brand-Beauty-Makeup-Face-Paint-Cosmetic-For-Women-Girls-Perfect-For-Spring-Summer-Ideal-For-Y2K-Fancy-Fashion-Suitable-For-Birthday-Mother-S-Day-Gift-Rave-Festival-Party-Ready-Best-Color-p-1512175.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/04/27/17622557302d7e9d6a9ddeb3e2721f860187c87a62_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 106,
+        "title": "بقع نجمية لعلاج حب الشباب من النوع الماصة للسوائل، 1400 قطعة ، بقع هيدروكولويد مضادة للحب الشباب، بقع نجمية جذابة",
+        "price": "5.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Star-Pimple-Patches-For-Face-Hydrocolloid-1400-Patches-Hydrocolloid-Acne-Patch-Cute-Star-Pimple-Patch-p-64521266.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/31/ab/17434208842c98549411881b5b99ad15454129e337_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 107,
+        "title": "زوج من العدسات اللاصقة الخضراء غير المرئية، عدسات تجميلية مناسبة للاستخدام طوال العام، قطر 14.5 مم، لأغراض تنكرية وتنكر في مناسبات هالوين",
+        "price": "7.00\n\n700+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Pair-Green-Invisible-Contact-Lenses-Cosmetic-Beauty-Lenses-Fit-For-Year-Round-Use-Diameter-14-5mm-Halloween-Costume-Cosplay-p-51258655.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/12/21/75/173475160156c47428bf1ae500288df11b973b00e0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 108,
+        "title": "عطر نسائي بقوام مطفي بعطر الزهور والفواكه 50 مل (1.7 أونصة سائلة) برائحة الورد/الفراولة/الحليب/الياسمين، عطر دائم ورذاذ جسم مميز للصيف، هدية مثالية للنساء",
+        "price": "15.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/50ml-1-7FL-OZ-Matte-Texture-Flower-And-Fruit-Fragrance-Rose-Strawberry-Milk-Fragrance-Gardenia-Women-s-Perfume-Lasting-Fragrance-Senior-Body-Spray-Summer-Best-New-Perfume-Gift-For-Women-p-297675996.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/18/70/1763464222889f259f6c902e50563cfcdd466f92ae_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 109,
+        "title": "Pudaier طقم قلم تحديد الشفاه ولمعان الشفاه - قلم تحديد الشفاه ولمعان الشفاه، طويل الأمد ومقاوم للماء، ملمس مخملي، متوفر بألوان عارية وبنفسجية، مناسب للمكياج اليومي والأعياد | مزيج مثالي، يخلق مكياج شفاه مثالي، صيغة غير لاصقة",
+        "price": "11.00\n\n1.1k+. تم بيع",
+        "product_link": "https://ar.shein.com/Pudaier-Matte-Lip-Liner-Lip-Gloss-Set-Lip-Liner-And-Lip-Gloss-Set-Long-Lasting-And-Waterproof-Velvet-Texture-Available-In-Nude-And-Plum-Colors-Suitable-For-Daily-And-Holiday-Makeup-Perfect-Combination-Creates-Flawless-Lip-Makeup-Non-Stick-Formula-p-353520691.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/04/a7/1767509610f22c71489871226e68850df5c1eb340c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 110,
+        "title": "NEW10 قطع تسمى بملح البحر الكراميل. هذه المانيكير تتميز بدرجات لون أزرق فاتح ودافئ بني، مقترنة بنقوش الشمس والنقاط. يخلق الطلاء اللامع إحساسًا مريحًا وبوهيميًا.",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/10pcs-It-s-Named-Sea-Salt-Caramel-This-Manicure-Features-Soft-Sky-Blue-And-Warm-Brown-Tones-Paired-With-Sun-Motifs-And-Polka-Dots-The-Glossy-Finish-Creates-A-Cozy-Bohemian-Vibe-p-468663604.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/11/d6/1778479791889d0005e14314ca13432b2f671d1ebf_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 111,
+        "title": "%21-\nSHEGLAM بلسم شفاه زيتي مرطب ملون لامع من مستخلص زهر الكرز، بدون لزوجة، يعزز ترطيب الشفاه، مناسب لحفلات والشتاء وعيد الأم والتخرج والأعياد والرحلات والمناسبات الخارجية والمدرسية والمهرجانات، هدية مثالية للفتيات والكوسبلاي",
+        "price": "15.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEGLAM-Power-Bouquet-Lip-Gloss-Power-Petals-Shiny-Tinted-Moisturizing-Lip-Gloss-Plumping-Non-Sticky-Lip-Oil-Repairing-Cherry-Blossom-Extract-Lip-Care-Christmas-Winter-Rosa-Lip-Gloss-Easter-Mother-S-Day-Graduation-Birthday-Holiday-Winter-Y2K-Fancy-Fashion-Makeup-Cosmetic-Party-Beach-Travel-Camping-Outdoors-School-Campus-Trip-Festivals-Decor-Gift-Present-Rose-Girl-Cosplay-Best-Color-Charm-Vibe-p-68718840.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/18/06/1744948944f8d1aa33b1ca319b23520a01796cac49_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 112,
+        "title": "46 قطعة مجموعة أدوات مكياج كاملة للمبتدئين، 25 فرشاة متعددة الأنواع + 3 إسفنجات + 3 إسفنجات مثلثة + 6 إسفنجات أصابع + 6 إسفنجات صغيرة + وعاء تنظيف + حقيبة مقاومة للماء + ملقط رموش، مجموعة مكياج يومية كاملة",
+        "price": "34.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/46PCS-All-In-One-Makeup-Tool-Kit-For-Beginners-25pcs-Multi-Type-Brushes-3pcs-Sponges-3pcs-Triangle-Puffs-6pcs-Finger-Puffs-6pcs-Mini-Sponges-Cleaning-Bowl-Waterproof-Bag-Eyelash-Curler-Complete-Daily-Makeup-Set-p-37117307.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/06/16/eb/17185034067b2cd491a8ee45730a9aace8fd2bed6f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 113,
+        "title": "%22-\n24 قطعة أظافر وردية وعارية اللون لامعة للضغط للنساء - أظافر قصيرة بيضاوية مزيفة قابلة لإعادة الاستخدام مع قاعدة وردية فاتحة وأطراف بيضاء، سهلة التطبيق بنفسك أو في صالون التجميل، أظافر مناسبة للزفاف والمناسبات الخاصة، أظافر ضغط جميلة، لوازم أظافر عالية الجودة لعشاق الموضة",
+        "price": "3.14\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/24Pcs-Pink-Nude-Glossy-French-Press-On-Nails-For-Women-Reusable-Oval-Short-False-Nails-With-Soft-Pink-Base-White-Tips-Easy-Diy-Or-Salon-Application-Wedding-Bridal-Manicure-Nails-Cute-Press-On-Nails-Special-Occasion-High-Quality-Pressons-Fashion-Lovers-Nail-Supplies-Nails-p-95725179.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/29/58/17485290508ebd3396c5cad2b9895f941e0066cfac_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 114,
+        "title": "زجاجة واحدة من طلاء الأظافر المائي الجديد لعام 2026 بحجم 10 مل، سريع الجفاف، طويل الأمد، قابل للتقشير، مناسب للطلاب، خالي من الكحول",
+        "price": "6.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Bottle-2026-New-10ml-Water-Based-Nail-Polish-Quick-Dry-Long-Lasting-Peel-Off-Suitable-For-Students-Alcohol-Free-p-419732659.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2026/03/03/67/177255031083e2611e4ac466be413fe3e3ee39ec03_thumbnail_405x552.png"
+    },
+    {
+        "id": 115,
+        "title": "300 قطعة/10 طقم ملصقات أظافر بيضاء ذات تدرج لون باللوز الطويل، تصميم فرنسي بسيط، طقم أظافر اصطناعية طويلة بشكل اللوز مثالي، ملصقات أظافر لوز فرنسية مناسبة للاستخدام اليومي للنساء، والمناسبات والأعياد",
+        "price": "16.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/300pcs-10sets-Long-Almond-Shaped-Ombre-White-Nail-Stickers-Minimalist-French-Tip-Design-Perfect-Fitting-Long-Almond-Acrylic-Fake-Nails-Set-French-Almond-Nail-Stickers-Suitable-For-Women-s-Daily-Work-Festivals-And-Parties-p-445025894.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/18/58/177650856839e1d7e8b156cd4cb3e1541547e18696_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 116,
+        "title": "%29-\n10 قطعة أظافر مصنوعة يدويًا للضغط عليها، أظافر اللوز، أظافر حادة بطراز INS، أظافر سوداء، أظافر متعددة الألوان، تدرج فرنسي، تأثير فقاعي، أظافر مرسومة باليد، للنساء والفتيات للاستخدام اليومي والحفلات والعمل، مجموعة أظافر قابلة لإعادة الاستخدام مع أدوات الأظافر ولوازمها",
+        "price": "16.40",
+        "product_link": "https://ar.shein.com/10pcs-Handmade-Press-On-Nails-Almond-Nails-Edgy-Nails-INS-Style-Black-Nails-Multicolor-Nails-Gradient-French-Tip-Bubble-Effect-Hand-Painted-Nails-For-Women-Girls-Daily-Commute-Party-Office-Wear-Reusable-Nail-Set-With-Nail-Tools-Nail-Supplies-p-468635051.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/12/e1/1778565314698b397007f557dbe117fd22a4b52d3d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 117,
+        "title": "Gege Bear بلسم شفاه صلب ذو نهاية مرآة، مرطب، شديد الصبغة، طويل الأمد، مقاوم للانتقال، وغير قابل للانتقال. نوع المضخة. مناسب لمستحضرات تجميل المرأة، مظاهر مكياج جنونية، إبداعات تجميلية، المدرسة، السفر، حفلات الزفاف، تنكر، هدايا عيد الحب، والكريسماس.",
+        "price": "7.00\n\n800+. تم بيع",
+        "product_link": "https://ar.shein.com/Gege-Bear-Mirror-Finish-Solid-Lip-Balm-Moisturizing-Highly-Pigmented-Long-Lasting-Transfer-Proof-And-Non-Transferable-Pump-Type-Suitable-For-Women-s-Cosmetics-Crazy-Makeup-Looks-Beauty-Creations-School-Travel-Weddings-Cosplay-Valentine-s-Day-Gifts-And-Christmas-p-269315334.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/04/a7/1762242416ceab0b1922dd81332c5372209c8d7331_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 118,
+        "title": "200/100/50/10 فرشاة رموش، فرشاة ماسكارا رموش (مع صندوق تخزين)، فرشاة حواجب قابلة للتصرف، فرشاة تمديد الرموش، فرشاة حواجب، فرشاة زيت الخروع (مسحوق كريستالي)، هدايا",
+        "price": "3.00\n\n500+. تم بيع",
+        "product_link": "https://ar.shein.com/200-100-50-10pcs-Eyelash-Brush-Eyelash-Mascara-Brush-With-Storage-Box-Flexible-Disposable-Eyebrow-Brush-Eyelash-Extension-Brush-Eyebrow-Brush-Castor-Oil-Brush-Crystal-Powder-Giveaways-p-51047116.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/24/0c/175073718857791f0bf8061fc93098156bdce4cef8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 119,
+        "title": "%20-\n288 قطعة (12 طراز مختلط) ملصقات أظافر أكريليك لامعة بشكل لوز، مناسبة تمامًا، سهلة الارتداء، مناسبة لتزيين الأظافر الصيفية، فن الأظافر الوردي، مناسبة للسيدات والفتيات لاستخدامها في المناسبات اليومية والحفلات وغيرها من المناسبات",
+        "price": "11.20\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/288pcs-12-Mixed-Styles-Almond-Shaped-Glossy-Acrylic-Nail-Stickers-Perfect-Fit-Easy-To-Wear-Suitable-For-Summer-Manicure-Pink-Nail-Art-Suitable-For-Ladies-And-Girls-For-Daily-Party-And-Other-Occasions-Press-On-Nails-p-356452791.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/15/3f/177882994999ad8f3a495d898fc472fcc25c8c5bde_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 120,
+        "title": "6 قطع شرائط ظل العيون، أدوات مساعدة لظل العيون وخط العين، جل تثبيت مكياج العيون، شرائط واقية لمكياج العيون، شرائط رموش احترافية، شرائط قماش لاصقة للرموش، شرائط قماش منفذة للهواء لتمديد الرموش، شرائط رفع الرموش، غشاء عزل الرموش منخفض التهيج والمنفذ للهواء. قاطع شرائط، 5 قطع/1 مجموعة، هدايا، سفر، أشياء رخيصة، ضروريات السفر",
+        "price": "3.00\n\n900+. تم بيع",
+        "product_link": "https://ar.shein.com/6pcs-Eye-Shadow-Tapes-Eye-Shadow-Eyeliner-Auxiliary-Tools-Eye-Makeup-Setting-Gel-Eye-Makeup-Protective-Tapes-Professional-Eyelash-Tapes-Adhesive-Cloth-Eyelash-Tapes-Breathable-Micro-Porous-Cloth-Eyelash-Extension-Tapes-Eyelash-Lifting-Tapes-Breathable-Low-Irritation-Eyelash-Isolation-Membrane-Tape-Cutter-5pcs-1-Set-Giveaways-Travel-Cheap-Stuff-Travel-Essential-p-112110345.html?src_identifier=fc%3DAll%60sc%3DBeauty%20%26%20Health%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar10menu01dir01%60jc%3Dreal_1864&src_module=topcat&src_tab_page_id=page_home1779117952359&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/24/97/175076139302d53e0f054e03dcd5230c55ec1559cb_thumbnail_405x552.jpg"
+    }
+];
+    // 2. دالة لحقن وعرض المنتجات ديناميكياً داخل الجريد
+    const productGrid = document.getElementById('productGrid');
+    // غير القيم دي براحتك حسب سعر اليوم والعمولة الحاببها
+const EXCHANGE_RATE = 1200;     // سعر الصرف اليوم (مثلاً الدولار أو الريال مقابل العملة المحلية)
+const FIXED_COMMISSION = 4;   // العمولة الثابتة التي تريد زيادتها لكل منتج
+  productsData.forEach(product => {
+    // 1. تنظيف وفصل السعر عن عدد المبيعات كالمعتاد
+    const priceInfo = product.price.split('\n\n');
+    const soldCount = priceInfo[1] ? priceInfo[1] : '';
+
+    // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+    const originalPrice = parseFloat(priceInfo[0].replace('', '').trim());
+
+    // 3. العملية الحسابية: (السعر الأصلي × سعر الصرف) + العمولة الثابتة
+    const localPriceNumber = (originalPrice + FIXED_COMMISSION) *  EXCHANGE_RATE;
+
+    // 4. تنسيق السعر النهائي ليظهر بشكل أنيق (مثال: ج.س 13,800) بدون كسور
+    const cleanPrice = "ج.س " + Math.round(localPriceNumber).toLocaleString('en-US');
+    
+    // الآن المتغير cleanPrice أصبح يحمل السعر المحلي الجديد وجاهز للعرض في الكارت...
+      let imgUrl = product.image_url.trim().startsWith('//') ? 'https:' + product.image_url.trim() : product.image_url;
+      
+      
+      
+      const cardHTML = `
+            <div class="product-card"
+                 data-title="${product.title}"
+                 data-price="${cleanPrice}"
+                 data-sold="${soldCount}"
+                 data-img="${product.image_url}"
+                  data-link="${product.product_link}">
+
+
+                 
+                 
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${product.title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <div class="rating"></div>
+                    <div class="price-row">
+                        <span class="price">${cleanPrice}</span>
+                        ${soldCount ? `<span class="sold-count">${soldCount}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // --- أكواد القوائم والفلتر الأصلية ---
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // --- كود السلايدر الأصلي ---
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // --- كود النافذة المنبثقة (MODAL JAVASCRIPT) بعد حقن العناصر المضافة حديثاً ---
+    const modal = document.getElementById("productModal");
+    const closeBtn = document.querySelector(".close-modal");
+    const productCards = document.querySelectorAll(".product-card");
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.getAttribute("data-title");
+            const price = this.getAttribute("data-price");
+            const rawImg = this.getAttribute("data-img"); 
+            
+        // 2. جلب وتصحيح رابط شي إن للمنتج (الجديد)
+        const rawLink = this.getAttribute("data-link");
+        const sheinLink = rawLink && rawLink.trim().startsWith('//') ? 'https:' + rawLink.trim() : rawLink;
+
+        // 2. فحص وتعديل الرابط طائراً (السطر السحري)
+        const img = rawImg.trim().startsWith('//') ? 'https:' + rawImg.trim() : rawImg;
+            const sold = this.getAttribute("data-sold");
+            
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalPrice").innerText = price;
+            document.getElementById("modalImg").src = img;
+            document.getElementById("modalSold").innerText = sold;
+                const whatsappMessage = `الاسم: ${title}\n
+                السعر: ${price}\n
+                رابط الصورة: ${img}\n
+                رابط المنتج ${rawLink}`;
+
+            document.getElementById("btn").href = "https://Wa.me/249128039027?text=" + encodeURIComponent(whatsappMessage);
+            document.getElementById("sheinBtn").href = sheinLink;
+            modal.style.display = "block";
+        });
+    });
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

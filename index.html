@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-321KZ3G55X"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-321KZ3G55X'); </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوار - Nowar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+    
+    <style>
+        @import url(‘https://fonts.googleapis.com/css?family=Cairo‘);
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo';
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: Cairo, 'Cairo';
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); }
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+      
+      
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span ,a { text-decoration: none; font-size: 15px; color: var(--text-muted);margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+     
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px 10%; padding: 15px 10px; background: #fff; margin-bottom: 10px; }
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .category-item img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .category-item span { font-size: 11px; color: #333; line-height: 1.2; }
+
+        /* Filters */
+        .filters { display: flex;
+            width:100%;
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;}
+        .filter-btn {
+             padding: 6px 15px;
+             border-radius: 20px;
+              background: #fff;
+               border: 1px solid #fff; 
+               font-size: 13px; 
+               font-weight: 600;
+                white-space: nowrap;
+                 cursor: pointer;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                 flex:1;
+                text-align: center;
+                }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; }
+        
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+        .price-row { display: flex; flex-direction: column; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .sold-count { font-size: 11px; color: var(--text-muted); direction: rtl; }
+        .rating { font-size: 10px; color: #f5a623; display: flex; gap: 2px; }
+        .rating span { color: var(--text-muted); font-size: 11px; margin-left: 2px;}
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; 
+            position: absolute; 
+            z-index: 100; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: white; 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%;
+            border-radius: 20px 20px 0 0; 
+            padding: 20px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute; right: 20px; top: 15px; 
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; direction: rtl; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; direction: rtl;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+        .modal-sold { font-size: 13px; color: var(--text-muted); }
+        
+        .add-to-cart-btn { 
+            background: var(--text-main); color: white; border: none; 
+            padding: 15px; border-radius: 25px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        #btn {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn{
+            background-color: #000;
+            color:#fff;
+        }
+        .sheinBtn a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="فساتين">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+         <div class="top-nav" id="topNav">
+            <span ><a href="shoes.html">أحذية</a></span>
+            <span ><a href="women.html">نساء</a></span>
+            <span  > <a href="kids.html">أطفال</a> </span>
+            <span class="active"> <a href="index.html">إكسسوارات</a> </span>
+            <span > <a href="meckup.html">تجميل</a></span>
+            <span>الكل</span>
+            
+        </div>
+    </header>
+
+    <div class="main-content">
+        
+        <div class='mySlides fade' style="display: block;">
+            <img src=' first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+        <div class='mySlides fade'>
+            <img src='access1.jpg' style='width:100%' alt="ad 2">
+        </div>
+
+        <div class='mySlides fade'>
+            <img src='access3.jpg' style='width:100%' alt="ad 2">
+        </div>
+
+        <div class='mySlides fade'>
+            <img src='access2.jpg' style='width:100%' alt="ad 2">
+        </div>
+      
+
+        <div class="filters">
+            <button class="filter-btn "> الأحدث</button>
+            <button class="filter-btn"> ترند</button>
+            <button class="filter-btn"> الأكثر طلباً  </button>
+            <button class="filter-btn active"> لَك </button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+        
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+
+
+
+
+
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+            <img id="modalImg" src="" alt="Product">
+            <h3 id="modalTitle"></h3>
+            
+            <div class="modal-price-row">
+                <span id="modalPrice" class="modal-price"></span>
+                <span id="modalSold" class="modal-sold"></span>
+            </div>
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="">عرض المنتج في شي إن  </a></button>
+
+            <button class="add-to-cart-btn"> <a id="btn" href="">طلب المنتج </a></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. مصفوفة المنتجات المأخوذة من ملف json_prd.json مباشرة
+    const productsData =[
+    {
+        "id": 1,
+        "title": "ساعة يد نسائية فريدة وأنيقة بتصميم بارز لرأس الثعبان، من سبيكة ذهبية فضية عالية الجودة لامعة ومتينة، بسوار مرن قابل للتعديل مناسب لمعظم معاصم النساء، مناسبة للاستخدام اليومي الكاجوال والمناسبات والحفلات والزفاف، هدية مثالية للنساء والزوجات والأخوات والأصدقاء والعائلة، كذلك إكسسوار ساعة راقي",
+        "price": "12.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Unique-Elegant-Prominent-Snake-Head-Dial-Women-s-Watch-High-Quality-Gold-Silver-Alloy-Shiny-Durable-Luxury-Elastic-Adjustable-Strap-Suitable-For-Most-Women-s-Wrists-Fashionable-Casual-Daily-Office-Party-Wedding-Occasion-Ideal-Gift-For-Women-Wife-Sister-Friend-Family-Also-A-Refined-Watch-Accessory-p-417977297.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2026/03/08/89/1772949561420a63041cbba1bc08335e51edd8d2d9_thumbnail_600x.webp"
+    },
+    {
+        "id": 2,
+        "title": "5 قطع مجموعة خواتم فاخرة مزينة بالنقوش الهندسية والأوراق والزهور من النحاس المطعم بالزركونيا الاصطناعية، مناسبة للاستخدام في المناسبات والحفلات والزفاف والارتداء اليومي",
+        "price": "15.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Elegant-Luxury-Floral-Leaf-Geometric-Copper-Micro-Inlaid-Synthetic-Zirconia-Rings-Set-Suitable-For-Vacation-Party-Wedding-Daily-Wear-p-105074381.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/06/17/83/1750144335ac8ba305cb362df0ea21e478178ad532_thumbnail_600x.webp"
+    },
+    {
+        "id": 3,
+        "title": "أقراط حلقات صغيرة عصرية راقية وعتيقة الطراز، مناسبة للنساء لارتدائها في المناسبات اليومية والأعياد",
+        "price": "12.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Luxury-Elegant-Retro-Small-Hoop-Earrings-Suitable-For-Women-Daily-And-Holiday-Wear-p-65450493.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/04/02/ca/1743582066ccf65d2389077f5993a9cd644fd3c6e6_thumbnail_600x.webp"
+    },
+    {
+        "id": 4,
+        "title": "5 قطع مجموعة خواتم هندسية فريدة من نوعها مرصعة بالزركونيا المكعبة النحاسية الفاخرة، مناسبة للارتداء اليومي، الحفلات، حفلات الزفاف، عصرية وراقية",
+        "price": "16.00\n\n900+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Minimalist-Elegant-Fashion-Versatile-Delicate-Unique-Geometric-Design-Copper-Micro-Inlaid-Cubic-Zirconia-Rings-Set-Suitable-For-Women-s-Daily-Commute-Banquet-Wedding-Wear-Fashionable-And-High-End-p-313163810.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/11/17/f2/1763355727c0485414716e14f2ab139b0ae065f794_thumbnail_600x.webp"
+    },
+    {
+        "id": 5,
+        "title": "4 قطع من خواتم الأصابع المصنوعة من الفولاذ المقاوم للصدأ باللون الذهبي على شكل نجوم وأقمار، مناسبة للارتداء اليومي أو كهدية للأصدقاء",
+        "price": "12.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Stainless-Steel-Gold-Color-Star-Moon-Knuckle-Rings-Set-Suitable-For-Daily-Wear-Or-Gift-For-Friends-p-35257104.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_spmp/2024/05/10/75/171532671945d72460b8814231128bf60e3bddd704_thumbnail_600x.webp"
+    },
+    {
+        "id": 6,
+        "title": "30 زوج من الأقراط بتصميم الأشجار والزهور لعيد الحب ، الأم ، عيد الأم ، هدية",
+        "price": "11.00\n\n500+. تم بيع",
+        "product_link": "https://ar.shein.com/30pairs-Tree-Flower-Design-Earrings-Valentines-Mom-Mother-Mother-s-Day-Gift-p-12623860.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2022/12/27/167212307716340c064a3b16674445af663b1e70cf_thumbnail_600x.webp"
+    },
+    {
+        "id": 7,
+        "title": "ساعة يد نسائية فريدة وأنيقة بتصميم بارز لرأس الثعبان، من سبيكة ذهبية فضية عالية الجودة ولامعة، بسوار مرن قابل للتعديل مناسب لمعظم معاصم النساء، مناسبة للاستخدام اليومي والرسمي وحفلات الزفاف، هدية مثالية للنساء والزوجات والأخوات والأصدقاء والعائلة، كذلك إكسسوار ساعة راقي",
+        "price": "12.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Unique-Elegant-Prominent-Snake-Head-Dial-Women-s-Watch-High-Quality-Gold-Silver-Alloy-Shiny-Luxury-Elastic-Adjustable-Strap-Suitable-For-Most-Women-s-Wrists-Fashionable-Casual-Daily-Office-Party-Wedding-Occasion-Ideal-Gift-For-Women-Wife-Sister-Friend-Family-Also-A-Refined-Watch-Accessory-p-418921318.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2026/03/08/55/1772949537d751aed7ad4ab43f0d7ba61271fc6240_thumbnail_600x.webp"
+    },
+    {
+        "id": 8,
+        "title": "3 قطع مجموعة أساور تنس قابلة للتعديل بتصميم هندسي دائري ومربع من الزركونيا اللامعة، مناسبة للنساء والفتيات للارتداء اليومي",
+        "price": "14.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Set-Shiny-Round-Square-Geometric-Zirconia-Adjustable-Tennis-Bracelet-Suitable-For-Women-And-Girls-Everyday-Wear-p-48543514.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_spmp/2024/11/22/b8/17322581170e9e44eceea26542846370b698616461_thumbnail_600x.webp"
+    },
+    {
+        "id": 9,
+        "title": "5 أزواج/مجموعة من الأقراط للاستخدام اليومي و حفلات الزفاف، بتصميم مثلث صغير ملتوي بطلاء مطفي فاخر، مجموعة أقراط شخصية",
+        "price": "12.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Set-Minimalist-Wedding-Party-Daily-Wear-Earrings-Petite-Vintage-Triangle-Twist-Earrings-Luxury-Matte-Finish-Personalized-Earring-Set-p-68999369.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/04/16/5f/1744766661278bf2f452cabd81879226f31577063c_thumbnail_600x.webp"
+    },
+    {
+        "id": 10,
+        "title": "5 قطع مجموعة خواتم قابلة للتعديل مرصعة بزركونيا مكعبة فاخرة وبارزة، مناسبة للموضة اليومية والحفلات والأعراس والمناسبات، هدية مثالية للعروس",
+        "price": "28.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Luxury-Exaggerated-Super-Shiny-Cubic-Zirconia-Adjustable-Open-Ring-Set-Suitable-For-Daily-Fashion-Banquet-Party-Festival-Gift-Wedding-Bride-Wear-p-163515493.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/08/28/e1/1756366536ff997bda074e0cf251952a0acfa9c522_thumbnail_600x.webp"
+    },
+    {
+        "id": 11,
+        "title": "5 قطع مجموعة خواتم فاخرة مزينة بتصميم هندسي متقاطع مرصعة بالزركونيا المكعبة، أنيقة وعصرية للارتداء اليومي والحفلات والهدايا المناسبة للمناسبات",
+        "price": "14.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Luxury-Geometric-Criss-Cross-Design-Cubic-Zirconia-Inlaid-Rings-Set-Elegant-Fashionable-For-Daily-Wear-Party-Holiday-Gift-p-163764992.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/25/d4/17561147334a38db90ef45514a1965dc39da8595ae_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 12,
+        "title": "مجموعة 5 أزواج أقراط مكونة من لؤلؤ مزيف، أشكال هندسية وأزهار في طراز عتيق بسيط، أنيقة وحصرية مناسبة للنساء لارتدائها يوميًا وفي المناسبات",
+        "price": "12.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Set-Minimalist-Vintage-Faux-Pearl-Letter-Flower-Geometric-Earrings-Set-Elegant-Exclusive-Suitable-For-Women-Daily-Holiday-Wear-p-58300691.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/21/07/17401213325e261953336dbfc591519292034260c3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 13,
+        "title": "DAZY ساعة يد للنساء قطعة واحدة من سبيكة ذهبية بسيطة، قرص بيضاوي رقيق، عقارب بيضاء أنيقة، ساعات نسائية فاخرة ذات إحساس راقي بالكوارتز، عقارب بأرقام رومانية، مناسبة للزينة اليومية والارتداء والحفلات والتنقل والسفر",
+        "price": "16.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-1-Piece-Gold-Simple-Alloy-Bracelet-Women-s-Watch-Delicate-Oval-Dial-Stylish-White-Hands-Casual-And-Exquisite-Highly-Attractive-Women-s-Watches-Roman-Numeral-Dial-Premium-Feeling-Luxury-Quartz-Watches-Suitable-For-Daily-Decoration-Wearing-And-Party-Commuting-Traveling-p-229864098.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/30/8c/1751277972371517451667d7d5b2ea4273ecbaf5c2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 14,
+        "title": "5 قطع/مجموعة أقراط معدنية ذات ملمس مزخرف بأشكال هندسية وزهور، مزينة بخرز اللؤلؤ الاصطناعي بتصميم فرنسي بسيط وفريد، إكسسوارات أزياء متنوعة للنساء للاستخدام اليومي والاحتفالي",
+        "price": "14.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Set-Vintage-Textured-Metal-Geometric-Flower-Stud-Earrings-Faux-Pearl-French-Minimalist-Unique-Design-Earring-Set-Versatile-Fashion-Accessories-For-Women-Daily-Festive-Wear-p-196617518.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/20/ad/17583559442bd63b60513f953e03f7268821ac300c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 15,
+        "title": "5قطع مجموعة أناقة خواتم ماس هندسية فاخرة خواتم حفل زفاف أنيقة للنساءرمضان",
+        "price": "16.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Luxury-Geometric-Rhinestone-Rings-Set-Elegant-Wedding-Party-Rings-For-Women-p-38926309.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/07/11/72/1720693178d1d53e9c8aa75509b079bf35e54db5f1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 16,
+        "title": "5 قطع مجموعة خواتم نسائية فاخرة من النحاس مرصعة بالزركونيا، تصميم سلسلة فريد قابل للتعديل، للاستخدام اليومي والحفلات (بدون علبة هدايا)",
+        "price": "13.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Luxury-Exquisite-Micro-Inlaid-Zirconia-Chain-Design-Unique-Adjustable-Copper-Rings-Set-For-Women-Daily-Party-Wear-No-Gift-Box-p-249754568.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/30/18/1761814833337917f2cf59fd97b77636fc30c558a0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 17,
+        "title": "5 قطع/مجموعة أقراط بيضاوية ذات عقد مزيفة وفراغات على شكل فيونكة، أقراط دبوس غير متماثلة، بتصميم بسيط، مناسبة للنساء للاستخدام اليومي والمناسبات",
+        "price": "16.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Set-Vintage-Hollow-Bow-Faux-Pearl-Oval-Earrings-Asymmetrical-Asymmetrical-Stud-Earrings-Minimalist-Style-Suitable-For-Women-Daily-Holiday-Wear-p-52042496.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/12/19/34/1734600726d0ef98306dbe0a33c1b1fd8659e6d9c3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 18,
+        "title": "4 قطع مجموعة خواتم من الفولاذ المقاوم للصدأ، خواتم قابلة للتعديل بتصميم هندسي مفرغ، إكسسوارات زفاف للرجال",
+        "price": "12.00\n\n500+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Stainless-Steel-Ring-Set-Minimalist-Adjustable-Open-Rings-Hollow-Geometric-Pattern-Rings-Men-s-Wedding-Accessories-p-45182465.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/04/5a/17595715367656f120a14fde5e2df8a35bd264eb05_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 19,
+        "title": "قطعة واحدة سوار كاحل للنساء مصنوع من الفولاذ المقاوم للصدأ مرصع بالراين نقش زهرة البابونج (قد يكون هناك انحراف في عدد الخرز على السلسلة، والعدد الفعلي للخرز على السلسلة يخضع للمقاس المحدد)",
+        "price": "12.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Fashion-Rhinestone-Daisy-Stainless-Steel-Anklet-For-Women-The-Number-Of-Beads-On-The-Chain-May-Have-Some-Deviation-And-The-Actual-Number-Of-Beads-On-The-Chain-Is-Subject-To-The-Size-Marked-p-10056564.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/03/17/16474870887303bdc47104dd7314a4eb55a382c404_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 20,
+        "title": "30 زوج من أقراط الأذن المرصعة للنساء، بتصاميم الزهور والفيونكة والقلب والمربع والهندسية، مناسبة للارتداء اليومي والمناسبات",
+        "price": "13.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/30-Pairs-Women-Fashion-Stud-Earrings-Set-Flower-Bow-Heart-Square-Geometric-Designs-Casual-Holiday-Wear-p-358181743.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/05/73/17675980290aefc47551bce1cec50513517457229c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 21,
+        "title": "Hihho سوار سحر بتصميم بسيط أنيق مزين بمربعات بنفسجية من الزركونيا للنساء، مناسب كهدية لمناسبة المواعدة، حياديًا",
+        "price": "8.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Hihho-1pc-Minimalist-Fashion-Purple-Square-Zirconia-Embedded-Women-Charm-Bracelet-Suitable-As-Dating-Gift-Unisex-p-107750468.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/19/91/175031560162afcbb9cb3b416a9d57ff38a2844ad8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 22,
+        "title": "5 أزواج من أقراط الزهور المربعة الزائفة من اللؤلؤ بطراز عتيق، مناسبة للنساء للاستعمال اليومي والارتداء المتعدد الاستخدامات",
+        "price": "12.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/5pairs-Vintage-Niche-Faux-Pearl-Flower-Square-Stud-Earrings-Suitable-For-Women-Daily-Commute-Versatile-Wear-p-66159363.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2025/04/07/27/1744020834594d2980124d3a82532469c310914cbd_thumbnail_405x552.png"
+    },
+    {
+        "id": 23,
+        "title": "%7-\nأساور ذهبية مطلية بالذهب عيار 18 قابلة للتعديل، أساور ذهبية للنساء للزفاف والحفلات والهدايا للأم والصديقات المقربات",
+        "price": "6.51\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Elegant-Floral-Stainless-Steel-Bangle-18K-Gold-Plated-Adjustable-Open-Cuff-Bracelet-Women-s-Gold-Color-Wedding-Jewelry-Holiday-Party-Accessory-Gift-For-Her-Mom-Best-Friend-p-58457903.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/20/a7/1773996149ae99c87a6b93fbcbd51ff3a7f7f84386_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 24,
+        "title": "Cravure طقم سوار و خاتم من طراز كلاسيكي بلمسات نحاسية اللون مزخرف بالزركونيا المكعبة, مناسب للارتداء اليومي",
+        "price": "7.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Cravure-Retro-Style-Dual-Tone-Electroplated-Cubic-Zirconia-Striped-Bangle-Ring-Set-Suitable-For-Daily-Wear-p-389001360.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/25/b7/17455633214e6ae1a77936dc661d2d544af09bb927_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 25,
+        "title": "6 قطعة مجموعة أقراط ستراس ذات سطح ناعم بطراز هونج كونج بأشكال دائرية وخرز اللؤلؤ وأعين القطط ذات طراز عصري للنساء",
+        "price": "14.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/6pcs-Set-Retro-Smooth-Surface-Hong-Kong-Style-Round-Pearl-Charm-Cat-Eye-Earrings-And-Stud-Earrings-Set-For-Women-p-47947160.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/15/5d/173165641833258a4cc5fa8b3096ba8fa14a31b0d2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 26,
+        "title": "30 زوج من أقراط التثبيت بشكل قلوب وزهور، هدية عيد الأم وأم الأم وعيد الأمهات",
+        "price": "11.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/30pairs-Heart-Flower-Stud-Earrings-Valentines-Mom-Mother-Mother-s-Day-Gift-p-12044416.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/11/03/1667440956a4a15b2ed773dd9df0ec9417e703bfe9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 27,
+        "title": "SHEIN BAE ثلاث خواتم رصعة من والنحاس الفاخرة بتصميم بسيط وأنيق، مناسبة للوقت العادي أو المناسبات الخاصة كهدايا المهرجاناترمضان",
+        "price": "7.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-BAE-3pcs-Set-Minimalist-Elegant-Luxury-Women-s-Dating-Daily-Vacation-Copper-Cubic-Zirconia-Stacking-Rings-Suitable-For-Festival-Gifts-p-175451626.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/26/d8/1758897110d22546f719585fb9f5b8a10e01eb39c0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 28,
+        "title": "3 أزواج من أقراط الأذن المطعمة بالزجاج بتصميم قلب هندسي أنيق على الطراز الفرنسي القديم، مناسبة للنساء للاستخدام اليومي والتنقل والعطلات والحفلات",
+        "price": "9.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/3-Pairs-Vintage-French-Elegant-Geometric-Heart-Glazed-Stud-Earrings-Set-Suitable-For-Women-s-Daily-Commute-Holiday-Party-Wear-p-340213690.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/25/88/1766641571874651e6f68350e2d3abb3c9cf6fe773_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 29,
+        "title": "4 قطع/مجموعة سوار من الزركونيا بشكل زهرة رباعية الأوراق من الفولاذ المقاوم للصدأ، إكسسوار مجوهرات نسائي متعدد الاستخدامات، مناسب للارتداء اليومي الأنيق والحفلات، هدية مثالية",
+        "price": "11.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Set-Stainless-Steel-Four-Leaf-Clover-Zirconia-Flower-Bracelet-Versatile-Women-Jewelry-Accessory-Suitable-For-Elegant-Daily-Wear-And-Parties-Ideal-Gift-p-433431795.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/10/9f/1773125786630d63b9003a17ed686966862c7d3619_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 30,
+        "title": "طقم قلادة ذو طراز روماني ذو أرقام راقية من الصلب اللامع، طراز كوري أنيق، تصميم صغير فريد، طقم قلادة فاخر متعدد الاستخدام للنساء، مناسب للارتداء اليومي",
+        "price": "17.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Set-Stainless-Steel-Minimalist-Chic-Sparkling-Roman-Numeral-Necklace-Suit-Fashionable-Korean-Style-Exquisite-Small-Unique-Design-Versatile-Luxury-Necklace-Set-For-Women-Suitable-For-Daily-Wear-p-31545590.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/03/13/8f/171030204077c51a7aafc3bd8c415f88c5f0d532f0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 31,
+        "title": "5 قطع مجموعة خواتم قابلة للتعديل بشكل قطرة مائية هندسية فاخرة من الزركونيا المكعبة، أنيقة وراقية، مناسبة للحفلات والزفاف (بدون علبة هدايا)",
+        "price": "19.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Luxury-Geometric-Water-Drop-Shaped-Cubic-Zirconia-Adjustable-Rings-Set-Elegant-Sophisticated-Suitable-For-Banquet-Wedding-No-Gift-Box-p-208638862.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/03/53/1759473523ba0d7dc546b714c0e2325ad718d46b88_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 32,
+        "title": "5 قطع مجموعة خواتم فاخرة بتصميم نجوم وقمر من الزركونيا المكعبة الاصطناعية بتصميم أوراق متقاطعة، مناسبة للحفلات والمناسبات والاستخدام اليومي",
+        "price": "14.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Elegant-Synthetic-Cubic-Zirconia-Star-Moon-Design-Leaf-Criss-Cross-Luxury-Fashion-Rings-Set-Suitable-For-Party-Holiday-Daily-Wear-p-202622496.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/25/ec/17587915198c4ba3e9f60be65c445b5893e912778c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 33,
+        "title": "Nooxian 1 قطعة سوار للسيدات على شكل أربعة ورقات البرسيم مرصع بالزركونيا النحاسية المطلسمة بشرابات، هدية يومية للمجوهرات (بدون علبة هدايا)",
+        "price": "11.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Nooxian-1pc-Women-Layered-Tassel-Copper-Inlaid-Zirconia-Four-Leaf-Clover-Bracelet-Daily-Gift-Jewelry-No-Gift-Box-p-72287469.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/21/8b/174522142345a4ff7404d4429b5c5c4e3ed91c2786_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 34,
+        "title": "Hihho مجموعة قلادة وسلسلة من 3 قطع مزينة بأزهار مرصعة بأحجار الزركونيا مربع، مصنوعة من الفولاذ المقاوم للصدأ ، أنيقة وفاخرة مناسبة للاستخدام اليومي ، الديكور والهدايا مثل عيد الحب ، لأم ، عيد الأم",
+        "price": "14.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Hihho-3pcs-Fashionable-Luxurious-Double-Ring-Pendant-Necklace-Set-With-Cubic-Zirconia-Inlaid-Flowers-Stainless-Steel-Chain-For-Women-Perfect-For-Daily-Wear-Decoration-Gift-Valentines-Mom-Mother-Mother-s-Day-Gift-p-30485423.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/10/b5/174955567408beeaa6ef4ad433042c46ec67dfd6e9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 35,
+        "title": "Cravure 2 قطعة من خواتم النساء المرصعة بالزركونيا المكعبة ذات اللون الفضي القابلة للتعديل، طقم خواتم مطلية بالفضة، طقم خواتم للنساء، خواتم للأزواج، خواتم قابلة للفتح، خواتم زفاف، خواتم خطوبة، للارتداء اليومي، هدية لعيد الحب، توزيعات رمضان، أطباق رمضان، هدايا عيد الفطر، هدايا عيد الفطر",
+        "price": "7.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Cravure-2pcs-Fashionable-Versatile-Silver-Tone-Cubic-Zirconia-Inlaid-Women-s-Rings-Silver-Plated-Ring-Set-Women-s-Ring-Set-Couple-Rings-Adjustable-Open-Ring-Wedding-Rings-Engagement-Rings-Daily-Wear-Gift-For-Valentine-s-Day-Ramadan-Distribution-Ramadan-Dishes-Eid-Al-Fitr-Gift-Eid-Al-Fitr-Giveaways-p-389001638.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/03/1e/1748958046e97144c323d2dbef57a8a4b30039c365_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 36,
+        "title": "أسلوب أساسي & الموضة & متعدد الجوانب والاستعمالات & الراقية إحساس & فاخرة خفيفة سبيكة خاتم الى ملابس يومية 2قطع/طقمرمضان",
+        "price": "5.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Set-Simple-Fashionable-Versatile-High-End-Feeling-Light-Luxury-Alloy-Rings-For-Daily-Wear-p-17676592.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/06/10/168636774763b34cba05dd0844c9b0a009733e378e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 37,
+        "title": "3 قطع مجموعة خواتم قطرة زيت بني من الفولاذ المقاوم للصدأ بتصميم بسيط، مناسبة للاستخدام اليومي للنساء أو كهدايا",
+        "price": "13.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Minimalist-Stainless-Steel-Brown-Oil-Drop-Ring-Set-Suitable-For-Women-s-Daily-Wear-Or-As-Gifts-p-88297447.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/26/ca/17482466808875aec1b9513ac45c56235fef23622d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 38,
+        "title": "Nooxian مجموعة 2 قطعة سوار للسيدات مزخرف بحجر البراق والزغاليل على شكل قلب، هدية عيد الأم، عيد الأم،عيد الحب",
+        "price": "9.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Nooxian-2pcs-Set-Blingbling-Sparkly-Heart-Zirconia-Decor-Ladies-Bracelet-Valentines-Mom-Mother-Mother-s-Day-Gift-p-48159062.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/12/cb/1731408248a966ce42afffc005f3628f77493fa843_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 39,
+        "title": "5 قطع مجموعة خواتم تاج أنيقة وأنيقة ذات تصميم هندسي، خواتم نحاسية رقيقة مرصعة بالزركونيا المكعبة، مناسبة للزفاف والحفلات والهدايا والاستخدام اليومي",
+        "price": "17.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Luxury-Fashion-Elegant-Geometric-Crown-Rings-Set-Delicate-Copper-Inlaid-Cubic-Zirconia-Rings-Suitable-For-Wedding-Party-Gift-Daily-Wear-p-414775196.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/05/72/1772692776141f3b6795d39250157061d1659b20ce_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 40,
+        "title": "ROMWE Goth 4 قطع خواتم بتصميم الأسلوب البحري - نجمة سماوية لامعة، صدفة، خواتم معدنية هندسية، خواتم مفتوحة. هدايا للنساء والبنات والزوجات",
+        "price": "7.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/ROMWE-Goth-4pcs-Fashion-Ocean-Style-Rings-Shiny-Starfish-Shell-Geometric-Metal-Rings-Open-Ring-Gifts-For-Women-Daughters-Wives-p-58728277.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/02/25/62/1740452849114e4f455351f3cf2c75d2917c8d1fdc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 41,
+        "title": "5 قطع مجموعة خواتم نسائية مفتوحة ذات تصميم بسيط وأنيق من النحاس المطعم بالحجارة الصناعية، مناسبة للاستخدام اليومي والمناسبات الخاصة",
+        "price": "15.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Minimalist-Luxury-Fashion-Daily-Personalized-Plain-Band-Elegant-Elegant-Party-Holiday-Copper-Micro-Inlaid-Synthetic-Unique-Gentle-Women-s-Open-Ring-Set-p-417709120.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/09/12/17730238387d8590d5166ac5a7c209271c34ccec7a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 42,
+        "title": "ساعة نسائية بطراز عتيق، ساعة كوارتز صغيرة عالية الجودة للطلاب، تصميم بريطاني فاخر",
+        "price": "8.00",
+        "product_link": "https://ar.shein.com/1pc-Vintage-Style-Women-s-Watch-High-Quality-Student-Petite-Dial-Quartz-Watch-Luxury-British-Design-p-430205994.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/01/70/17593053994cc7409ef9e5d089b55327f88693a8b0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 43,
+        "title": "طقم أقراط معدنية هندسية زهرية عصرية على الطراز الأوروبي والأمريكي، أقراط جديدة بخرز مصطنع بطراز بسيط وأنيق، مناسبة للاستخدام اليومي والمناسبات للنساء",
+        "price": "15.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Set-Fashionable-European-American-Metal-Geometric-Floral-Stud-Earrings-Faux-Pearl-New-Minimalist-Retro-High-End-Earrings-Set-Simple-Elegant-Earrings-Suitable-For-Women-s-Daily-And-Festival-Wear-p-132934797.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/21/78/175308803030bdfeac3d7c5c047773e90e05b0795f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 44,
+        "title": "4 قطع طقم أقراط من الفولاذ المقاوم للصدأ مرصعة بالزركونيا، أقراط إبزيم مطلية بالذهب عيار 18 قيراط للنساء",
+        "price": "15.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Elegant-Stainless-Steel-Zirconia-Earring-Set-18K-Gold-Plated-Crown-Stud-Earrings-Cartilage-Piercing-Jewelry-For-Women-p-304519714.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/08/00/176517856615c15c0cec551d081e15f66c42a8cef0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 45,
+        "title": "9 قطعة مجموعة أقراط زهور صدفة القمر الأنيقة والمبسطة، أقراط كريستال متدلية أنيقة مزينة بالؤلؤ الاصطناعي للنساء، مناسبة للاستخدام اليومي والمناسبات",
+        "price": "16.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/9Pcs-Set-Elegant-Minimalist-Moonlight-Moon-Shell-Flower-Earrings-Faux-Pearl-Delicate-Glamorous-Geometric-Crystal-Drop-Earrings-Set-For-Women-Suitable-For-Daily-And-Festive-Wear-p-77693084.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/12/2e/1747045474a2b7df08ae5f6a0f7086f61115d29d0f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 46,
+        "title": "ثلاث خواتم رصعة من والنحاس الفاخرة بتصميم بسيط وأنيق، مناسبة للوقت العادي أو المناسبات الخاصة كهدايا المهرجاناترمضان",
+        "price": "7.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Set-Minimalist-Elegant-Luxury-Women-s-Dating-Daily-Vacation-Copper-Cubic-Zirconia-Stacking-Rings-Suitable-For-Festival-Gifts-p-32134898.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/03/20/8f/171089862343c7cace75046b040c7d01c93a386e35_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 47,
+        "title": "LUCKYFOX 1 قطعة ساعة إسترجاع المدرسة، ساعة نسائية بسيطة بنمط أعمال بعقارب كوارتز قرص مربع صغير من سبيكة الزنك عتيق، سوار جلد مناسبة للاستخدام اليومي كهدية للطلاب",
+        "price": "12.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/LUCKYFOX-1pc-Ladies-White-Simplistic-Business-Style-Zinc-Alloy-Retro-Quartz-Small-Square-Dial-Leather-Strap-Watch-Suitable-For-Daily-Use-As-A-Gift-For-Students-Returning-To-School-p-37600712.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/06/25/3c/17192874765435d949e7d73ce8e131405af1b8033d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 48,
+        "title": "أقراط نحاسية أنيقة وجميلة مطلية بالذهب عيار 18 قيراط، مناسبة للارتداء اليومي والمناسبات",
+        "price": "15.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/18K-Gold-Plated-Elegant-Cute-Copper-Earrings-Suitable-For-Daily-Wear-And-Gatherings-p-346012796.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/04/ef/17647797538c8a422cffc5fe120fbb74825a525b24_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 49,
+        "title": "سوار متصل بسلسلة مربع مكعب زركونيا فاخر موضة قطعة واحدة",
+        "price": "11.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Chain-Linked-Square-Cubic-Zirconia-Luxury-Fashion-Bracelet-p-18124398.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/10/19/23/1729342550dad186f1160d805142dcd7021f5d6a24_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 50,
+        "title": "Hihho 6 قطع من مجموعة الأقراط الفاخرة المنفصلة المرصعة بحجر الزركونيا الكامل، ذات تصميم أنيق وعصري مع زهور مصقولة ، هدية رومانسية مناسبة لأيام الأم وعيد الأم",
+        "price": "13.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Hihho-6-Pieces-Simple-Fashionable-Shiny-Flower-Pendant-Earring-Set-With-Full-Zirconia-Inlay-Luxury-Jewelry-Ear-Accessories-Gift-Valentines-Mom-Mother-Mother-s-Day-Gift-p-33014599.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/31/ac/174866126378413f3e5e40cc3864580f140560e5df_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 51,
+        "title": "قلادة قلادة بنمط المحيط الصيفي، نجمة البحر وذيل السمكة مع خرز اللؤلؤ الزائف، سلسلة طوق من سبائك المينا الملونة، أنيقة للارتداء اليومي، رحلة إلى الشاطئ، المواعدة، الحفلات، السفر",
+        "price": "10.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Summer-Ocean-Style-Starfish-Fish-Tail-Faux-Pearl-Pendant-Necklace-Colorful-Enamel-Alloy-Clavicle-Chain-Fashionable-For-Daily-Wear-Beach-Vacation-Dating-Party-Travel-p-63257396.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/25/bd/1742867085c18e344e5706bc4b78b888af0c29683c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 52,
+        "title": "5 أزواج من أقراط زينة فرنسية أنيقة عتيقة فاخرة مزيفة من اللؤلؤ والزجاج المحروق والطواحين والزهور واللهب",
+        "price": "16.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/5-Pairs-Elegant-French-Style-Vintage-Luxury-Faux-Pearl-Cracked-Glaze-Windmill-Floral-Flame-Decorative-Earring-Set-p-64875289.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/30/0a/174331714790d0019ac442de2048a3289384fa66a9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 53,
+        "title": "سوار أساور مجموعة مجوهرات من الزركونيا والفولاذ المقاوم للصدأ على شكل زهرة، مناسب للارتداء اليومي",
+        "price": "8.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Fashion-High-Quality-Stainless-Steel-Flower-Zirconia-Women-s-Bangle-Bracelet-Jewelry-Set-Suitable-For-Daily-Wear-p-307622020.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/24/a0/17639624647e7f33c036757b965268b24bc7463a97_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 54,
+        "title": "3 أزواج من الأقراط المنقوشة بالراتنج الكهرماني الأنيق والناعم للنساء، متعددة الاستخدامات للاستعمال اليومي والحفلات والكرة، مناسبة لفصلي الخريف والشتاء",
+        "price": "15.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/3-Pairs-Retro-Elegant-Soft-Amber-Resin-Inlaid-Earrings-Set-For-Women-Versatile-For-Daily-Party-Ball-Wear-Autumn-Winter-p-61464978.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/12/d0/17417426934ed0b3c797894c801981f93301d97731_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 55,
+        "title": "4 قطع طقم من الخواتم مطلي بالذهب الأصفر عيار 18 قيراط، بتصميم النجمة والشمس، مناسبة للاستخدام اليومي للنساء",
+        "price": "12.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Set-Stainless-Steel-18K-Gold-Plated-Fashionable-Star-Sun-Open-Ring-Suitable-For-Daily-Wear-For-Women-p-58926412.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/25/25/1740484357a8ebace8ebd16bbb66cdb38cf5e91282_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 56,
+        "title": "سوار فضة إسترليني عيار 925 إنش برؤوس فصوص وزركونيا بشكل كرة التنس للنساء موضة بسيطة للخطوبة والزفاف والأناقة بطول من 16 إلى 23 سم وقطر 4 مم",
+        "price": "9.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-S925-Sterling-Silver-Plated-Bracelet-Zirconia-Tennis-Ball-Women-Fashion-Simple-Engagement-Wedding-Charm-Jewelry-4mm-16-23cm-p-82775893.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/19/19/1747669088bf5ba0072c3a5dfd8d1c4aae7f58bf1d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 57,
+        "title": "Clariva ساعة نساء إيطالي مطلى بالذهب والفضة، إطار بيضاوي، حزام فولاذ لا يصدأ، حركة كوارتز، مرصعة بحجارة الماس، مناسبة للاستخدام اليومي",
+        "price": "15.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Clariva-1pc-Women-s-Oval-Dial-Two-Tone-Stainless-Steel-Band-Classic-Business-Quartz-Watch-With-Diamonds-Suitable-For-Daily-Use-p-378702530.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/ssms/2026/02/27/29/1772166995551c0b7f4925a0fdc044586709a020e6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 58,
+        "title": "سوار مفتوح مكعب زركونيا زخرفةرمضان",
+        "price": "15.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Glamorous-Cubic-Zirconia-Decor-Cuff-Bangle-For-Women-For-Daily-Decoration-p-14307793.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/05/20/11/1716183896389f10ca24ec743b92896d0c477a5cad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 59,
+        "title": "REBIRTH ساعة يد نسائية كوارتز بتصميم أنيق وعملي، مع مقياس بالأرقام الرومانية، مناسبة للارتداء اليومي",
+        "price": "22.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/REBIRTH-1pc-Women-s-Minimalist-Fashion-Business-Quartz-Wrist-Watch-With-Roman-Numeral-Scale-Suitable-For-Daily-Wear-p-191016398.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/22/fe/17585269774c0aca6b6c3b7a77c2a074b609418620_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 60,
+        "title": "5 قطع مجموعة خاتم قابل للتعديل مزين بزهرة مجوفة فاخرة وراقية من المكعب اللامع، مناسب للحفلات والسهرات والعطلات",
+        "price": "16.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Fashionable-Luxury-Exquisite-Vintage-Hollow-Radiant-Flower-Inlaid-Shiny-Cubic-Zirconia-Unique-Adjustable-Open-Ring-Set-Suitable-For-Banquet-Party-Vacation-Wear-p-417145370.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/07/b1/1772870224202ad9d9088004c267a6d56e97e7de48_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 61,
+        "title": "مجموعة خاتمين نحاسيين قابلين للتعديل مرصعين بالزركونيا الكاملة بشكل بيضاوي أنيق لحفلات الزفاف والعطلات والعرائس للنساء",
+        "price": "10.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Luxury-Oval-Full-Zirconia-Elegant-Party-Wedding-Vacation-Bridal-Adjustable-Copper-Ring-Set-For-Women-p-417307239.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/08/e9/1772936982f6f3beacc23cd8bde09cb1d3e5e37588_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 62,
+        "title": "قلادة نمط أوروبي وأمريكي عالية الجودة مطلية بالنحاس والذهب عيار 18 قيراط مرصعة بالراين ستون غير متماثلة، هدية عصرية للنساء، مناسبة للارتداء اليومي",
+        "price": "18.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-High-Quality-European-American-Style-Cubic-Zirconia-Copper-Plated-18K-Gold-Block-Asymmetrical-Rhinestone-Necklace-Fashionable-Gift-For-Women-Suitable-For-Daily-Wear-p-113097801.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/28/08/1751097046c5346928994d83b64b76a3b777ec5d57_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 63,
+        "title": "Glisma ساعة يد نسائية بأرقام رومانية بيضاوية، كاجوال أنيقة بحركة كوارتز، مناسبة للارتداء اليومي قطعة واحدة",
+        "price": "31.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Glisma-1pc-Women-s-Oval-Roman-Numerals-Casual-Elegant-Quartz-Wrist-Watch-Suitable-For-Daily-Wear-p-306340251.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/25/33/17666434522e2973774ef543bde0e9464d513bacda_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 64,
+        "title": "1 قطعة تصميم فردي أنيق رفيع المستوى من الخاتم ذي التقابل الأنيق والملائم للاستخدام اليومي",
+        "price": "8.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Fashion-Minimalist-Niche-Design-Personal-High-End-Luxurious-Elegant-Criss-Cross-Ring-Suitable-For-Daily-Wear-p-63041352.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/25/f7/17428739019cd16d0554ce225eb9e3d04aca8e8388_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 65,
+        "title": "مجموعة 4 قطع: قلادة قلب معلقة ملونة بزهور، أقراط، سوار، مجموعة مجوهرات زهور أنيقة وجذابة للنساء، مناسبة للارتداء اليومي والحفلات والمناسبات",
+        "price": "14.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/4-Piece-Set-Colorful-Teardrop-Floral-Pendant-Necklace-Earrings-Bracelet-Elegant-Chic-Floral-Jewelry-Set-For-Women-Suitable-For-Daily-Party-Holiday-Wear-p-72773696.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/30/aa/17459922171c0b81a1cec1491b61697beb112b9925_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 66,
+        "title": "9 قطع/مجموعة أساور متعددة الطبقات مصنوعة يدويًا بطراز بوهيمي مزخرفة بالخرز والقلوب والفراشات، مناسبة لإكسسوارات فستان الشاطئ للمرأة. ملاحظة: قد يوجد اختلاف طفيف في اللون بسبب اختلاف دفعات الصبغ.رمضان",
+        "price": "11.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/9pcs-Set-Bohemian-Style-Handmade-Beaded-Multilayer-Bracelet-Set-With-Heart-Butterfly-Decor-Suitable-For-Women-Y2K-Beach-Dress-Accessories-Note-Slight-Color-Difference-May-Exist-Due-To-Varying-Dyeing-Batches-p-23582095.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/09/21/fb/169527647414546c0467a80ed12993e09b7f86d8ce_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 67,
+        "title": "3 أزواج من أقراط الأذن المينائية بعقدة على الطراز الصيني الجديد والفرنسي الرجعي، مجموعة أقراط أنيقة، متعددة الاستخدامات للنساء في الاستخدام اليومي والمناسبات الاحتفالية",
+        "price": "9.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/3-Pairs-Minimalist-French-Retro-New-Chinese-Style-Knot-Enamel-Stud-Earrings-Elegant-Earring-Set-Versatile-For-Women-Daily-And-Festive-Wear-p-358557745.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/07/c6/1767779731102a73d4085e230d111ebc54c93e416f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 68,
+        "title": "4 قطع / مجموعة قلادة بوهيمية صيفية مع زهرة البابونج مصنوعة يدويًا بسلاسل من سبائك النجمة والصدفة، قلادة متعددة الطبقات للنساء، مناسبة للملابس اليومية وتصوير الإجازة على الشاطئ. طول السلسلة قابل للتخصيص",
+        "price": "15.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Set-Summer-Bohemian-Daisy-Handmade-Chain-Alloy-Starfish-Shell-Pendant-Multi-Layer-Necklace-For-Women-Suitable-For-Daily-Outfit-And-Beach-Vacation-Photo-Shoot-Chain-Length-Customizable-p-77385996.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/12/ab/174701833566ec6b210d6d0e37c352ac14eea04819_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 69,
+        "title": "17 قطعة طقم أقراط وكليبسات أذن زهرية مزينة بالزركونيا عتيقة، ملحقات مجوهرات نحاسية مناسبة للنساء في الحفلات والمآدب",
+        "price": "17.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/17pcs-Vintage-Mini-Zirconia-Inlaid-Floral-Earrings-Ear-Clips-Set-Copper-Jewelry-Accessories-Suitable-For-Women-Party-Banquet-p-47821686.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/14/c8/1771081151dedcfb596ecfcb73a1df7d3282ec7d86_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 70,
+        "title": "BINBOND ساعة نسائية كوارتز فاخرة من الذهب، ساعة نسائية أنيقة مقاومة للماء بإضاءة ليلية، من الفولاذ المقاوم للصدأ، للأعمال والأوقات الحرة، بنظام تقويم مزدوج",
+        "price": "32.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/BINBOND-Luxury-Gold-Quartz-Watch-Women-s-Fashion-Women-s-Watch-Waterproof-Night-Light-Stainless-Steel-Business-Leisure-Dual-Calendar-Women-s-Watch-p-26429404.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/06/26/b1/1719387991a772dc8c571d4b46d39dcd5a9f7dbb5c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 71,
+        "title": "1 قطعة خاتم أنيق من السيركون المكعب للنساء للزفاف والخطوبة والذكرى السنوية والحفلات والمجوهرات، هدية عيد الحب",
+        "price": "11.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1-PC-Glamorous-Cubic-Zirconia-Ring-For-Women-For-Wedding-Engagement-Anniversary-Party-Jewelry-Valentine-s-Day-Gift-p-101861022.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/17/ce/1750130849d0c53caa470105f0c4284bffe6434c6d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 72,
+        "title": "Livesso زوج واحد من سوار الأصابع ذو رابط من الفولاذ المقاوم للصدأ أنيق، سلسلة خرز اللؤلؤ الأرز المتعددة الأوجه والبسيطة، مجوهرات اليد (عدد الخرز عشوائي)",
+        "price": "8.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Livesso-1pc-Fashionable-Stainless-Steel-Linked-Fingertip-Bracelet-Minimalist-Versatile-Rice-Pearl-Finger-Chain-Hand-Jewelry-Bead-Count-Random-p-326350875.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/06/7e/17492095957836253cec0a7420a533233cac06e704_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 73,
+        "title": "مجموعة من 2 قطعة من الخواتم المتصلة بسلسلة شفافة ذهبية بتصميم هندسي ثماني الأضلاع، مجوهرات عصرية للنساء مناسبة للارتداء اليومي والحفلات",
+        "price": "8.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Set-Gold-Minimalist-Transparent-Crystal-Handmade-Chain-With-Octagram-Linked-Finger-Ring-Fashionable-Jewelry-For-Women-Suitable-For-Daily-Wear-And-Party-p-414210083.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/04/06/1772602538ae46e7e299275ae6e43c78fb39e3a462_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 74,
+        "title": "%12-\nساعة نسائية جديدة مربعة بلون ذهبي، أنيقة وبسيطة، عصرية وشاملة، بطراز فاخر رجعي. سوار من الفولاذ المقاوم للصدأ خفيف الوزن بحركة كوارتز، مقاومة للماء لعمق 30 متر، متينة. طول السوار قابل للتعديل.",
+        "price": "20.19\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-New-Square-Gold-Tone-Women-s-Watch-Elegant-Minimalist-Fashion-Casual-Versatile-Retro-Luxury-Style-Lightweight-Stainless-Steel-Strap-Quartz-Watch-30M-Water-Resistant-Durable-Adjustable-Strap-Length-p-414522738.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/03/98/17724747011f870cf4ac1332ab899b0eec99aac8ec_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 75,
+        "title": "Herseygold تاج عروس كردي مطلي بالذهب قطعة واحدة، تاج رأس نسائي مزين بالعملات العربية، إكسسوار شعر فاخر للعروس، إكسسوارات شعر للنساء، زفاف",
+        "price": "22.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Herseygold-1pc-Gold-Plated-Turkish-Kurd-Bride-Headdress-Arabic-Coin-Totem-Women-Headpiece-Luxury-Bridal-Hair-Accessory-Hair-Accessories-For-Women-Wedding-p-47051291.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/04/3e/1730687185dfb64767cb46c00596d1fdc1a2f1e51d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 76,
+        "title": "4/1 قطعة/مجموعة شريط رياضي أحادي اللون، شرائط رأس مناسبة للاستخدام اليومي في اليوغا والتمارين الرياضية أو الأوقات المزدحمة لتثبيت الشعر - مناسبة للفتيات والنساء، قماش مرن ناعم ومريح، ألوان بسيطة تتناسب مع أي إطلالة. ضروري للنساء اللواتي يحببن المظهر الأنيق السهل.",
+        "price": "3.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/4-1pc-Set-Solid-Color-Sports-Headbands-Plain-Headbands-Suitable-For-Daily-Yoga-Workout-Or-Busy-Time-To-Secure-Hair-Fit-For-Girls-And-Women-Soft-Elastic-Fabric-Comfortable-And-Snug-Simple-Colors-Perfectly-Match-Any-Outfit-Essential-For-Women-Who-Love-Easy-Stylish-Looks-p-153212727.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/06/0e/175441505342c509ce33061ddd8193f817d5fd71f1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 77,
+        "title": "6 قطع/مجموعة من أقراط النحاس والزركونيا الحجرية الأنيقة والبسيطة، أقراط حلقية متعددة العناصر، هدية مجوهرات عصرية متنوعة لعيد الأم",
+        "price": "17.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/6pcs-Set-Copper-Zirconia-Stone-Minimalist-Elegant-Earrings-Set-Multi-Element-Earrings-Hoops-Fashion-Versatile-Jewelry-Gift-For-Mother-s-Day-p-65737003.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/13/29/1778656533169dfe0fc40d8202ee2df6de86415e17_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 78,
+        "title": "1 قطعة خاتم أنيق على شكل زهرة من الفولاذ المقاوم للصدأ مناسب للارتداء اليومي للنساء في عيد الحب",
+        "price": "5.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Stainless-Steel-Fashionable-Flower-Open-Ring-Suitable-For-Women-s-Daily-Wear-Valentines-p-34648234.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/05/05/d6/171489965028018e367406ab50b034858a243cde8d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 79,
+        "title": "7 قطع من طقم خواتم معدنية ذهبية سميكة، خواتم متقاطعة بسيطة، مجموعة خواتم للنساء قابلة للتراكم على الأصابع، مجوهرات",
+        "price": "9.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/7pcs-Gold-Metal-Thick-Ring-Set-Minimalist-Criss-Cross-Rings-Women-Stackable-Simple-Finger-Rings-Jewelry-p-49122686.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/26/2b/17325860682e3d38f17f2d8dc7f0bb145fa647184c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 80,
+        "title": "%3-\nHerseygold قطعة واحدة كاملة من مجوهرات رأس نسائية مطلية بالذهب لاحتفالات رمضان في الشرق الأوسط، اكسسوارات شعر للزفاف",
+        "price": "28.25\n\n1k+. تم بيع",
+        "product_link": "https://ar.shein.com/Herseygold-1pc-Luxury-Gold-Plated-Middle-East-Ramadan-Celebration-Women-Jewelry-Headpiece-Wedding-Hair-Accessories-p-60146030.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/12/05/15/17333885124c5551f48f7d84e3d8570d5421c2a373_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 81,
+        "title": "سوار للنساء من طبقتين بزهرة الكاميليا والخرز، مناسب للفساتين والملابس اليومية، وكهدية لصديقات في عيد الميلاد والشتاء",
+        "price": "6.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Women-s-Double-Layer-Camellia-Flower-Pearl-Bracelet-Suitable-For-Dress-Casual-Wear-And-As-Gifts-For-Friends-Winter-Gifts-p-64595898.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/10/29/1e/1730165331d4c73efd9e58e3c69d0b4128aab7f8a0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 82,
+        "title": "CHICVUE مجموعة مجوهرات أنيقة بسيطة من قطعتين، تشمل 1 سوار أساور و 1 خاتم مفتوح بلون الذهب، مناسبة للحياة اليومية والارتداء في الحفلات، هدية رائعة للنساء في عيد الميلاد وفصل الشتاء",
+        "price": "8.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/CHICVUE-2PCS-Minimalist-Elegant-Teardrop-Gold-Jewelry-Set-Including-1-Cuff-Bracelet-And-1-Open-Ring-Suitable-For-Daily-Life-And-Party-Wear-Great-Gift-For-Women-Winter-Gifts-p-65719917.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/30/83/17485871624e25cb06acb418e3577076b5d0828c9b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 83,
+        "title": "زوج من أقراط الحلقة ذات نمط الزهور من مادة النحاس العصرية للنساء والفتيات",
+        "price": "10.00",
+        "product_link": "https://ar.shein.com/1Pair-Fashion-Copper-Material-Flower-Pattern-Hoop-Earrings-Jewelry-For-Women-Girls-p-401420396.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/07/b3/17704561527150974e44fc56a95a4bbd50ab767b8e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 84,
+        "title": "Hihho 3 قطع / مجموعة من القلائد الأنيقة العصرية مع تصاميم مزينة بالأشكال الدائرية والزهور ، مجوهرات فريدة وإبداعية للنساء ، هدية فاخرة للعيد ، الأم ، عيد الأم",
+        "price": "17.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Hihho-3pcs-Set-Fashionable-Elegant-Necklace-With-Flower-Circle-Shaped-Design-Unique-And-Creative-Jewelry-For-Women-Luxury-Gift-Valentines-Mom-Mother-Mother-s-Day-Gift-p-21352024.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/30/7d/174599239752f03812c066b6923c161a540fff21ba_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 85,
+        "title": "مجموعة من 2 خاتم دانتيل مرصع بالزركونيا المكعبة النحاسية الفريدة للحفلات والتجمعات والعطلات والهدايا، طراز أنيق للنساء (بدون علبة هدايا)",
+        "price": "9.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Set-Lace-Trim-Copper-Micro-Inlaid-Cubic-Zirconia-Rings-Unique-Design-For-Party-Gathering-Vacation-Holiday-Gift-Elegant-Style-For-Women-No-Gift-Box-p-99014813.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/31/ee/1753953572f56c25d82778e0fd091e4d3675f110c9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 86,
+        "title": "1 قطعة سلسلة إصبع فاخرة مطلية بالنحاس والذهب بتصميم هندسي أنيق، مناسبة كإكسسوار لفستان الزفاف والملابس الرسمية",
+        "price": "17.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Luxury-Exquisite-Copper-Gold-Plated-Geometric-Fashion-Finger-Chain-Suitable-For-Wedding-Gown-And-Formal-Dress-Accessories-p-428413192.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/20/fa/17739756969d2a46a1c79f2354288bf7325aaeaded_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 87,
+        "title": "3 قطع مجموعة خواتم فضي بشكل زهرة من الفولاذ المقاوم للصدأ، مناسبة للنساء للزينة اليومية والهدايا",
+        "price": "9.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Stainless-Steel-Silver-Radiant-Shape-Ring-Set-Suitable-For-Women-Daily-Decoration-And-Gifts-p-54680877.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/01/21/f4/1737448477c6d2da77d82a90d55ebf459213afedc7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 88,
+        "title": "3 قطع من خواتم الماس الهندسية المرصعة بالكامل بالزركونيا المكعبة الفاخرة الأنيقة العتيقة، مناسبة للنساء للارتداء اليومي والمناسبات والحفلات والمناسبات الاجتماعية",
+        "price": "14.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Vintage-Elegant-Luxury-Fully-Paved-Cubic-Zirconia-Geometric-Diamond-Rings-Set-Suitable-For-Women-s-Daily-Date-Party-Festival-Gathering-Wear-p-428229057.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/05/cf/1775368280f5fe863240e5d3873a199408a3ba9191_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 89,
+        "title": "Herseygold 1 قطعة خاتم قابل للتعديل ذهبي اللون بتصميم زهرة وهلال قمر، مجوهرات بأسلوب للنساء، مناسب للزفاف والمناسبات",
+        "price": "12.00\n\n900+. تم بيع",
+        "product_link": "https://ar.shein.com/Herseygold-1pc-Adjustable-Size-Brass-Plated-Gold-Flower-Crescent-Moon-Design-Ring-Middle-Eastern-Style-Jewelry-For-Women-Wedding-Festivities-p-72356084.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/29/fd/174592427163dfacd063adede8c178a8d5ed41a9f9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 90,
+        "title": "3 قطع مجموعة خواتم من الفولاذ المقاوم للصدأ بلون ذهبي ذات طبقتين بتصميم زهرة ثلاثية الأبعاد وأوراق بنية، مناسبة للزينة اليومية للنساء",
+        "price": "8.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Stainless-Steel-Gold-Tone-Double-Layer-3D-Flower-Brown-Leaf-Flower-Ring-Set-Suitable-For-Women-s-Daily-Decoration-p-208006483.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/30/14/1759209331a389c520fc813008c825e26764ff0007_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 91,
+        "title": "30 زوج/مجموعة من أقراط المرأة ذات تصميم بسيط معدني مزخرف بزهر الخرز المزيف ، الراين ، علامة موسيقية ، قلب ، أشكال هندسية، مناسبة للبس اليومي العادي ، مجموعة هدايا مجوهرات",
+        "price": "13.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/30pairs-Set-Fashion-Simple-Metal-Faux-Pearl-Flower-Rhinestone-Music-Note-Heart-Geometric-Women-s-Earrings-Suitable-For-Casual-Daily-Wear-Jewelry-Gift-Set-p-83494413.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/15/b1/17472965399b4a727716134c96eb1b9910029d0178_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 92,
+        "title": "قلادة 1 قطعة من الفولاذ المقاوم للصدأ بقلادة نجمة البرودة البرادية والنجمة الساطعة مع حجارة كريستالية صغيرة بلون الذهب عيار 18 قيراط، تصميم ساحر متلألئ، هدية للزوجة وصديقات النساء وفرح الزفاف",
+        "price": "8.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Stainless-Steel-Aurora-Star-Pearl-Radiant-Star-Pendant-Necklace-18K-Goldtone-With-Tiny-Crystals-Dreamlike-Sparkle-Design-Gift-For-Wife-Female-Friends-Wedding-p-43493543.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/09/21/58/17268980858d17fb8df029a462af3841492c9316f3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 93,
+        "title": "5 قطع مجموعة خواتم قابلة للتعديل مزينة بالخرز الاصطناعي والزركونيا بشكل قلب وفراشة، تصميم فريد للارتداء اليومي والحفلات والتجمعات (بدون علبة هدايا)",
+        "price": "17.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Elegant-Exquisite-Faux-Pearl-Zirconia-Heart-Bow-Adjustable-Rings-Set-Unique-Design-For-Daily-Party-Gathering-Wear-No-Gift-Box-p-416806973.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/26/c1/1772084005cfe004400e7d8c8c931a7b8f0e01182a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 94,
+        "title": "سوار مجوهرات مطلي بالذهب بتصميم زهري مينا قطعة واحدة، مناسب للبنات والنساء",
+        "price": "15.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Fashionable-New-Gold-Plated-Floral-Enamel-Bracelet-Jewelry-Gift-Suitable-For-Girls-And-Women-p-90911214.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/03/e1/17489097824c3d0e36ec14f594389329a929a26e18_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 95,
+        "title": "%2-\nساعة يد نسائية واحدة بسوار ذهبي جديدة ، ساعة كوارتز نسائية فاخرة ، بسيطة ، أنيقة ، فاخرة و جذابة المظهر ذات استعمالات متعددة",
+        "price": "15.63\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Piece-Of-New-Fashion-Gold-Bracelet-Women-s-Watch-Retro-Luxury-Fashion-Simple-Elegant-Light-Luxury-Elegant-Versatile-Watch-Women-s-Quartz-Watch-p-24849740.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/10/12/03/169712526435838ab69ab295bf88a55531c32ad20f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 96,
+        "title": "ROMWE 6 قطع حزام شعر مرن أحادي اللون مناسب للرياضة والاستخدام اليومي، عصابة للرأس، توربان، شريط للرأس",
+        "price": "9.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/ROMWE-6pcs-Solid-Color-Elastic-Hair-Ties-Suitable-For-Sports-And-Leisure-Use-Hair-Band-Turban-Headband-Sweatband-p-32623099.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/04/02/00/1712046004b9973927833889206139a002ae18a04c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 97,
+        "title": "18 قطعة مجموعة أقراط بنمط الحياة البحرية والنجوم البحرية - أقراط صغيرة بسيطة على شكل سلحفاة ونجمة بحرية - أقراط حلقية مطلية بالذهب مع قلادة نجمة بحرية مينا - مجوهرات للارتداء اليومي في العطلات الصيفية",
+        "price": "18.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/18pcs-Tropical-Ocean-Marine-Life-Starfish-Earring-Set-Minimalist-Mini-Turtle-Starfish-Stud-Earrings-Gold-Plated-Hoop-Earrings-With-Enamel-Starfish-Pendant-Summer-Holiday-Daily-Wear-Jewelry-p-418460708.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/07/db/177287299019668e90f0cd0dabb0088788ada114a5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 98,
+        "title": "4 قطعة/مجموعة من طقم إكسسوارات منباثة ألماس مكون من إكسسوارات القرط والقلادة والخاتم، بطراز فاخر وأنيق، هدية عصرية للنساء",
+        "price": "6.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/4pcs-Set-Rectangular-Rhinestone-Earrings-Necklace-And-Ring-Set-Elegant-Luxury-Style-Sophisticated-Women-s-Gift-p-51335574.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/29/ec/176439600993d82f4d8f3d3104af96eb6e85ed1037_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 99,
+        "title": "%1-\nقطعة واحدة من قلادة قلادة الزركونيا المربعة المصنوعة من الفولاذ المقاوم للصدأ العصرية، إكسسوارات التنقل النسائيةرمضان",
+        "price": "6.92\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Fashionable-Stainless-Steel-Square-Zirconia-Pendant-Necklace-Women-s-Commuting-Accessories-p-22124629.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/08/26/b0/1693032184cec1071259acc86d7678cab6c5cb63c4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 100,
+        "title": "1 قطعة سوار إصبع مطلي بالذهب الأصفر عيار 18 قيراط، مزين بأربعة أوراق البرسيم الملونة والزركونيا، مناسب للاستخدام في الشاطئ والعطلات الصيفية والمناسبات الخاصة كعيد الحب والأعياد والحفلات والزفاف والكريسماس وعيد الميلاد وهدية أنيقة للأم",
+        "price": "14.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/1Pc-18K-Gold-Plated-Elegant-Lucky-Four-Leaf-Clover-Colorful-Rainbow-Zirconia-Finger-Chain-Bracelet-Summer-Beach-Vacation-Women-s-Hand-Stainless-Steel-Jewelry-For-Valentines-Party-Gala-Daily-Dating-Mardi-Gras-New-Years-Wedding-Beach-Christmas-Anniversary-Elegant-Mom-Gift-Boho-Jewelry-Birthday-Bridesmaid-Gift-p-422695010.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/07/46/1772849505efa436c299760951991326a5aaac5492_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 101,
+        "title": "ساعة كوارتز أنيقة من الفولاذ المقاوم للصدأ مناسبة للارتداء اليومي للنساء، قطعة واحدة",
+        "price": "28.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Women-s-Elegant-Stainless-Steel-Strap-Quartz-Watch-Suitable-For-Daily-Wear-p-65793494.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/07/6f/1744007677dfe2bdd41f10394aa3f322f0292a9f40_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 102,
+        "title": "زوج من النظارات الأنيقة الخفيفة الوزن المصنوعة من المعدن للنساء، إطار معدني بسيط هندسي خفيف الوزن، مناسبة للتنسيق مع الملابس اليومية والأنشطة الخارجية",
+        "price": "3.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Pair-Women-s-Lightweight-Elegant-Metal-Fashion-Glasses-Minimalist-Metal-Frame-Geometric-Lightweight-Glasses-Suitable-For-Daily-Outfit-Matching-And-Outdoor-Activities-p-168187412.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/25/1d/175608210876f4b96ca776264d43cd546c172c6864_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 103,
+        "title": "6 أزواج من أقراط الأزهار والقلوب الجميلة المصنوعة من المعدن والراتنج، مجموعة متعددة الأساليب وجذابة، مناسبة للنساء للارتداء اليومي، مجموعة هدايا",
+        "price": "7.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/6-Pairs-Fashionable-Floral-Heart-Stud-Earrings-Metal-Resin-Simple-Cute-Multi-Style-Jewelry-Set-Suitable-For-Women-Casual-Daily-Wear-Gift-Set-p-107947562.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/19/a8/17503168418288dd2425ad6e68d8449b4254a950a1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 104,
+        "title": "قلادة مطلية بالذهب عيار 18 قيراط مع حجر زركونيا، سلسلة عنق عصرية، تصميم متعدد الاستخدامات، بأسلوب المؤثرين",
+        "price": "10.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-18K-Gold-Plated-Necklace-With-Zirconia-Stone-Fashionable-Clavicle-Chain-Versatile-Design-Influencer-Style-p-285600559.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/13/63/1763021268aa5e12c2fd77dc8976669a8995038118_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 105,
+        "title": "خاتم مطلي بالذهب متعدد الطبقات من الكريستال مع شرابات، خاتم مفتوح من النحاس والزركونيا المكعبة، مناسب للنساء للخطوبة والزفاف والحفلات وهدايا عيد الميلاد",
+        "price": "9.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Fashionable-Multi-Layer-Crystal-Tassel-Gold-Plated-Ring-Versatile-Copper-Cubic-Zirconia-Open-Ring-Suitable-For-Women-Engagement-Wedding-Party-Christmas-Gift-p-250001446.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/29/63/1761728141cec1137c87dce5f59dbababc6f290fa1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 106,
+        "title": "خاتم كوبي كوبيك زركونيا فينتاج، خاتم هندسي من الفولاذ المقاوم للصدأ باللون الذهبي للنساء، مجوهرات لحفلات الزفاف والخطوبة، هدية عيد الميلاد",
+        "price": "5.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Vintage-Cubic-Zirconia-Cuban-Link-Ring-Women-s-Gold-Stainless-Steel-Geometric-Ring-Wedding-Engagement-Party-Jewelry-Christmas-Gift-p-58413789.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/14/43/173157217524d5c843919fe854f4b395aea7af397a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 107,
+        "title": "%10-\nساعة للسيدات ذات ميزة الزيادات الجديدة مياه مربعة الشكل , أنيقة وبسيطة بأرقام رومانية وزخرفة , مناسبة للحياة اليومية والحفلات",
+        "price": "25.22\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-New-Arrivals-Square-Dial-Ladies-Waterproof-Watch-Elegant-Simple-Style-With-Roman-Numerals-And-Decoration-Suitable-For-Daily-Life-And-Parties-p-31233809.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/12/13/24/17024806097021122b1c2fba9bcc478f62ced1a4bd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 108,
+        "title": "5 قطع/مجموعة أقراط قمر مرصعة بالراين والخرز والفيونكة بتصميم بسيط وأنيق، أقراط قطرة بشكل زهرة صدفة فاخرة، مجموعة هدايا مناسبة للنساء للاستخدام اليومي والمناسبات",
+        "price": "12.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Set-Minimalist-Cute-Bow-Pearl-Rhinestone-Moon-Earrings-Elegant-Seashell-Flower-Drop-Earrings-Luxury-Gift-Set-Suitable-For-Women-Daily-Festival-Wear-p-100543306.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/15/87/176579078218550e3cb4528ccb5101c7ee8fd10194_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 109,
+        "title": "سوار تنس من Ficcino مطلي بالذهب ومرصع بزركون مكعب ومزود برباط قابل للتعديل، اكسسوار يومي متعدد الاستخدامات للنساءرمضان",
+        "price": "10.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Ficcino-Gold-Plated-Cubic-Zirconia-Inlaid-Tennis-Bracelet-With-Adjustable-Drawstring-Versatile-Daily-Wear-Accessory-For-Women-p-27394848.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/11/25/d2/1700924767d5c78f948732c5b8728c242edaac46a4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 110,
+        "title": "%5-\nLIEBEIRIS خاتم أصابع مطلي بالذهب عيار 18 قيراط بطبقتين على شكل نجمة، مناسب للاستخدام اليومي للنساء وكهدية",
+        "price": "13.32\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/LIEBEIRIS-1pc-18K-Gold-Plated-Fashion-Starburst-Double-Layer-Finger-Ring-Bracelet-Suitable-For-Women-s-Daily-Wear-And-Gift-p-422293961.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/08/d9/177295716458f019ee9d79ec04bb32b7500d8b1b0c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 111,
+        "title": "1 قطعة أساور ذهبية مطلية بتصميم ورقي أنيق وعملي مناسب للاستخدام اليومي للنساء",
+        "price": "8.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Dubai-Elegant-Fashion-Versatile-Gold-Plated-Leaf-Design-Bracelet-Suitable-For-Women-s-Daily-Wear-p-55247694.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/02/c8/173849151913634cf83bc7341c8376e3fed47d5ec7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 112,
+        "title": "jealous young زوج من أقراط قلادة على شكل ورقة مرصعة بالزركونيا المكعبة الفاخرة، مناسبة للأعراس والخطوبة والأعياد والحفلات وهدايا عيد الحب",
+        "price": "16.00",
+        "product_link": "https://ar.shein.com/jealous-young-1-Pair-Luxury-Sparkling-Leaf-Shaped-Cubic-Zirconia-Pendant-Earrings-Suitable-For-Weddings-Engagements-Anniversaries-Parties-Valentine-s-Day-Gifts-p-416865594.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/06/55/1772795382ad6ab27fc448a507816bceeb6dbbf4f8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 113,
+        "title": "6/18 قطعة أقراط مجموعة سلسلة الفراشة بزهور خماسية البتلات كبيرة على شكل حرف C، زهور أبدية مبالغ فيها، مناسبة للارتداء اليومي والأعياد، مصنوعة من مادة راتنج ABS مطلية بالذهب المقاوم للتلاشي بالأشعة فوق البنفسجية",
+        "price": "7.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/6-18pcs-Exaggerated-Eternal-Flower-Large-C-Shaped-5-Petal-Flower-Butterfly-Series-Earring-Set-Suitable-For-Daily-And-Festival-Wear-ABS-Resin-Material-With-UV-Plated-Non-Fading-Gold-p-199956568.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/04/93/17622694308ff1e6f5b364857dc7f8652cb557305e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 114,
+        "title": "خاتم إصبع قابل للتعديل مع سلسلة زهرة متصلة، مطلي بالنحاس الذهبي الفاخر، مناسب لاكسسوارات حفلات الزفاف للنساء",
+        "price": "25.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Adjustable-Flower-Chain-Connected-Finger-Ring-Luxury-Copper-Gold-Plated-Suitable-For-Women-Wedding-Party-Accessories-p-428333497.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/22/71/17741437180f6b2a734ea6054bf29f34842ac3b89a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 115,
+        "title": "Nooxian سوار نسائي عملي متعدد الطبقات من النحاس و زركون مربع بسيط و أنيق ملائم للإطلالة اليومية",
+        "price": "8.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Nooxian-2pcs-Fashionable-Minimalist-Square-Copper-Cubic-Zirconia-Multi-layer-Bracelet-Unconventional-Deluxe-For-Women-s-Daily-Wear-p-26172496.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/11/03/30/1698981763ef991f91b4bb504f4c3e22810c1d60de_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 116,
+        "title": "طقم خواتم فضية مطلية بالذهب عيار 18 قيراط مكونة من 3 خواتم بتصميم بسيط وعصري للنساء ملائمة للارتداء اليومي",
+        "price": "9.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Stainless-Steel-18K-Gold-Plated-Simple-Fashionable-Line-Design-Open-Ring-Set-Suitable-For-Women-s-Daily-Wear-p-36877217.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/06/11/74/171812151962b6e7ca1715f762ae08605896147d0d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 117,
+        "title": "7 خاتم شكل قلوب ونجوم لعيد الحب",
+        "price": "5.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/7pcs-Heart-Star-Detail-Ring-Valentines-p-10921016.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/06/24/16560500720590002063f51a029e41e05eee59cf13_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 118,
+        "title": "طقم أقراط مربعة من الزيركونيا والخرز المحلية للنساء بطراز فرنسي أنيق للخريف/الشتاء 5 قطع/مجموعةرمضان",
+        "price": "12.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/5pcs-Set-Micro-Inlaid-Zirconia-Pearl-Letter-Square-Earrings-Autumn-Winter-Elegant-French-Style-Set-For-Women-p-42656332.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/09/10/7b/1725948455c244ad8fbaa0bf84d8fa530169993800_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 119,
+        "title": "سوار أنيق مطلي بالذهب على الطراز البوهيمي الجديد، مناسب للبنات والنساء قطعة واحدة",
+        "price": "15.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Fashionable-New-Bohemian-Style-Gold-Plated-Enamel-Bangle-Bracelet-Suitable-For-Girls-And-Women-p-36600683.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/05/07/d9/1715090973dbf6bb01fa385f0a24129fc5b3df6cab_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 120,
+        "title": "مجموعة 3 قطع من الخواتم المصنوعة من الفولاذ المقاوم للصدأ بتصميم هندسي دائري بسيط، مناسبة للاستخدام اليومي والحفلات للنساء",
+        "price": "11.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Set-Stainless-Steel-Minimalist-Geometric-Circle-Line-Design-Rings-Set-Suitable-For-Women-s-Daily-And-Party-Wear-p-319525572.html?src_identifier=fc%3DAll%60sc%3DJewelry%20%26%20Accessories%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar12menu01dir01%60jc%3DitemPicking_017291431&src_module=topcat&src_tab_page_id=page_risk_crawler_blockundefined&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/05/15/17649030901db1b62a75e08a3b8d4ac34651ac4f93_thumbnail_405x552.jpg"
+    }
+];
+    // 2. دالة لحقن وعرض المنتجات ديناميكياً داخل الجريد
+    const productGrid = document.getElementById('productGrid');
+    // غير القيم دي براحتك حسب سعر اليوم والعمولة الحاببها
+const EXCHANGE_RATE = 1200;     // سعر الصرف اليوم (مثلاً الدولار أو الريال مقابل العملة المحلية)
+const FIXED_COMMISSION = 3;   // العمولة الثابتة التي تريد زيادتها لكل منتج
+  productsData.forEach(product => {
+    // 1. تنظيف وفصل السعر عن عدد المبيعات كالمعتاد
+    const priceInfo = product.price.split('\n\n');
+    const soldCount = priceInfo[1] ? priceInfo[1] : '';
+
+    // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+    const originalPrice = parseFloat(priceInfo[0].replace('', '').trim());
+
+    // 3. العملية الحسابية: (السعر الأصلي × سعر الصرف) + العمولة الثابتة
+    const localPriceNumber = (originalPrice + FIXED_COMMISSION) *  EXCHANGE_RATE;
+
+    // 4. تنسيق السعر النهائي ليظهر بشكل أنيق (مثال: ج.س 13,800) بدون كسور
+    const cleanPrice = "ج.س " + Math.round(localPriceNumber).toLocaleString('en-US');
+    
+    // الآن المتغير cleanPrice أصبح يحمل السعر المحلي الجديد وجاهز للعرض في الكارت...
+      let imgUrl = product.image_url.trim().startsWith('//') ? 'https:' + product.image_url.trim() : product.image_url;
+      
+      
+      
+      const cardHTML = `
+            <div class="product-card"
+                 data-title="${product.title}"
+                 data-price="${cleanPrice}"
+                 data-sold="${soldCount}"
+                 data-img="${product.image_url}"
+                  data-link="${product.product_link}">
+
+
+                 
+                 
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${product.title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <div class="rating"></div>
+                    <div class="price-row">
+                        <span class="price">${cleanPrice}</span>
+                        ${soldCount ? `<span class="sold-count">${soldCount}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // --- أكواد القوائم والفلتر الأصلية ---
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // --- كود السلايدر الأصلي ---
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // --- كود النافذة المنبثقة (MODAL JAVASCRIPT) بعد حقن العناصر المضافة حديثاً ---
+    const modal = document.getElementById("productModal");
+    const closeBtn = document.querySelector(".close-modal");
+    const productCards = document.querySelectorAll(".product-card");
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.getAttribute("data-title");
+            const price = this.getAttribute("data-price");
+            const rawImg = this.getAttribute("data-img"); 
+            
+        // 2. جلب وتصحيح رابط شي إن للمنتج (الجديد)
+        const rawLink = this.getAttribute("data-link");
+        const sheinLink = rawLink && rawLink.trim().startsWith('//') ? 'https:' + rawLink.trim() : rawLink;
+
+        // 2. فحص وتعديل الرابط طائراً (السطر السحري)
+        const img = rawImg.trim().startsWith('//') ? 'https:' + rawImg.trim() : rawImg;
+            const sold = this.getAttribute("data-sold");
+            
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalPrice").innerText = price;
+            document.getElementById("modalImg").src = img;
+            document.getElementById("modalSold").innerText = sold;
+                const whatsappMessage = `الاسم: ${title}\n
+                السعر: ${price}\n
+                رابط الصورة: ${img}\n
+                رابط المنتج ${rawLink}`;
+
+            document.getElementById("btn").href = "https://Wa.me/249128039027?text=" + encodeURIComponent(whatsappMessage);
+            document.getElementById("sheinBtn").href = sheinLink;
+            modal.style.display = "block";
+        });
+    });
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوار - Nowar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+    
+    <style>
+        @import url(‘https://fonts.googleapis.com/css?family=Cairo‘);
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo';
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: Cairo, 'Cairo';
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); }
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+      
+        
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span ,a { text-decoration: none; font-size: 15px; color: var(--text-muted);margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+            
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px 10%; padding: 15px 10px; background: #fff; margin-bottom: 10px; }
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .category-item img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .category-item span { font-size: 11px; color: #333; line-height: 1.2; }
+
+        /* Filters */
+        .filters { display: flex;
+            width:100%;
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;}
+        .filter-btn {
+             padding: 6px 15px;
+             border-radius: 20px;
+              background: #fff;
+               border: 1px solid #fff; 
+               font-size: 13px; 
+               font-weight: 600;
+                white-space: nowrap;
+                 cursor: pointer;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                 flex:1;
+                text-align: center;
+                }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; }
+        
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+        .price-row { display: flex; flex-direction: column; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .sold-count { font-size: 11px; color: var(--text-muted); direction: rtl; }
+        .rating { font-size: 10px; color: #f5a623; display: flex; gap: 2px; }
+        .rating span { color: var(--text-muted); font-size: 11px; margin-left: 2px;}
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; 
+            position: absolute; 
+            z-index: 100; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: white; 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%;
+            border-radius: 20px 20px 0 0; 
+            padding: 20px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute; right: 20px; top: 15px; 
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; direction: rtl; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; direction: rtl;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+        .modal-sold { font-size: 13px; color: var(--text-muted); }
+        
+        .add-to-cart-btn { 
+            background: var(--text-main); color: white; border: none; 
+            padding: 15px; border-radius: 25px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        #btn {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn{
+            background-color: #000;
+            color:#fff;
+        }
+        .sheinBtn a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="فساتين">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+        <div class="top-nav" id="topNav">
+            <span ><a href="shoes.html">أحذية</a></span>
+            <span ><a href="women.html">نساء</a></span>
+            <span  class="active"> <a href="kids.html">أطفال</a> </span>
+            <span> <a href="index.html">إكسسوارات</a> </span>
+            <span  > <a href="meckup.html">تجميل</a></span>
+            <span>الكل</span>
+            
+        </div>
+    </header>
+
+    <div class="main-content">
+        
+      
+        <div class='mySlides fade'>
+            <img src='kids.jpg' style='width:100%' alt="ad 2">
+        </div>
+
+         <div class='mySlides fade' style="display: block;">
+            <img src=' first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+
+         <div class='mySlides fade'>
+            <img src='kids1.jpg' style='width:100%' alt="ad 2">
+        </div>
+      
+
+        <div class="filters">
+            <button class="filter-btn "> الأحدث</button>
+            <button class="filter-btn"> ترند</button>
+            <button class="filter-btn"> الأكثر طلباً  </button>
+            <button class="filter-btn active"> لَك </button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+        
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+
+
+
+
+
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+            <img id="modalImg" src="" alt="Product">
+            <h3 id="modalTitle"></h3>
+            
+            <div class="modal-price-row">
+                <span id="modalPrice" class="modal-price"></span>
+                <span id="modalSold" class="modal-sold"></span>
+            </div>
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="">عرض المنتج في شي إن  </a></button>
+
+            <button class="add-to-cart-btn"> <a id="btn" href="">طلب المنتج </a></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. مصفوفة المنتجات المأخوذة من ملف json_prd.json مباشرة
+ const productsData = [
+   
+    {
+        "id": 2,
+        "title": "SHEIN Vintaside Kids 3 قطع/طقم جمبسوت طويلة الأكمام مع أقدام للمواليد الجدد، طقم ملابس مريح بطبعة قلب كاملة على طوق الظرف، مناسب للمواليد الجدد والرضع للاستخدام اليومي",
+        "price": "68.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-6pcs-3Set-Newborn-Long-Sleeve-Footed-Jumpsuit-Minimalist-Heart-Full-Print-Envelope-Collar-Comfortable-Outfit-Set-Suitable-For-Cute-Newborn-Infant-Casual-Wear-p-303626569.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/01/08/a3/17678498557742881f63240c86d8d6f35fc00b1736_thumbnail_600x.webp"
+    },
+    {
+        "id": 3,
+        "title": "Vintaside Kids مجموعة بنات صغيرات بأكمام قصيرة وبدون أكمام، توب أيفوري + تنورة جينز أزرق فاتح. التوب بتصميم محبوك بياقة بولو مطاطي بدون أكمام مع فيونكة وردية مطرزة على الصدر. التنورة جينز أزرق فاتح قصيرة مع تفاصيل مطرزة بفيونكة بيضاء. الطراز الكلي حلو وجميل وكولومبي، مناسب للارتداء الصيفي، للخروجات اليومية، للحضانة، للحفلات ومناسبات الأسرة.",
+        "price": "33.67\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Vintaside-Kids-Baby-Girls-Short-Sleeve-Sleeveless-Set-Ivory-Top-Light-Blue-Denim-Skirt-The-Top-Is-A-Sleeveless-Stretchy-Polo-Collar-Knit-Design-With-A-Pink-Bow-Embroidery-On-The-Chest-The-Skirt-Is-A-Light-Wash-Denim-Short-Skirt-With-White-Embroidered-Bow-Details-The-Overall-Style-Is-Sweet-Cute-And-Collegiate-Suitable-For-Summer-Wear-Daily-Outings-Preschool-Parties-And-Family-Leisure-Occasions-p-392890883.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/03/13/68/1773368844804aed87b8ba20a386549ca6bbf8b3c3_thumbnail_600x.webp"
+    },
+    {
+        "id": 4,
+        "title": "SHEIN LMoss Kids 5 قطع من الملابس الداخلية الكاجوال المناسبة لفصل الصيف للرضع من البنات، مصنوعة من النسيج اللينة والقابلة للامتداد باستخدام الحمالات الرفيعة والألوان موحد اللون الهادئة",
+        "price": "56.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-LMoss-Kids-5pcs-Set-Baby-Girl-5-Pieces-Casual-Simple-Knitting-Soft-Stretchy-Solid-Color-Spaghetti-Strap-Bodysuit-Suitable-For-Summer-p-49696515.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2024/12/06/fd/17334573450eef9a5b4070d210bc9d78fd1e6dda00_thumbnail_600x.webp"
+    },
+    {
+        "id": 6,
+        "title": "طقم صيفي مريح مكون من 2 قطعة للبنات الصغيرات: ملابس علوية قصيرة الأكمام بياقة دائرية وطباعة قطة كرتونية لطيفة باللون الوردي، وشورت جينز وردي مزين بفيونكة في الخصر المطاطي",
+        "price": "29.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Baby-Girls-2-Piece-Casual-Summer-Outfit-Cute-Cartoon-Cat-Print-Pink-Round-Neck-Short-Sleeve-T-Shirt-Top-And-Pink-Bowknot-Decor-Elastic-Waist-Denim-Shorts-Set-p-79684440.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/06/15/5f/17499643213ef29a24acb456f882623158ab5ba0f2_thumbnail_600x.webp"
+    },
+    {
+        "id": 7,
+        "title": "SHEIN مجموعة ملابس علوية وشورت قصير بطبعة أرنب وفهد، ملابس علوية بأكمام قصيرة وياقة دائرية فضفاض وتايت مناسبة للبنات الصغار، مناسبة للارتداء اليومي في الربيع والصيف، للسفر والتنسيق والمنزل والعطلات والخارج والمزرعة والاسترخاء، 2 قطعة/مجموعة",
+        "price": "20.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Set-Cute-Rabbit-Leopard-Print-Top-And-Tight-Shorts-Set-Casual-Loose-Round-Neck-Short-Sleeve-T-Shirt-And-Leggings-Outfit-For-Baby-Girls-Suitable-For-Spring-Summer-Daily-Wear-Travel-Matching-Home-Vacation-Outdoor-Farm-Chill-p-330376699.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/12/19/fa/176611200619003091de4acf03c6e5a3e9657cd1ad_thumbnail_600x.webp"
+    },
+    {
+        "id": 8,
+        "title": "SHEIN Elladie kids طقم بنات رضع أنيق بتصميم غير متماثل الكتف مزين بالزهور مع شورت وسط مطاطي بفيونكة وردية، ملابس بنات رضع صيفية وخريفية، طقم بنات رضع صيفي، طقم شورت بنات رضع، طقم بنات رضع صيفي قطعتين",
+        "price": "21.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Elladie-kids-Baby-Girls-Cute-Stylish-Asymmetrical-Shoulder-Floral-Decor-Top-With-Pair-Of-Pink-Bow-Elastic-Waist-Shorts-Set-Summer-Autumn-Baby-Girl-Clothes-Baby-Girl-Summer-Clothes-Baby-Girl-Shorts-Set-Baby-Girl-Summer-Outfit-2-Pieces-Baby-Girl-Set-p-97748132.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/06/12/5d/174971321806d26abed1b9d5cdbc94bc8de1594745_thumbnail_600x.webp"
+    },
+    {
+        "id": 9,
+        "title": "SHEIN Playful Pals 5 قطع سراويل رياضية قصيرة كاجوال وجميلة للبنات الصغيرات، مريحة متعددة الألوان، مناسبة للارتداء اليومي، المنزل أو الخارج",
+        "price": "30.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-5pcs-Baby-Girls-Casual-Cute-Sports-Shorts-Leggings-Comfortable-Multi-Color-Suitable-For-Daily-Wear-Home-Or-Outdoor-p-425996962.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/03/16/ec/17736540953861db348fadac386a7e2d51b9b71868_thumbnail_600x.webp"
+    },
+    {
+        "id": 10,
+        "title": "SHEIN Playful Pals بنات صغيرات طقم قطعتين: فستان كشكش مطبوع بالليمون مع قبعة مطابقة، ملابس كاجوال مريحة وجميلة للاستخدام اليومي والعطلات والوقت الترفيهي",
+        "price": "30.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Baby-Girls-2-Pieces-Set-Lemon-Print-Slip-Dress-With-Matching-Hat-Casual-Comfortable-And-Cute-Outfit-For-Daily-Holiday-And-Playtime-p-67947726.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/05/09/d9/177831719718b7004983ec7e125382c5d6a1e43639_thumbnail_600x.webp"
+    },
+    {
+        "id": 11,
+        "title": "%4-\nمجموعة من الحمالة الرفيعة الطبعة الزهرية وبنطلون مزركش ذو هيم منفوخ للبنات الصغار ، صيفية",
+        "price": "25.84\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Baby-Girl-Floral-Spaghetti-Strap-Tank-Top-Floral-Ruffle-Hem-Flared-Pants-Set-Summer-p-59974588.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/26/b7/17429879276dbb3c0bff4e647f5ef4fae49d24c42d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 12,
+        "title": "SHEIN GraphicGems مايوه لطفلة يتكون من قطعة واحدة بأكمام قصيرة ويحتوي على غطاء بزخرفة حورية البحر",
+        "price": "26.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-GraphicGems-Baby-Girl-Mermaid-Printed-Raglan-Short-Sleeve-One-Piece-Swimsuit-With-Cap-p-31921392.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/03/22/8b/17110744059b9c1c7f7e503818033065d90c51fab3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 13,
+        "title": "ملابس رضيعة بناتية مكونة من قطعتين، بدلة رومبر مزينة بزهور 3D جميلة وقبعة دلو (إجمالي 2 قطعة) للصيف",
+        "price": "30.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Summer-Baby-Girls-Cute-3D-Floral-Vest-Romper-Bucket-Hat-2Pcs-Set-p-57703992.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/03/3b/1740998409566b28e68770939c191461f8f211fcfb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 14,
+        "title": "SHEIN 3 قطع تيشيرتات كاجوال للأطفال البنات بطبعات استوائية من الزهور والهيبسكس وقوقعة البحر والنجمة البحرية بياقة دائرية وأكمام قصيرة ، مناسبة للربيع/الصيف باللون الأبيض والبيج والوردي الفاتح",
+        "price": "30.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Happikins-3pcs-Baby-Girls-Casual-Tropical-Floral-Hibiscus-Seashell-Starfish-Print-Round-Neck-Short-Sleeve-T-Shirts-Suitable-For-Spring-Summer-White-Beige-Light-Pink-p-101158187.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/18/59/17502149943ae53e9a7d2d5a1548c9627e04fbf9de_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 15,
+        "title": "SHEIN LMoss Kids طقم بيجاما للأطفال البنات 6 قطع، مطبوع برسوم الدبي الكارتوني الجميل والزهور، تصميم قصير الأكمام وبنطال مع كشكشة، قطن مريح ومحبك للاستخدام اليومي",
+        "price": "43.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-LMoss-Kids-6pcs-Set-Baby-Girl-Cute-Cartoon-Bear-Floral-Print-Ruffle-Trim-Round-Neck-Short-Sleeve-Pants-Casual-Comfy-Knitted-Pajamas-Set-p-71572327.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/29/d3/1745920396b463658343ddb398af961b8bd90ef970_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 16,
+        "title": "SHEIN Playful Pals مجموعة من قطعتين للبنات الصغار، تتكون من: 1- ملابس علوية بدون أكمام مطرزة بفيونكة وياقة، باللون الوردي. 2- شورت بخصر مطاطي مطرز بفيونكة، باللون الأزرق الفاتح. مناسب للخروجات الصيفية أو العطلات",
+        "price": "36.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Set-Baby-Girls-Collared-Sleeveless-Bow-Embroidered-Pink-V-Neck-Vest-Top-Elastic-Waist-Embroidered-Bow-Decor-Light-Blue-Shorts-Casual-Cute-Outfit-Suitable-For-Summer-Outings-Or-Vacation-p-341886941.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/24/b0/1777010761ee19de5a8bfbb525fc2e6ca5e51ab1b9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 17,
+        "title": "Cozy Pixies زوج من أحذية الأميرة المسطحة المزينة بالدانتيل والشبك والفيونكة المناسبة للربيع/الصيف للبنات، مناسبة للزفاف والحفلات والتجمعات",
+        "price": "47.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Cozy-Pixies-1-Pair-Spring-Summer-Lace-Cute-Floral-Mesh-Bow-Decor-Flat-Princess-Shoes-For-Girls-Suitable-For-Wedding-Party-Gathering-p-286194469.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/24/9f/1763972526084330bbc90b8106541ab7d9bded594a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 18,
+        "title": "مجموعة فستان وقبعة للبنات الرضع بطبعة زهرية أنيقة وكاجوال، خفيفة الوزن للربيع والصيف، قطعتان",
+        "price": "18.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Baby-Girl-Casual-Elegant-Floral-Print-Dress-Hat-Set-Lightweight-For-Spring-Summer-p-52938585.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/01/02/f9/1735798517607b46e76ce82b60bb9ac51c3fc3110f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 19,
+        "title": "SHEIN بدلة رضيعة بفتحات الأرجل مزينة بتطريزات زهرية و أحزمة عريضة مع جيوب، متناسقة مع الكاب",
+        "price": "34.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Baby-Girl-Wide-Strap-Floral-Embroidered-Romper-With-Pockets-Matched-With-Cap-p-34529835.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/05/23/63/1716436890946426feeb3dbb5769897c79dc217ee7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 20,
+        "title": "SHEIN Vintaside Kids [مجموعة عشوائية 3 قطع، إرسال 1 مجموعة] جمبسوت رومبر للأطفال الرضع مطبوعة بطبعات قلوب جميلة، طبعات زهور فنية، طبعات نقاط وردية، مريحة وملائمة، بيجامات كاجوال ناعمة للربيع/الصيف، تجعل الطفل يبدو جذاب وحيوي، قماش ناعم ومريح، يوفر شعور الحضن الأمومي للأطفال الرضع.",
+        "price": "18.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-Random-3-Sets-Send-1-Set-Cute-Heart-All-Over-Print-Artistic-Floral-Print-Pink-Polka-Dot-Print-Newborn-Romper-Jumpsuit-Comfortable-And-Convenient-Spring-Summer-Soft-Casual-Pajamas-Set-Makes-Baby-Look-Adorable-And-Lively-Soft-And-Comfortable-Fabric-Provides-Motherly-Embrace-Feeling-For-Newborns-p-421683898.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/18/02/1779083509d3dd67278f9ccb334fae25efc2043df1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 21,
+        "title": "SHEIN بناطيل سروال متسع القدمين قابلة للتعديل، بنطلون أمومة بلون أحادي",
+        "price": "47.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Adjustable-Waist-Wide-Leg-Pants-Solid-Color-Maternity-Trousers-p-55289811.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/02/05/9f/17387381027430ea465436685670708c7a9392137a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 22,
+        "title": "SHEIN بدلة سباحة قطعة واحدة مطبوعة برسومات الحورية للبنات الصغيرات، للعطلات الشاطئية",
+        "price": "20.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Baby-Girl-Mermaid-Print-One-Piece-Swimsuit-Beach-Vacation-p-396265959.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/04/b1/17701854650dd5af7747650804291bf0991291b55e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 23,
+        "title": "طقم قميص مطرز بشعار الدب وسروال للأولاد الصغار مقاس 2 قطعة، ملابس أطفال بتصميم الموضة الشارعية",
+        "price": "23.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Set-Toddler-Boys-Textured-Pocket-Bear-Embroidered-Shirt-And-Shorts-Street-Fashion-Children-Outfit-p-76689638.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/29/80/1745912765362813e2bdccfbab77fd960bdfec9846_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 24,
+        "title": "SHEIN Vintaside Kids مجموعة سيدة رضيعة موديل كاجوال تتكون من توب بدون أكمام مطرز بالدانتيل وشورت، مناسبة للربيع والصيف، تستخدم للبس اليومي",
+        "price": "38.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-2-Pieces-Baby-Girl-Fashion-Casual-Embroidered-Lace-Sleeveless-Top-And-Shorts-Set-Suitable-For-Spring-And-Summer-Daily-Wear-Little-Girl-Clothes-Sets-p-73246233.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/05/a1/1746428878f3dd60cbf1e24a10f40640ce32f3beea_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 25,
+        "title": "SHEIN فستان أبيض مطرز بنمط رقعي لحديثي الولادة من البنات، بأكمام منفوخة خضراء، طازج وجميل وحلو مثالي للخروجات وجلسات التصوير",
+        "price": "36.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Summer-Newborn-Baby-Girl-White-Embroidered-Pattern-Patchwork-Green-Puff-Sleeve-Dress-Fresh-Cute-And-Sweet-Perfect-For-Outings-And-Photo-Shoots-Green-Baby-Girl-Dress-Baby-Vintage-Dress-Sage-Green-Baby-Girl-Dress-Cute-Green-Outfits-For-Baby-Girl-Green-Babygirl-Dress-Baby-Girl-Tea-Party-Outfit-Cute-Outfits-For-Baby-Girl-Tea-Party-Outfit-For-Baby-Baby-Girl-Dress-Spring-Tea-Party-Outfit-Plus-Restful-Baby-Dress-For-Baby-New-Born-Baby-Girl-Dresses-Baby-Girl-0-To-12months-Photoshoot-Outfit-For-Baby-p-403828049.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/23/b2/1776926496a1eca962e6e451f2f651d59f75ac0517_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 26,
+        "title": "SHEIN Vintaside Kids مجموعة من 2 قطعة لطفل ذكر - ملابس علوية كاجوال مخططة قصيرة الأكمام وسروال قصير عادي ، مناسبة للارتداء اليومي في الربيع والصيف",
+        "price": "32.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-2pcs-Set-Baby-Boy-Casual-Striped-Short-Sleeve-Top-And-Bib-Shorts-Set-Suitable-For-Spring-Summer-Everyday-Wear-p-87963993.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/28/65/175366733851397a8c87a572254bd1175151fd426c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 27,
+        "title": "طقم قميص وشورت مطبوع برسوم كرتونية جميلة ذات ملمس للأطفال الصبيان، موضة الشارع 2 قطعة",
+        "price": "28.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Baby-Boy-Textured-Cute-Cartoon-Print-Shirt-And-Shorts-Street-Fashion-Children-Set-p-314509689.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/28/88/176431401965552abd7c4beac338b4098505d28072_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 28,
+        "title": "SHEIN 3 قطع/مجموعة ملابس أطفال ولد مريحة وعملية وأنيقة بطراز بسيط، تشمل: قميص بولو/تي شيرت بياقة حمراء وأكمام قصيرة، وشال أبيض مخطط، وشورت/بنطلون أبيض مع حزام، مناسبة للارتداء في المنزل والخارج واليومي والرياضي والحفلات وتصوير الصور والعطلات والمناسبات والأعراس وحفلات استقبال المواليد في الربيع والصيف",
+        "price": "38.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-3pcs-Set-Baby-Boy-Comfortable-Casual-Versatile-Fashion-Minimalist-Style-Red-Collar-Short-Sleeve-T-Shirt-POLO-Shirt-White-Striped-Shawl-White-Shorts-Trousers-With-Belt-Suitable-For-Indoor-Outdoor-Daily-Sports-Party-Photo-Shoot-Holiday-Festival-Wedding-Baby-Shower-Spring-Summer-p-395697848.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/03/b4/177008450466caa008d197c118402ac9f178c98754_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 29,
+        "title": "SHEIN Playful Pals ملابس صيفية أنيقة للرضع بناتي 2 قطعة، ملابس علوية بلا أكمام وأزهار كبيرة وبألوان صلبة، شورت جينز بحاشية مكشكشة وخصر مطاطي",
+        "price": "44.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2-Piece-Set-For-Baby-Girls-With-Large-Flower-Suspenders-And-Solid-Color-Tops-With-Multi-Layered-Ruffled-Elastic-Shorts-For-Fashionable-Summer-p-37436599.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/09/ae/1778321093183d7e39168f157531fe8658d1c27fd0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 30,
+        "title": "Souflis Souflis مجموعة طفل ولد 2 قطعة، بولو مريح مصنوع من الأقمشة المحبوكة 2 في 1، تصميم نقش على الصدر، ملابس علوية كاجوال بأكمام قصيرة مقترن مع بنطلون خاكي، تصميم خصر مطاطي، فضفاض، مناسب لمناسبات الخريف مثل العطلات والاستخدام اليومي وما إلى ذلك.",
+        "price": "29.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Souflis-Souflis-2pcs-Baby-Boy-Set-Children-Knitted-Comfortable-Polo-2-In-1-Chest-Print-Niche-Design-Casual-Short-Sleeve-Top-Paired-With-Khaki-Pants-Elastic-Waist-Design-Loose-Fit-Suitable-For-Autumn-Occasions-Like-Vacation-Daily-Wear-Etc-p-283759349.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/13/90/1763035345b1a16e8b021f36299ed9ccbcf7571c44_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 31,
+        "title": "SHEIN Playful Pals مجموعة ملابس للأطفال الرضع والصغار من 0-3 سنوات، مكونة من 2 قطعة قميص طباعة ديناصور بياقة دائرية و4 قطع مجموعة ملابس، قطع صيفية مريحة وسهلة الارتداء بأكمام قصيرة، مناسبة للأطفال من 6 أشهر إلى 3 سنوات، ملابس للربيع/الصيف، للارتداء اليومي والخروج والمنزل",
+        "price": "29.36\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Set-Infant-Toddler-Unisex-0-3Y-Casual-Cute-Dinosaur-Print-Round-Neck-T-Shirt-4pcs-Outfit-Set-Comfortable-Easy-Wear-Short-Sleeve-Summer-Suit-Suitable-For-6-Months-To-3-Years-Old-Baby-Boys-Clothing-For-Spring-Summer-Daily-Wear-Outings-And-Home-Dinosaur-Baby-Clothes-Set-Dinosaur-Toddler-Shorts-Sets-Baby-Boy-Dinosaur-Outfit-Knitted-Top-And-Short-Set-Baby-Boy-Summer-Sets-p-365682382.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/17/54/1773745039a7bd7522f361f36ababbd4e601e5908d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 32,
+        "title": "SHEIN GraphicGems مجموعة ملابس سباحة للرضع الإناث، ملابس سباحة بطبعة صدفة مع رداء وفستان شاطئي مطوي",
+        "price": "35.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-GraphicGems-Baby-Girl-Swimwear-Set-Shell-Shaped-Ruffle-Swimsuit-Swimwear-Beach-Dress-p-30998709.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/03/12/f0/1710250573afb88e7be22523c6cd2ee834a1b95e1d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 33,
+        "title": "SHEIN Playful Pals سراويل جينز مستقيمة الساق مغسولة، قصيرة للأطفال البنات، موضة كاجوال جديدة",
+        "price": "31.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Baby-Girl-New-Casual-Fashion-Style-Denim-Shorts-Straight-Leg-Washed-Jeans-p-60879692.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/27/38/174832362992bcdd8d73ea5644db27535b244da3de_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 34,
+        "title": "SHEIN مجموعة فستان صيفي للأطفال الرضع بطبعة زهور وياقة مكشكشة وتنورة من الدانتيل + قبعة مزينة بالدانتيل، فستان معمودية بيضاء للرضع مع دانتيل، ملابس مناسبة للمعمودية، فساتين بيضاء أنيقة للرضع، فستان معمودية للرضع مزين بالدانتيل",
+        "price": "56.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Set-Toddler-Girls-Summer-Newborn-Floral-Collar-Ruffle-Hem-Lace-Princess-Dress-Lace-Trim-Hat-Baby-Girl-Baptism-White-Dress-Lace-Newborn-Outfit-Christening-Outfit-White-Baby-Dresses-Baby-Elegant-Clothes-Luxury-Dress-For-Newborn-Newborn-Christening-Dress-Lace-Baby-Girl-Dress-Baby-Girl-White-Party-Dress-White-Lace-Baby-Dress-Baby-Girls-Christening-Dress-Baby-Girl-Elegant-Dress-Baby-Girls-White-Outfit-Baptism-Dresses-For-Girls-Christening-Outfits-Christening-Dress-For-Baby-Girl-White-Dress-p-411513283.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/12/05/17732807822cecf6743319127fe66e1d98ee2c473f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 35,
+        "title": "SHEIN Playful Pals مجموعة من 3 قطع للأطفال الرضع: بلوزة قصيرة الأكمام مخططة، وبنطلون جينز قابل للتعديل، وشال ذو ياقة مناسبة للتنقل والمدرسة والعطلات والرياضة، مناسبة للربيع والصيف، مقاس 6 أشهر - 3 سنوات، ملابس أطفال، ملابس أطفال رضع، بلوزة أطفال رضع، سراويل أطفال رضع، مجموعات صيفية للأطفال الرضع",
+        "price": "41.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-3pcs-Set-Infant-Boys-Casual-Versatile-Comfortable-Shawl-Collar-Striped-Short-Sleeve-T-Shirt-And-Adjustable-Denim-Bib-Pants-Suitable-For-Commuting-School-Vacation-Sports-Spring-Summer-6M-3T-Children-Clothing-Toddler-Clothing-Baby-Clothing-Toddler-T-Shirt-Toddler-Overalls-Baby-Casual-Sets-Toddler-Summer-Sets-Baby-Boy-Summer-Sets-p-68982193.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/15/8c/17552442260f1186c37ccffee1a0d0237c8961e467_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 36,
+        "title": "SHEIN Playful Pals مجموعة قميص كم قصير بياقة مستديرة مع طباعة الدب الصغير والخطوط + شورت أزرق داكن، مناسبة للخروجات الصيفية، 2 قطعة/مجموعة",
+        "price": "19.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Set-Baby-Boy-Cute-Bear-Striped-Print-Round-Neck-Short-Sleeve-T-Shirt-Navy-Shorts-Set-Suitable-For-Outings-In-Summer-p-397886623.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/04/e0/177020803933e26e5716761f07ef1ad7cbf4d942e6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 37,
+        "title": "طقم ملابس علوية أكمام قصيرة وشورت خصر مطاطي بطراز كولومبي لطفل حديث الولادة ذكر",
+        "price": "36.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Newborn-Baby-Boy-Cute-Collegiate-Style-Knit-Red-And-White-Stripe-Short-Sleeve-Top-And-Elastic-Waist-Shorts-Set-Boy-Baby-Clothes-Baby-Boy-Outfit-Polo-Shirt-Shorts-Set-Family-Matching-Summer-Cute-p-426258512.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/20/a9/17739767269d1478e7d43ce9d92a6af7bbf61cf42a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 38,
+        "title": "SHEIN Playful Pals بلوزة كولاريس ذات أكمام قصيرة مع طبعة فراشة، وبنطلون كتن أبيض بتصميم مُطارزبنمط فراشة وردي، مجموعة لملابس الصيف للبنات الصغيرات بتصميم كوري كيوت",
+        "price": "30.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Girls-Blue-Bow-Short-Sleeve-Shirt-White-Bow-Pants-2-Piece-Casual-Outfit-Set-p-59454642.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/04/ec/174108603657ef9753990c0d94f36ec64bffd14129_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 39,
+        "title": "SHEIN فستان كعكة مزين بالزهور والفيونكة للبنات الصغيرات، أنيق وكاجوال، مناسب للربيع والصيف والخريف، للمنزل والعطلات والمناسبات والحفلات والاستخدام اليومي",
+        "price": "25.91\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Baby-Girls-Fashionable-Casual-Floral-Print-Bow-Decor-Cake-Dress-Suitable-For-Spring-Summer-Autumn-Home-Vacation-Festivals-Parties-Daily-Wear-p-423773683.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/20/57/17739733157674aed2da776d1af672f974ad1ace8d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 40,
+        "title": "مجموعة فتاة بلوزة أنيقة بياقة بولو وردية بدون أكمام و شورت وردي منقوش برباط خرز مخصر عالٍ مطوي مجموعة لطفلة 2 قطعة",
+        "price": "24.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Baby-Girls-Elegant-Pink-Polo-Collar-Sleeveless-Blouse-Pink-Floral-Faux-Pearl-Button-High-Waist-Pleated-Shorts-Set-p-62872368.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/19/d7/1745030077cda76992e58a23b750b7db579f32fbb1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 41,
+        "title": "SHEIN GraphicGems قطعة واحدة ملابس سباحة بتنورة للأطفال البنات كيوت مطبوعة بتفاح",
+        "price": "23.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-GraphicGems-1pc-Baby-Girl-Cute-Strawberry-Print-One-Piece-Swimsuit-With-Skirt-p-54282054.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/01/20/96/1737379536f9144b7fa71898d8e9596d2d433b28d6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 42,
+        "title": "SHEIN 4 قطع/مجموعة بيجامات وملابس منزلية للأولاد، بتصميم أمامي مفتوح، ملابس علوية بأكمام طويلة وبنطلون، بطباعة أرنب ودب جميلة، من قماش ناعم وقابل للتجعد، مريحة ومناسبة للاستخدام اليومي للأولاد",
+        "price": "53.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-4pcs-Set-Boys-Open-Front-Pajamas-Loungewear-Long-Sleeve-Top-And-Pants-Cute-Rabbit-Bear-Print-Soft-Crinkle-Fabric-Comfortable-And-Suitable-For-Boys-Everyday-Wear-p-309635032.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/08/76/176784938526667696cee281f9476986c703bbba05_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 43,
+        "title": "%7-\nجمبسوت طويلة الأكمام للأطفال الرضع البنات مع وشاح رأس، بياقة دائرية مزينة بأربطة وأزرار، بتصميم كرتوني للكرز، بأكمام طويلة وتباين الأربطة",
+        "price": "24.12\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Newborn-Baby-Girls-Cute-Cartoon-Cherry-Woven-Round-Neck-Button-Ruffle-Contrast-Bow-Long-Sleeve-Jumpsuit-With-Headband-p-170497997.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/30/80/176182494907ee144f7de7eb42c41a5dd4fb603052_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 44,
+        "title": "SHEIN Playful Pals طقم قميص مخطط وبنطال جينز مزين برسم فيل لطيف للأطفال الصغار، قطعتان",
+        "price": "37.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Toddler-Boys-Striped-T-Shirt-Cute-Cartoon-Elephant-Denim-Bib-Pants-2-Piece-Set-p-421686335.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/14/30/17761732100d911d17732df3f56e5809a7772671e0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 45,
+        "title": "Dazy Kids مجموعة بنطلون وتي شيرت بطبعات كرتونية للبنات الصغار، تي شيرت بياقة دائرية وبنطلون كاجوال أحادي اللون، بيجامات صيفية، 2 قطعة",
+        "price": "35.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Dazy-Kids-2pcs-Set-Baby-Girls-Cartoon-Print-Round-Neck-T-Shirt-And-Solid-Color-Casual-Pants-Pajamas-Summer-p-425169485.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/19/db/1773901034f1150621f5701c995010c1c564104b03_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 46,
+        "title": "SHEIN Vintaside Kids بنطلون قصير مموه بألوان متباينة وتيشيرت بنصف أكمام مزخرف بطبعة الكرز للاطفال البنات، طقم من قطعتين",
+        "price": "34.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-Baby-Girl-Cherry-Print-T-Shirt-With-Contrast-Trim-Fashion-Short-Sleeve-Top-Embroidery-Pattern-Contrast-Color-Hem-Shorts-2Pc-Set-p-90265070.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/23/c1/175064123503ef143e39b19e0573c1816732741956_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 47,
+        "title": "SHEIN Playful Pals 5 قطع/مجموعة بدلات داخلية لطيفة للأطفال الرضع الذكور بألوان دافئة، مناسبة للخروجات والعطلات والأعياد، للربيع والصيف",
+        "price": "46.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-5pcs-Set-Newborn-Baby-Boys-Cute-Warm-Tone-Bodysuits-Suitable-For-Outings-Vacations-Holidays-Spring-Summer-p-159378565.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/09/91/177832354255099c2a1b7487d7091e6105087f819a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 48,
+        "title": "SHEIN طقم مكون من قطعتين لحديثات الولادة: لباس علوي حمراء وبيضاء مزينة بفيونكة وفراولة مطرزة، وشورت مثلث الشكل. تصميم صيفي جديد وجذاب، مناسب لالتقاط الصور والعطلات.",
+        "price": "43.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Newborn-Girl-Red-White-Grid-Bow-And-Strawberry-Embroidered-Strap-Top-With-Triangle-Shorts-2-Pieces-Set-Summer-New-Cute-Little-Clear-New-Style-Suitable-For-Taking-Photos-And-Vacation-Strawberry-Romper-Strawberry-Outfits-Baby-Girl-Strawberry-Baby-Girl-Clothes-Baby-Girl-Strawberry-Dress-Checkered-Baby-Outfit-Strawberry-Baby-Outfit-Baby-Girl-Strawberry-Outfit-Strawberry-Baby-Girl-Outfit-Strawberry-Outfits-For-Baby-Girl-p-346631112.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/07/e1/176775404821d018384cb5b7b0be42f825c43d0418_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 49,
+        "title": "SHEIN Playful Pals طقم صيفي للبنات الرضع ملابس علوية مع فراشة ثلاثية الأبعاد وبنطلون قصير الأكمام",
+        "price": "36.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Baby-Girls-Summer-Fashion-3D-Bow-Top-Short-Sleeve-Pants-Set-p-62929305.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/24/ee/1742779140ae704324a0832371134228b437427909_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 50,
+        "title": "SHEIN Playful Pals مجموعة من 2 قطعة لفتاة الربيع والصيف، ملابس علوية قطنية بدون أكمام وسروال جينز قصير مزين بفيونكة",
+        "price": "40.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Set-Baby-Girl-Spring-Summer-Casual-Style-Plain-Sleeveless-Slip-Top-Bowknot-Decoration-Short-Jeans-p-58249636.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/11/be/1741658442bfa25e8664b183d175ab56cfbcb80701_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 51,
+        "title": "SHEIN Playful Pals بلوزة قصيرة الأكمام مزينة بزهور ثلاثية الأبعاد وبنطلون مربعات للبنات الصغيرات، طقم كاجوال",
+        "price": "15.21\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Baby-Girl-3D-Floral-Decor-Short-Sleeve-T-Shirt-And-Plaid-Pants-Casual-Outfit-p-426212911.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/09/22/177831840651a3746fcb178bd77c75b388ba9f54c8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 52,
+        "title": "SHEIN Vintaside Kids بيجامة بنات رضع - طقم بيجامة مكون من قطعتين، للربيع إلى الصيف، ملابس علوية طويل الأكمام بياقة مموجة وأزرار أمامية مع طبعات كرز وخطوط وردية، وبنطلون طويل مطابق بفيونكة على الخصر، بيجامة بنات للهدايا والاستخدام اليومي والتصوير الفوتوغرافي والنوم، مناسبة للمواسم الأربعة",
+        "price": "36.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-Baby-Girls-Pajamas-2-Pieces-Pajama-Set-Spring-To-Summer-Pink-Striped-Cherry-Applique-Scalloped-Collar-Long-Sleeve-Button-Front-Top-Matching-Long-Pants-Waist-Bow-Baby-Girl-Pajama-Set-Nightwear-Four-Seasons-Holiday-2026-Gift-Cute-Playtime-Everyday-Photoshoot-Slumber-p-323242496.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/11/61/17654182902e866eb1f9dbd53fbb6e3c3d9b8b5f24_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 53,
+        "title": "DAZY مجموعة بيجامة لفتيات الأطفال تتكون من 2 قطعة: ملابس علوية بياقة مستديرة بلون أحادي وأكمام قصيرة، وبنطلون فضفاض مخطط",
+        "price": "28.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-2pcs-Baby-Girls-Round-Neck-Solid-Color-Short-Sleeve-Top-And-Striped-Loose-Pants-Pajama-Set-Toddler-Girls-Clothes-p-359051994.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/08/3c/1767851095b0473a06b9916ed413097d9987cf25cf_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 54,
+        "title": "DAZY مجموعة بيجامة صيفية لفتيات الأطفال تتكون من قميص بياقة وأكمام طويلة مطبوع بقلوب ونقاط وبنطلون فضفاض، 2 قطعة",
+        "price": "35.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-2pcs-Baby-Girls-Casual-Heart-Polka-Dot-Print-Lapel-Long-Sleeve-Shirt-And-Loose-Pants-Pajama-Set-Summer-p-397903139.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/06/cf/17703630364a3a2dfccce0aed2f7bbbbba47e307c2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 55,
+        "title": "SHEIN Playful Pals 2 قطعة/مجموعة ملابس كاجوال للأطفال الرضع والأولاد، تشمل سترة كم قصير مطبوعة بشعار على الكابوت و شورت جينز مع جيب ذو خصر مطاطي باللون الأزرق، مناسبة للارتداء اليومي والرياضة والنزهات والسفر",
+        "price": "39.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Set-Infant-Baby-Boys-Casual-Outfit-Including-White-Graphic-Print-Hooded-Sleeveless-Vest-Blue-Elastic-Waist-Pocket-Denim-Shorts-Suitable-For-Casual-Sports-Daily-Wear-Outings-Traveling-Summer-Outfits-Boy-Summer-Outfits-Infant-Outfit-Sets-Boys-Outfit-Sets-Summer-Boy-Clothes-For-Kids-3t-Boy-Clothes-For-Toddlers-Kids-Boys-Clothing-Summer-Clothes-For-Boy-Toddlers-p-72607930.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/25/84/17508420095bf696bba696e35145508a460bbb9461_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 56,
+        "title": "Souflis Souflis 3 قطع طقم بدلة قدمية طويلة الأكمام للمواليد الجدد، وحلقة لعنق، وقبعة، مصنوعة من قماش جاكار مُحبك مع تطريز دب جميل، بتصميم جذاب",
+        "price": "41.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Souflis-Souflis-3pcs-Newborn-Long-Sleeve-Footie-Jumpsuit-Bib-And-Hat-Set-Knitted-Jacquard-Fabric-With-Cute-Bear-Embroidery-Adorable-Style-Natural-Baby-Clothes-Newborn-Newborn-Neutral-Outfit-Neutral-Baby-Clothes-Unisex-Newborn-Baby-Layette-Set-p-190874526.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/22/95/1758512267733470814381b58ff95d4610431dff68_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 57,
+        "title": "SHEIN Vintaside Kids مجموعة بنات رضع مكونة من قطعتين، ملابس علوية كاجوال قصير الأكمام ذو لون أحادي وسروال قصير مطرز بالزهور، مناسب للارتداء اليومي في الربيع والصيف",
+        "price": "46.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-2-Piece-Baby-Girl-Set-Casual-Cute-Versatile-Solid-Color-Short-Sleeved-Top-And-Floral-Embroidered-Denim-Overalls-Set-Suitable-For-Spring-And-Summer-Daily-Wear-Fall-Winter-p-161514656.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/09/ab/1778321065f2c2b43ff52ebff2acbe440549924587_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 58,
+        "title": "LMoss Kids بلوزة بياقة مستديرة مزينة بخرز صناعي وأكمام قصيرة وبنطال واسع الساق بخصر مطاطي، طقم كاجوال يومي للبنات الصغار",
+        "price": "30.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/LMoss-Kids-Baby-Girl-Round-Neck-Faux-Pearl-Single-Breasted-Short-Sleeve-T-Shirt-And-Elastic-Waist-Wide-Leg-Pants-Casual-Daily-Outfit-p-327771252.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/03/ed/1772515131c3adb5216b277a51e3ddbbcd4b19b7a0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 59,
+        "title": "SHEIN GraphicGems مجموعة من قطعتين من قمصان النوم الكرتونية الملونة بطبعة آيس كريم مع أكمام قصيرة للبنات الصغار، بدلة صيفية آيس كريم للبنات الصغار، ملابس بنات صغار آيس كريم بفستان بيجامات صيفي",
+        "price": "30.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-GraphicGems-2pcs-Set-Baby-Girls-Colorful-Cartoon-Ice-Cream-Print-Cap-Sleeve-Nightgown-Pajamas-Summer-Ice-Cream-Baby-Girl-Outfit-Baby-Girls-Clothes-Ice-Cream-Summer-Pj-Dress-p-367089594.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/13/68/1768281005af4d5a459c913ee73d47fdd95e0153c1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 60,
+        "title": "مجموعة قميص وشورت قصير للأطفال الصبية للصيف، قميص بنمط أخضر وشورت جينز أسود، 2 قطعة",
+        "price": "31.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Set-Baby-Boy-Summer-Casual-Beach-Vacation-Green-Pattern-T-Shirt-And-Black-Denim-Shorts-Set-p-410658420.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/23/6a/1774230566661d2c4867a07172adc1dc9593945c1f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 61,
+        "title": "Genkimix Kids طقم بنات رضع للخريف/الشتاء، بلوزة رياضية مطرزة بياقة عالية وسحاب طويلة الأكمام، بسيطة ومريحة",
+        "price": "35.00",
+        "product_link": "https://ar.shein.com/Genkimix-Kids-Autumn-Winter-Baby-Girls-Embroidered-Stand-Collar-Zip-Up-Long-Sleeve-Sweatshirt-Set-Minimalist-Comfortable-p-309648095.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/28/34/17642593255a818db308e8554a3ca547d7d828fe6b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 62,
+        "title": "SHEIN مجموعة من قطعتين لحديثي الولادة من الجنسين، رومبير قصيرة الأكمام مطرزة بشعار الجينز وقبعة شمس جينز، ملابس الربيع/الصيف للأطفال الرضع، أزياء عيد الفصح",
+        "price": "39.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Set-Unisex-Newborn-Baby-Boy-Girl-Denim-Slogan-Embroidered-Short-Sleeve-Romper-And-Denim-Sun-Hat-Outfit-Spring-Summer-Baby-Boy-Clothes-Outfits-Easter-Gift-Sthings-For-Baby-p-382281892.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/14/8a/177615212168bc377a340c19af7c42aaede35a138f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 63,
+        "title": "SHEIN طقم رومبير أبيض كاجوال متعدد الاستخدامات للأطفال حديثي الولادة من الجنسين، مع سروال بيب وقبعة شمس، مناسب للارتداء في الربيع والصيف في المنزل أو خارجه",
+        "price": "23.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Unisex-Newborn-Baby-Boy-Girl-Casual-Versatile-White-Romper-With-Bib-Pants-And-Sun-Hat-Set-Suitable-For-Spring-Summer-Wear-At-Home-Or-Outdoor-p-396526793.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/13/4e/1773366681462dbfbcf6ad33855860cf23c4b1c4bb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 64,
+        "title": "SHEIN طقم رضيعة بنطلون قصير وقميص كم قصير، بسيط وعادي، مناسب للصيف",
+        "price": "22.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Happikins-Baby-Girl-Casual-Simple-Short-Sleeve-Shorts-Set-Suitable-For-Summer-p-50897696.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/29/a8/1777446823e48fc4a2efe992dee336b6f916716450_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 65,
+        "title": "SHEIN LMoss Kids مجموعة بنطلون وكامي أخضر للأطفال الرضع البنات، قطعتان، ملابس علوية كامي ملون منسوج وبنطلون طويل، مجموعة أطفال",
+        "price": "21.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-LMoss-Kids-LMoss-2pcs-Baby-Girl-Woven-Solid-Color-Camisole-Top-And-Long-Pants-Set-Green-Two-Pieces-Set-Baby-Girl-Green-Two-Pieces-Set-Kids-p-389664497.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/28/0f/1769598891b141992fe89303f3e732765fc21076b6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 66,
+        "title": "طقم بدلة وردية مزخرفة بالأزهار الصغيرة مع أكمام قصيرة وجوارب فيونكة وشريطة للرأس للأطفال الرضع في الصيف",
+        "price": "30.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Summer-Baby-Girl-Cute-Pink-Ditsy-Floral-Cap-Sleeve-Bodysuit-Bow-Socks-Headband-Set-p-58500596.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/18/21/1739869705d2ec63ad079bfa3027b7201127caf642_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 67,
+        "title": "SHEIN مجموعة من قطعتين تتكون من ملابس علوية هودي بطباعة حرفية وفستان قصير للأطفال البنات/الأولاد، مناسبة للارتداء اليومي أو للرياضة أو الأنشطة أو التصوير أو الأعياد والمناسبات ،مريحة للارتداء الداخلي والخارجي خلال الربيع والصيف",
+        "price": "31.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Set-Baby-Boys-Girls-Casual-Street-Fashion-Letter-Graphic-Hoodie-Sleeveless-Tank-Top-Shorts-Set-Comfortable-For-Indoor-Outdoor-Daily-Wear-Sports-Play-Party-Photo-Shoot-Holiday-Spring-Summer-p-71570428.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/12/e9/174703163412a898ab7d2f0ee039fd25d7e04fa6d7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 68,
+        "title": "Playful Pals مجموعة ملابس طفل ولد مكونة من 2 قطعة: تي شيرت بياقة دائرية بأكمام قصيرة مزين بطباعة الدب والخطوط + شورت أزرق داكن، مناسبة للخروجات الصيفية",
+        "price": "17.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Playful-Pals-2pcs-Set-Baby-Boy-Cute-Bear-Striped-Print-Round-Neck-Short-Sleeve-T-Shirt-Navy-Shorts-Outfit-Suitable-For-Summer-Outings-p-290446284.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/18/3a/17634513499da1c9e5badf05df844d987bfdba9361_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 69,
+        "title": "SHEIN Playful Pals مجموعة تيشيرت أكمام قصيرة بياقة مستديرة للأطفال/البنات بألوان كتل رجعية، بطبعات الكرز والفيونكة، كاجوال، ناعم وراحة، مناسب للصيف، 6 أشهر - 3 سنوات، قطعتان",
+        "price": "21.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Baby-Baby-GirlRetro-Color-Block-Round-Neck-Short-Sleeve-T-Shirt-Set-Cherry-Bow-Graphic-Casual-Soft-Comfortable-Suitable-For-Summer-6M-3T-p-380328451.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/16/ba/1776320905d03c719505aebc3c85767216dc1de843_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 70,
+        "title": "Elladie kids ملابس بنات رضع كوريّة الطراز، طقم ملابس علوية كم قصير بياقة طاقم وشورت ملائم مع طباعة الفيونكة وتصميم الألوان المتباينة، مناسب للصيف والمدرسة والمنزل والخارج",
+        "price": "18.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Elladie-kids-Baby-Girls-Cute-Bow-Print-Baby-Girls-Casual-Minimalist-Colorblock-Striped-Short-Sleeve-Crew-Neck-Top-And-Fitted-Colorblock-Shorts-Set-Suitable-For-Summer-School-Home-Outdoor-Adorable-Summer-Baby-Girls-Clothing-Korean-Style-p-391895648.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/04/20/1772605922b812315d66e5e2db18902f963de8ebc3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 71,
+        "title": "SHEIN Vintaside Kids طقم بنات رضع بتصميم زهري بأكمام قصيرة وبنطلون ليجنز بلون أحادي، طقم جميل للخروجات الصيفية",
+        "price": "19.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-1-Set-Baby-Girl-Floral-Print-Short-Sleeve-T-Shirt-And-Solid-Color-Leggings-Cute-Outfit-For-Summer-Outings-p-434620635.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/01/76/17750306435972a7ac4fa9af6bf867eb8a36c59fa9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 72,
+        "title": "فستان أنيق للرضيعة الجديدة بياقة من الدانتيل الأبيض بدون أكمام، مرقع باللون الوردي مع فيونكة، قماش ناعم وأنيق بطراز كلاسيكي",
+        "price": "36.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Newborn-Baby-Girl-White-Sleeveless-Lace-Collar-Patchwork-Pink-Bow-Dress-New-Elegant-Retro-Cute-Fabric-Comfortable-Red-Baby-Dress-Baby-Girl-Outfit-Newborn-Baby-Girl-Dresses-Photoshoot-Outfit-For-Baby-Baby-Girl-Dresses-0-To-12-Months-Baby-Girl-Ootd-Baby-Girl-Outfits-Baby-Girl-Photoshoot-Outfit-p-422732310.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/16/51/177365358373fb8dc096e8bb88dca14d36f72863d0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 73,
+        "title": "SHEIN Vintaside Kids مجموعة من قطعتين من بيجامات الفتيات الصغيرة ذات نمط الفراشة الجميلة، فستان نوم مكشكش وردي بطراز صيفي حلو وأنثوي، مريح وجذاب لأجواء العطلات الاسترخائية، مجموعة ملابس للفتيات الصغيرات",
+        "price": "24.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-2pcs-Set-Of-Cute-Little-Fairy-Pattern-Baby-Girl-Pajamas-Ruffled-Nightdress-Pink-Summer-Sweet-Girly-Style-Cute-And-Comfortable-2026-New-Vacation-Atmosphere-Relaxed-And-Comfortable-Girl-Outfit-Set-Girls-Baby-Girl-s-Clothing-p-420172093.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/30/1e/1774841450ce52d6bae4b088be5567a84c05e0dc4a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 74,
+        "title": "SHEIN 3 قطع طقم ملابس للأولاد، يشمل قميص بولو بأكمام قصيرة، شورت عادي، وقبعة، مناسب لمناسبات عيد الميلاد، الزفاف، التخرج، المناسبات الرسمية أو غير الرسمية، ملابس رجالية للخريف/الشتاء",
+        "price": "29.60\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-3pcs-Boys-Outfit-Set-Includes-Short-Sleeve-Polo-Shirt-Regular-Shorts-And-Hat-Suitable-For-Birthday-Formal-Or-Casual-Occasions-Gentleman-Attire-For-Autumn-WinterWedding-Prom-Graduation-Formal-Attire-For-Baby-Boy-Baby-Boy-Wedding-Outfit-Toddler-Wedding-Boys-Outfit-Sets-Utilitarian-Chic-Vintage-Back-To-Vintage-Old-Money-Summer-p-381897752.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/14/7c/1778749969b72c7e2d73c51b66589002327688fdbc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 75,
+        "title": "Elladie kids فستان ذو طبعة وردة مكشكش من الشيفون بدون أكمام للبنات الصغار، بسحاب خلفي، طراز أميرة جميل، متعدد الاستخدامات للاستخدام اليومي والعمل",
+        "price": "36.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Elladie-kids-Spring-Ruffled-Rose-Print-Sleeveless-Chiffon-Dress-For-Baby-Girls-Zipper-Back-Cute-Princess-Style-Versatile-Casual-Work-Wear-p-90194275.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/03/f1/17489219180887c42e17a7aa8bfb7be844a7b889ac_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 76,
+        "title": "SHEIN Vintaside Kids طقم بنطلون وبلوزة نوم للبنات الصغيرات، طبعة دب وفيونكة على لون أزرق داكن، قطعتان طويلة الأكمام، قماش ناعم، طراز فتياتي رقيق وأنيق، مريح وملائم للربيع، مناسب للأجواء المسترخية والمنتجعات الجديدة لعام 2026، ملابس بنات",
+        "price": "31.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-Baby-Girls-Navy-Blue-Cute-Bear-And-Bow-Print-Soft-2-Piece-Set-Long-Sleeve-Top-Pants-Pajamas-Spring-Flowers-Sweet-Girly-Style-Cute-Comfortable-2026-New-Resort-Atmosphere-Relaxed-Comfortable-Girl-Outfit-Set-Girls-Baby-Girl-s-Clothing-p-416447958.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/07/cc/17728129401734ba1e3a3b7f7d1eb574d68f26bd89_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 77,
+        "title": "SHEIN طفلة حديثة الولادة، مناسبة للربيع والصيف والخريف والشتاء. خطوط بيج فاتح. لطيفة وجميلة وجذابة. مريحة وفضفاضة مع سحاب أمامي. زخرفة كشكشة على الأكمام والأسفل. بذلة قطعة واحدة مع أكمام وأقدام ملحقة. تأتي مع قبعة للطفل. مجموعة من قطعتين. مناسبة لمناسبات مختلفة مثل الحفلات والأعراس وأعياد الميلاد واحتفالات القمر وغيرها من المناسبات.",
+        "price": "37.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Newborn-Baby-Girl-Small-Age-Suitable-For-Spring-Summer-Autumn-And-Winter-Light-Beige-Stripes-Sweet-Cute-And-Adorable-Comfortable-And-Loose-Front-Zipper-Opening-Frill-Decoration-On-The-Sleeves-And-Bottom-One-Piece-Pants-With-Attached-Sleeves-And-Feet-Comes-With-A-Baby-Cap-Two-Pieces-Set-Suitable-For-Various-Occasions-Such-As-Parties-Weddings-Birthdays-Moon-Celebrations-And-Other-Events-p-409856180.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/26/2c/1772069151c4dbf4985f1a8d4d8f5ae3c9a10d1ff2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 78,
+        "title": "Dazy Kids طقم بيجامات للأطفال البنات مكون من ملابس علوية كم طويل وبنطلون بنمط المربعات الصغيرة",
+        "price": "38.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Dazy-Kids-Baby-Girl-Plaid-Pattern-Long-Sleeve-Top-And-Pants-Homewear-Pajamas-Set-Toddler-Girls-Clothes-p-86468210.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/26/bb/1748261739767a74529c6e923204054a33f8ee22cf_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 79,
+        "title": "LMoss Kids 6 قطع طقم بنطلون وتي شيرت كاجوال للأطفال البنات مزين بطبعة الدب الزهري والكشكشة في الياقة",
+        "price": "51.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/LMoss-Kids-6pcs-Baby-Girl-Knit-Floral-Bear-Pattern-Ruffle-Collar-Casual-T-Shirt-And-Pants-Homewear-Set-p-183117965.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/15/54/1757922364569318c446d0e536e33382e122e85a80_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 80,
+        "title": "6 مجموعات عشوائية، إرسال 2 مجموعة، رومبير قدم طويلة الأكمام للمواليد الجدد بطباعة ديناصور وشاحنة باللون الأبيض والأزرق والأخضر الداكن والأبيض والأزرق الفاتح، بدلة رومبر بيجامة، أفضل هدية للمواليد الجدد",
+        "price": "43.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Random-2-Sets-Newborn-Long-Sleeve-Footie-Cute-Dinosaur-Truck-White-Blue-Dark-Green-White-Light-Blue-Fashion-Pattern-2pcs-Romper-Pajamas-Best-Gift-For-Newborn-Night-Winter-Casual-p-442055510.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/18/ae/177910788256c2463c3bf071ecc07ba1e2ff96ccc4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 81,
+        "title": "SHEIN Elladie kids طقم ملابس رضيع بنات أنيق، يتكون من فستان وشورت، ذو كشاكش وأشرطة رفيعة، مزين بالزهور الجميلة",
+        "price": "24.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Elladie-kids-Newborn-Baby-Girls-Fashion-Cute-Flower-Decor-Outfit-Spaghetti-Strap-Vest-And-Shorts-2Pcs-Set-Baby-Girl-Summer-Clothes-p-91977294.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/04/d2/17490199756510ca3067929a131867ce6534907981_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 82,
+        "title": "Cozy Pixies بدلة سباحة غطاء للأطفال البنات مطرزة بالفراولة وطباعة نقاط البولكا مع كابوشون",
+        "price": "31.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Cozy-Pixies-Baby-Girl-Strawberry-Embroidery-Polka-Dot-Print-Hooded-Swimsuit-Cover-Up-p-403432301.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/10/d5/177069433755fdb5463ab3ac9438424c33dff15e14_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 83,
+        "title": "DAZY مجموعة بنطلون وتي شيرت بأكمام طويلة مطبوعة بالكامل للبنات الصغار، ملابس منزلية صيفية قطعتان",
+        "price": "35.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-2pcs-Baby-Girls-Casual-All-Over-Print-Long-Sleeve-T-Shirt-And-Pants-Homewear-Set-Summer-p-408365065.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/24/3d/177190181613f2a34095db888f0a70d68b5889d1c2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 84,
+        "title": "Hapijoa طقم ملابس منزلية للأطفال الرضع الصبيان، تي شيرت كاجوال بياقة دائرية بلون واحد مع بنطال كاجوال مخطط، ملابس خريفية للأطفال الصغار رمضان",
+        "price": "39.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Hapijoa-Baby-Boys-Solid-Color-Round-Neck-Casual-T-Shirt-With-Striped-Casual-Pants-Homewear-Set-Toddler-Fall-Clothes-p-112408982.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/01/5b/1751335594e7fec77e89c4dc06c2dfb10add5f46fd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 85,
+        "title": "Playful Pals 2 قطعة ملابس علوية كاميسول مخططة مصنوعة من الجاكار المحبوك بدون أكمام + شورت بخصر مطاطي مناسب للبنات الصغار، طقم كاجوال جميل مناسب للخروجات الصيفية أو العطلات",
+        "price": "16.12\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Playful-Pals-2pcs-Baby-Girls-Sleeveless-Striped-Knit-Jacquard-Camisole-Top-Elastic-Waist-Shorts-Casual-Cute-Set-Suitable-For-Summer-Outings-Or-Vacation-p-374818588.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/19/87/1768789358de7764deabe0199cf056fc178e216f6e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 86,
+        "title": "SHEIN مجموعة ملابس جنتلمان للأطفال الصبيان، تتكون من قميص بولو بأكمام قصيرة بنمط أرجايل وبنطال مربعات زرقاء، مناسبة لحفلات عيد الميلاد والحفلات المسائية والأعراس وحفلات استقبال المواليد وعيد الميلاد الأول",
+        "price": "35.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Baby-Boy-Summer-Spring-Preppy-Style-Argyle-Pattern-Short-Sleeve-Polo-Shirt-Blue-Plaid-Pants-Gentleman-Outfit-Set-Suitable-For-Birthday-Party-Rave-Evening-Party-Performance-Wedding-Baby-Shower-1st-Birthday-Celebration-Blue-Vintage-Baby-Boy-Outfit-Toddler-Boy-White-Or-Blue-Outfits-p-378795600.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/06/1d/17703490613c10c3668679bd6f25756576e545e296_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 87,
+        "title": "SHEIN رومبير صيفية كاجوال وجميلة للرضيعة الجديدة، مزينة بشريط وفيونكة باللون الوردي",
+        "price": "28.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Newborn-Baby-Girl-Summer-Vacation-Casual-Cute-Pink-Striped-Bow-Strap-Romper-p-430926172.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/08/a6/17756301967af4919367e1eca24568b951288dcf2b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 88,
+        "title": "%6-\nبدلة للأطفال الصغيرات تتكون من تي شيرت أسود بأكمام قصيرة مطبوع عليه فراشة ومع بنطلون جينز طويل مزين بزخارف فراشات ثلاثية الأبعاد قطعتان",
+        "price": "31.82\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Baby-Girl-Butterfly-Print-Black-Short-Sleeve-T-Shirt-And-Multi-3D-Butterfly-Decor-Denim-Long-Pants-2-Pieces-Set-p-48943974.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/01/06/1b/17361518797bcfb4c432c98fa3f20471ebff8a5df9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 89,
+        "title": "SHEIN رومبير قصيرة الأكمام مخططة للرضع مع ياقة بولو وشارة دب حلوة للعب اليومي العادي ، رومبير مطبوعة مخططة ملونة وكاجوال ذات أزرار وأكمام قصيرة للرضع والأطفال الصغار. متوفرة باللون الأزرق الفاتح اللون الصلب والقماش المحبوك المخطط الأبيض والأسود ، هذه المجموعة المكونة من قطعتين مثالية للارتداء اليومي والعطلات. مجموعة بيجامة للأطفال الرضع المكونة من قطعتين ، ملابس علوية بياقة طاقم وأرجل مطوية مخططة بسيطة وجميلة.",
+        "price": "62.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Infant-Short-Sleeve-Striped-Romper-With-Polo-Neck-And-Sweet-Bear-Patch-For-Everyday-Play-Casual-Cute-And-Casual-Color-Blocked-Striped-Collared-Button-Down-Short-Sleeved-Printed-Romper-For-Infants-And-Toddlers-Available-In-Light-Blue-Solid-Color-And-Black-And-White-Striped-Knit-Fabric-This-Two-Piece-Set-Is-Perfect-For-Everyday-Wear-And-Vacations-2-Piece-Newborn-Baby-Boy-Cute-Simple-Striped-Print-Ruffled-Hem-Crew-Neck-Short-Sleeve-Top-And-Pants-Knit-Set-Elegant-Party-Dresses-p-346745616.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/31/54/17671680457c14559ddb0932af1e93dabcefd1ffd6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 90,
+        "title": "SHEIN مجموعة من قميص بولو بياقة عالية وأكمام قصيرة من قماش البيكيه الأزرق الداكن وشورت أبيض مع حزام، مناسب للاستخدام اليومي والرياضة واللعب والحفلات والتصوير الفوتوغرافي والحضانة، مناسب للربيع والصيف، 2 قطعة",
+        "price": "36.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Set-Baby-Boy-Comfortable-Casual-Stylish-Navy-Pique-Fabric-Polo-Shirt-With-Stand-Collar-Short-Sleeve-And-White-Shorts-With-Belt-Suitable-For-Indoor-Outdoor-Daily-Sports-Play-Party-Photo-Shoot-Holiday-Kindergarten-Spring-Summer-p-101815677.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/30/c3/1767059566fbccd176c8934c684934fa4152cec9c0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 91,
+        "title": "SHEIN طقم بلوزة جيب مربعات وشورت مربعات 2 قطعة للأطفال والرضع الصبيان، كاجوال ومريح",
+        "price": "23.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Dozemod-Kids-Baby-Boy-Plaid-Pocket-Tee-Plaid-Shorts-2pcs-Set-Casual-Comfortable-Toddler-Boy-Short-Sleeve-Pajamas-Baby-Boy-Pjs-Baby-Boy-Pajama-Set-Baby-Boy-Sleep-Wear-Baby-Boy-Cotton-Pajamas-Baby-Boy-Bamboo-Pjs-Baby-Boy-Cotton-Pajamas-For-Summer-Unisex-Baby-Clothes-Baby-Boy-Clothes-Pajamas-For-Baby-Boy-p-416832931.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/12/df/177331020481c043aaf81328da822266ab7158e59a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 92,
+        "title": "SHEIN Vintaside Kids 3 قطع مجموعة كاجوال للأطفال الجنسين تشمل سترة وبدلة داخلية، باللون الأبيض والأسود والأزرق الرمادي، قماش ناعم ومريح، مناسب للعطلات والسفر والمدرسة والمناسبات اليومية، ربيع/صيف",
+        "price": "32.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-3pcs-Baby-Unisex-Casual-3-Pieces-Set-Including-Vest-Bodysuits-White-Black-Modle-Blue-Soft-Comfortable-Fabric-Suitable-For-Vacation-Travel-School-Daily-Events-Spring-Summer-Festival-p-65340781.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/26/66/174825085557a80762b476b023fa6b609cde878af2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 93,
+        "title": "%10-\nDAZY مجموعة قميص جينز صيفي مع طوق وشورت للأطفال الصغار، قطعتان",
+        "price": "57.77\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-2pcs-Toddler-Boys-Summer-Casual-Denim-Shirt-With-Collar-Shorts-Set-p-398233198.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/05/a9/17702714026d699376c3e9e0a29042cdf59b3ca2da_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 94,
+        "title": "GraphicGems زي طفل صبي غير رسمي وعملي مكون من قميص ياقة دائرية بأكمام قصيرة و شورت متنوع مع طبعات نمط النمر المرحة, لفصلي الربيع والصيف",
+        "price": "19.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/GraphicGems-2pcs-Set-Baby-Boy-Casual-Everyday-Simple-Versatile-Fun-Tiger-Pattern-Printed-Short-Sleeve-T-Shirt-And-Shorts-Outfits-Spring-Summer-p-32926406.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/15/8b/17657898400e702fe9704faf62b2dece4711bdbcfe_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 95,
+        "title": "طقم بيجامة طويلة الأكمام للرضيعة الفتاة الصغيرة، بتصميم كتل اللون المحبوك مع فيونكة الدب الوردي، ملابس منزلية عصرية",
+        "price": "40.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Newborn-Baby-Girl-Cute-Casual-Knit-Color-Block-Bow-Bear-Pink-Long-Sleeve-Pajama-Set-Coming-Home-Baby-Girl-Set-Baby-Girl-Newborn-Outfit-Little-Sister-Outfit-Newborn-Girls-Summer-Set-Newborn-Girl-Set-p-419828690.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/12/42/1773310209adefe1a6e7f2b97735aad65b8bedd6db_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 96,
+        "title": "بدلة سباحة قصيرة مقسّمة موشاة بطبعة حورية البحر للأطفال البنات ، بتصميم كشكشة بلا أكمام",
+        "price": "25.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Baby-Girl-Mermaid-Scale-Print-Splicing-Ruffle-Trim-Sleeveless-Rompershort-Swimsuit-p-47178345.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/11/11/1a/1731295857e2f59b6b4f39c7b2aec996a480b00609_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 97,
+        "title": "مجموعة 2 قطعة للبنوتة - ملابس علوية كتفين ملونة مطرزة بالكرز مع جينز عالي الخصر مزين بأزرار وأكمام مطرزة بالكرز ، موضة",
+        "price": "39.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Baby-Girl-2pcs-Set-Colorblock-Shirt-Collar-Top-With-Cherry-Embroidery-And-High-Waist-Button-Decorated-Cherry-Embroidery-Cuff-Jeans-Set-Fashion-p-89824609.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/07/b1/17518731643ad33aa3093300f9c6347c09edb55d47_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 98,
+        "title": "Vintaside Kids طقم ملابس علوية قصير الأكمام بياقة على شكل حرف V مخطط باللونين الأسود والخاكي مع شورت بدون خصر مماثل لمناسبات متنوعة - اللعب في الهواء الطلق ، الملابس المنزلية الكاجوال ، الرياضات الخارجية ، حفلات العطلات أو التجمعات العائلية ، مما يجعل الطفل يبدو أنيقًا ونشيطًا",
+        "price": "29.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Vintaside-Kids-Baby-Boy-Summer-Fashion-Black-Khaki-Striped-V-Neck-Short-Sleeve-Top-Paired-With-Matching-Waistless-Shorts-Set-Suitable-For-Various-Occasions-Outdoor-Play-Casual-Home-Wear-Outdoor-Sports-Holiday-Parties-Or-Family-Gatherings-Keeping-Baby-Looking-Elegant-And-Energetic-p-53006385.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/01/13/f1/173674759222d1b705538766494690aa0cc2b28255_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 99,
+        "title": "SHEIN Playful Pals بنطلون كارجو وتي شيرت أبيض مطبوع للبنات الصغيرات، طراز شارع أنيق، مجموعة صيفية",
+        "price": "24.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-Baby-Girls-Fashion-Chic-Street-Style-White-Short-Sleeve-T-Shirt-With-Printed-Decor-Paired-With-Pink-Cargo-Pants-Set-Summer-p-152220994.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/08/28/1757301559360c957e5c69e75523ffa5875500b205_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 100,
+        "title": "مجموعة قميص قصير وسروال ضيق مطبوع عليها رسومات قطة وفيونكة وحروف، ملائمة للارتداء اليومي للبنات الصغيرات، مناسبة للربيع والصيف والخريف",
+        "price": "19.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Spring-And-Summer-Casual-Cute-Cat-Eye-Bow-Decor-Letter-Print-Short-T-Shirt-And-Leggings-Set-Comfortable-Daily-Wear-For-Baby-Girls-Suitable-For-Spring-Summer-And-Autumn-p-433769588.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/31/d9/17749208258421311b8c690c9633f99909a87357e8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 101,
+        "title": "SHEIN 4قطع/مجموعة ملابس صيفية للصبي الرضيع تتكون من قميص مخطط كم قصير، شورت خصر مطّاطي، كيب، وفيونكة، مناسبة لحفل عيد الميلاد والمناسبات الرسمية والزفاف وحفلات إستحمام الطفل وحفلات عيد ميلاد عامه الأول",
+        "price": "37.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-3pcs-Baby-Boy-Summer-Cute-Striped-Short-Sleeve-Shirt-Elastic-Waist-Shorts-Shawl-Gentleman-Outfit-With-Belt-Suitable-For-Birthday-Party-Evening-Party-Performance-Wedding-Full-Moon-Baptism-And-1st-Birthday-Celebration-Baby-Shower-p-49887778.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/07/b3/175187313968a5d0b343f7b5ed4d3b6590d4dcca42_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 102,
+        "title": "SHEIN Vintaside Kids فستان بناتي كاجوال قابل للارتداء في أي مكان مع أكمام قصيرة على شكل مربعات، مناسب للاستخدام في الخارج أو في المنزل اليومي",
+        "price": "28.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-Baby-Girls-Casual-Checkered-Cap-Sleeve-Versatile-Wear-Anywhere-Dress-Suitable-For-Outdoors-Or-Everyday-Home-p-62302797.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/21/80/1742527359d5c8e66ce522e20293b594142679422f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 103,
+        "title": "مجموعة ملابس علوية بأكمام طويلة بياقة دائرية مطرز بطريقة بوهيمية ملونة وبنطال جينز مطرز بالزهور لطفلة 2 قطعة",
+        "price": "35.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/2pcs-Baby-Girl-Bohemian-Style-Colorful-Floral-3D-Embroidery-Round-Neck-Long-Sleeve-T-Shirt-Top-And-Floral-Embroidered-Denim-Pants-Set-p-230519764.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/02/6f/1767320935d97c8153334471142237834272cdfb53_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 104,
+        "title": "%4-\n3 قطع/طقم بنطلون جينز مريح وبسيط للأطفال الصغار الأولاد/البنات",
+        "price": "64.96\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/3pcs-Set-Toddler-Boys-Girls-Casual-Versatile-Simple-Comfortable-Denim-Pants-Set-p-44381798.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/10/21/5a/1729490244e766cadaa1028d6e679d884b2b3f71bd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 105,
+        "title": "Playful Pals مجموعة من 2 فستان قصير الأكمام على شكل A للبنات الصغار مزين بطباعة البط والفراخ، مناسب للخروجات الربيعية والصيفية، التصوير الفوتوغرافي أو الارتداء اليومي",
+        "price": "37.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Playful-Pals-2pcs-Set-Baby-GirlCute-Duck-Chick-Print-Short-Sleeve-A-Line-Dress-Suitable-For-Spring-Summer-Outings-Photoshoots-Or-Everyday-Wear-p-360718128.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/11/a4/1770795427fc6eaedb74b2bff5493cd86a768bd93f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 106,
+        "title": "SHEIN مجموعة بنطلون وبلوزة بدون أكمام مطرزة بالزهور للبنات الصغار، مناسبة للربيع والصيف، للخروج والسفر والاستخدام اليومي، قطعتان",
+        "price": "32.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2-Pieces-Baby-Girl-Casual-Floral-Embroidered-Lapel-Sleeveless-Top-And-Pants-Set-Suitable-For-Spring-And-Summer-Outdoor-Travel-Daily-Wear-p-430008436.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/25/0c/17744095685f6703fdb582c2a8eceb10611eae2e66_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 107,
+        "title": "SHEIN مجموعة قميص بولو مخطط وشورت أبيض للأطفال الصبيان، مناسبة لحفلات عيد الميلاد والحفلات المسائية والزفاف وحفلات استقبال المولود الجديد وعيد الميلاد الأول وغيرها من المناسبات، مجموعة صيفية للأطفال الصبيان، قميص بولو مخطط وشورت للأطفال الصبيان باللونين الأسود والأبيض، ملابس للعودة إلى المدرسة",
+        "price": "30.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Baby-Boy-Casual-Striped-Polo-Shirt-And-White-Shorts-Set-Suitable-For-Birthday-Party-Evening-Party-Wedding-Baby-Shower-1st-Birthday-Celebration-And-Other-Occasions-Baby-Boy-Summer-Set-Baby-Boy-Striped-Polo-Shirt-And-Shorts-Set-Black-And-White-Baby-Boy-Outfit-Back-To-School-Clothes-p-88395989.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/19/3c/1752919486d4776703671f17c496d53a75b66e2fb4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 108,
+        "title": "طقم بنات صيفي يتكون من تي شيرت بطبعة فراشة وبنطلون فضفاض مزين بالفراشات",
+        "price": "33.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Summer-Baby-Girls-Fashion-Bow-Print-T-Shirt-Casual-Wide-Leg-Bow-Decor-Pants-Set-p-79555768.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/22/9d/174789295817fccddce93ea943d27b9501cb679f61_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 109,
+        "title": "قميص كاجوال بأكمام قصيرة ذو لون واحد للطفل البنت، رومبير مخطط بشال، مناسب لارتداء الربيع والصيف، للاستخدام داخل وخارج المنزل",
+        "price": "30.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Baby-Boy-Girl-Casual-Academy-Resort-Solid-Color-Short-Sleeve-Shirt-Striped-Shawl-Romper-Suitable-For-Spring-Summer-Wear-Indoor-And-Outdoor-p-58133098.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/15/a7/1750002214fe7b767e9f9abe1e1f8458c317987083_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 110,
+        "title": "LMoss Kids 6 قطع طقم رومبير قصير الأكمام مزخرف بالزهور الجميلة للأطفال البنات",
+        "price": "46.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/LMoss-Kids-6pcs-Baby-Girl-Cute-Floral-Elastic-Knit-Short-Sleeve-Romper-Set-p-343354316.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/25/3d/17744298605c1ba3c48fc7fc75275c086b2c8ee4b1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 111,
+        "title": "Travachic KIDS Travachic KIDS فستان بناتي كاجوال بطراز لطيف وحلو بطبعة زهور فينتاج أنيق بخصر مطاطي بدون أكمام",
+        "price": "20.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Travachic-KIDS-Travachic-KIDS-1pc-Baby-Girl-Casual-Cute-Sweet-Pattern-Placement-Retro-Print-Floral-Vintage-Style-Sleeveless-Elastic-Waist-Dress-p-345833847.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/28/87/1772272158b8dda3c6bc69b219ce9ab25530460c4e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 112,
+        "title": "Souflis Souflis فستان أميرة للبنات الرضع بأكمام منفوخة من الشبك المطرز باللون الكريمي، مناسب لحفلات عيد الميلاد والمناسبات الرسمية والارتداء اليومي، ملابس بنات رضع للربيع والصيف لحفلات الزفاف والمناسبات الأنيقة",
+        "price": "35.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Souflis-Souflis-Baby-Girls-Cream-Color-Embroidered-Mesh-Puff-Sleeve-Princess-Dress-Suitable-For-Birthday-Party-Formal-Events-And-Daily-Wear-Spring-Summer-Baby-Girl-Clothes-For-Wedding-Elegant-Dresses-For-Baby-Girls-Dresses-Christening-p-86153436.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/23/d1/17479888016d1ab736578c200fe783a88efc3f1e2a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 113,
+        "title": "SHEIN Vintaside Kids مجموعة فتاة رضيع وطفل رقم قل-م أزرق داكن بدون أكمام ذات طوق مكشكش وشراشيب عند الخصر، مع ديكور فيونكة، مريحة وجذابة، مناسبة للربيع/الصيف/الخريف",
+        "price": "24.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Vintaside-Kids-Baby-Girl-Blue-Round-Neck-Sleeveless-Top-Elastic-Waist-Sweet-Suitable-For-Outdoor-Wear-p-105783480.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/23/37/1750664903ae2a8805ba28bf81e1c3061567e11487_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 114,
+        "title": "SHEIN LMoss Kids [5 قطع عشوائية، إرسال 1 قطعة] رومبير رومبر كاجوال للبنات الرضع والأطفال مناسبة للربيع/الصيف، بتصميم كاواييي وطراز كوري، بأنماط مختلفة كالشرائط الرجعية السوداء والبيضاء، والطباعة الزهرية الصغيرة، والزهور الجرافيتي، وأنماط أخرى مريحة وعصرية، مناسبة للخروجات الصيفية والأنشطة اليومية والعطلات والحفلات",
+        "price": "12.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-LMoss-Kids-Random-5pcs-Send-1pc-Vintage-Sweet-Black-White-Striped-Mini-Floral-Print-Graffiti-Floral-Girly-Chill-Chill-Y2K-Kawaii-Baby-Girl-Casual-Camisole-Romper-Suitable-For-Spring-Summer-Cute-Summer-Outfits-For-Outing-Summer-Kids-Items-Summer-Outing-Items-Korean-Style-Easy-Comfort-Stylish-Kids-Y2K-Kawaii-Party-Everyday-Vacation-Cute-Comfy-Outing-Summer-2026-Cottagecore-Weekend-Casual-Family-Outing-Photoshoot-Outfits-Chill-Chill-Baby-Kids-Graphic-Tops-p-437719279.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/09/d7/17757007205b006c253e286ca1b9e0c7b70a04f7f9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 115,
+        "title": "SHEIN GraphicGems بدلة سباحة بأكمام طويلة مع طبعة فيونكة وسحاب، تشمل قبعة، قطعة واحدة للبنات",
+        "price": "27.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-GraphicGems-1-Piece-Girls-Bow-Print-Long-Sleeve-Swimsuit-With-Zipper-Includes-Hat-p-62534256.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/24/76/1742806756dbfa79e619cbd3ae01bb81c7c0665549_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 116,
+        "title": "SHEIN مجموعة نوم للأطفال الصبية مكونة من قطعتين، مطبوعة برسومات الفيل والثعلب، قطعة ملائمة للصيف، قطنية ناعمة ومريحة للتنفس",
+        "price": "30.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-2pcs-Set-Elephant-Fox-Sketch-Print-Breathable-Soft-Cozy-Sleepwear-Set-For-Baby-Boys-Loose-Casual-Outfit-Suitable-For-Summer-p-394641790.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/02/6a/1770010435d24ddba3b2b09da0d10c7e4fadc5bffd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 117,
+        "title": "SHEIN Playful Pals 2 قطعة مجموعة ملابس صبي رضيع مكونة من تي شيرت أكمام قصيرة ياقة عالية وبنطلون لون مباين مناسبة للصيف",
+        "price": "24.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Playful-Pals-2pcs-Baby-Boy-Elegant-Minimalist-Stand-Collar-Short-Sleeve-T-Shirt-And-Contrast-Color-Pants-Full-Set-Suitable-For-Summer-Boys-Clothes-Baby-Boy-Summer-Clothes-Baby-Boys-Sets-Boy-Clothes-Baby-Summer-Clothes-For-Baby-Boys-Boy-Clothes-For-Toddler-p-71805390.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/16/81/1747396812aee77bb4e526c1e353d99f5f4c0c2a9c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 118,
+        "title": "SHEIN فستان رومبر أبيض للبنات الرضع بطراز أميرة حلو مع تطريز زهري وشريط عقدة الفراشة، إصدار فضفاض مكشكش، مناسب للخروجات اليومية والرحلات الترفيهية وحفلات العائلة وحفلات عيد الميلاد ال- 100 وجلسات التصوير، فستان بنات رضع، فستان صيفي للبنات الرضع، رومبير رضع للبنات الجدد، رومبير رضع للبنات، ملابس أطفال محايدة، ملابس بنات رضع، فساتين معمودية للبنات",
+        "price": "29.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Newborn-Baby-Girls-Summer-White-Sweet-Princess-Style-Lace-Bow-Floral-Embroidery-Sleeveless-Romper-Dress-Loose-Ruffles-Version-Suitable-For-Daily-Outings-Leisure-Trips-Family-Gatherings-100Day-Birthday-Parties-And-Photo-Sessions-Baby-Girls-Dress-Bodysuit-Baby-Girls-Summer-Dress-Newborn-Baby-Bodysuits-Newborn-Romper-Baby-Girl-Bodysuits-Unisex-Baby-Clothes-Neutral-Baby-Clothes-Baby-Girl-Clothes-Baptism-Dresses-For-Girls-p-415060002.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/23/72/177692864660851c188b57aba48028f14a6ac1b49b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 119,
+        "title": "SHEIN بيجامة بنات رضع، مطبوعة بالكرز مريحة وأنيقة مع حافة مكسرة، توب كم قصير وبنطلون طويل قطعتين ملابس منزلية",
+        "price": "30.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Baby-Girls-Pajamas-Set-Comfortable-Fashionable-Cherry-Print-With-Ruffle-Hem-Elegant-Short-Sleeve-Top-And-Long-Pants-2-Pieces-Loungewear-p-416953233.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/12/1c/1773278815675af44af010ec1b1d2cf6fd0bdac52b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 120,
+        "title": "Souflis Souflis فستان صيفي مع كابوشون للبنات، ملابس أنيقة للبنات الصغيرات",
+        "price": "25.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Souflis-Souflis-Girls-Hooded-Summer-Dress-Fashion-Baby-Girl-s-Outfit-p-63741245.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/04/01/a0/174347197630f3c9d95dec30d0f4189638d5016c25_thumbnail_405x552.jpg"
+    }, {
+        "id": 1,
+        "title": "SHEIN بنطال كاجوال بجيب للسيدات الحوامل ذو لون سادة، للاستخدام اليومي",
+        "price": "48.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Pregnant-Women-Solid-Color-Pocket-Casual-Pants-Everyday-Use-p-48956446.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2024/11/28/0a/173279145658a83631f48b5f24cfd208380eb6a70b_thumbnail_600x.webp"
+    },
+    {
+        "id": 5,
+        "title": "SHEIN بنطلون أرجل واسعة كاجوال أبيض للحوامل مع إمكانية ضبط الخصر",
+        "price": "37.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Maternity-Solid-Color-Adjustable-Waist-Wide-Leg-Casual-Pants-p-54546205.html?src_identifier=fc%3DBaby%20%26%20Maternity%60sc%3DBaby%20%26%20Maternity%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab11navbar11menu01dir01%60jc%3DitemPicking_1004696117&src_module=topcat&src_tab_page_id=page_select_class1779115568558&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2025/01/23/94/1737609704b3e7ab14f06bedfb89addbe8b7d2728d_thumbnail_600x.webp"
+    }
+];
+   // 2. دالة لحقن وعرض المنتجات ديناميكياً داخل الجريد
+    const productGrid = document.getElementById('productGrid');
+    // غير القيم دي براحتك حسب سعر اليوم والعمولة الحاببها
+const EXCHANGE_RATE = 1200;     // سعر الصرف اليوم (مثلاً الدولار أو الريال مقابل العملة المحلية)
+const FIXED_COMMISSION = 10;   // العمولة الثابتة التي تريد زيادتها لكل منتج
+  productsData.forEach(product => {
+    // 1. تنظيف وفصل السعر عن عدد المبيعات كالمعتاد
+    const priceInfo = product.price.split('\n\n');
+    const soldCount = priceInfo[1] ? priceInfo[1] : '';
+
+    // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+    const originalPrice = parseFloat(priceInfo[0].replace('', '').trim());
+
+    // 3. العملية الحسابية: (السعر الأصلي × سعر الصرف) + العمولة الثابتة
+    const localPriceNumber = (originalPrice + FIXED_COMMISSION) *  EXCHANGE_RATE;
+
+    // 4. تنسيق السعر النهائي ليظهر بشكل أنيق (مثال: ج.س 13,800) بدون كسور
+    const cleanPrice = "ج.س " + Math.round(localPriceNumber).toLocaleString('en-US');
+    
+    // الآن المتغير cleanPrice أصبح يحمل السعر المحلي الجديد وجاهز للعرض في الكارت...
+      let imgUrl = product.image_url.trim().startsWith('//') ? 'https:' + product.image_url.trim() : product.image_url;
+      
+      
+      
+      const cardHTML = `
+            <div class="product-card"
+                 data-title="${product.title}"
+                 data-price="${cleanPrice}"
+                 data-sold="${soldCount}"
+                 data-img="${product.image_url}"
+                  data-link="${product.product_link}">
+
+
+                 
+                 
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${product.title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <div class="rating"></div>
+                    <div class="price-row">
+                        <span class="price">${cleanPrice}</span>
+                        ${soldCount ? `<span class="sold-count">${soldCount}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // --- أكواد القوائم والفلتر الأصلية ---
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // --- كود السلايدر الأصلي ---
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // --- كود النافذة المنبثقة (MODAL JAVASCRIPT) بعد حقن العناصر المضافة حديثاً ---
+    const modal = document.getElementById("productModal");
+    const closeBtn = document.querySelector(".close-modal");
+    const productCards = document.querySelectorAll(".product-card");
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.getAttribute("data-title");
+            const price = this.getAttribute("data-price");
+            const rawImg = this.getAttribute("data-img"); 
+            
+        // 2. جلب وتصحيح رابط شي إن للمنتج (الجديد)
+        const rawLink = this.getAttribute("data-link");
+        const sheinLink = rawLink && rawLink.trim().startsWith('//') ? 'https:' + rawLink.trim() : rawLink;
+
+        // 2. فحص وتعديل الرابط طائراً (السطر السحري)
+       const img = rawImg.trim().startsWith('//') ? 'https:' + rawImg.trim() : rawImg;
+            const sold = this.getAttribute("data-sold");
+            
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalPrice").innerText = price;
+            document.getElementById("modalImg").src = img;
+            document.getElementById("modalSold").innerText = sold;
+                const whatsappMessage = `الاسم: ${title}\n
+                السعر: ${price}\n
+                رابط الصورة: ${img}\n
+                رابط المنتج ${rawLink}`;
+
+            document.getElementById("btn").href = "https://Wa.me/249128039027?text=" + encodeURIComponent(whatsappMessage);
+            document.getElementById("sheinBtn").href = sheinLink;
+            modal.style.display = "block";
+        });
+    });
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

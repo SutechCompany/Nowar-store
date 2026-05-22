@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوار - Nowar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+    
+    <style>
+        @import url(‘https://fonts.googleapis.com/css?family=Cairo‘);
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo';
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: Cairo, 'Cairo';
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); }
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+      
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span ,a { text-decoration: none; font-size: 15px; color: var(--text-muted);margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+         
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px 10%; padding: 15px 10px; background: #fff; margin-bottom: 10px; }
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .category-item img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .category-item span { font-size: 11px; color: #333; line-height: 1.2; }
+
+        /* Filters */
+        .filters { display: flex;
+            width:100%;
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;}
+        .filter-btn {
+             padding: 6px 15px;
+             border-radius: 20px;
+              background: #fff;
+               border: 1px solid #fff; 
+               font-size: 13px; 
+               font-weight: 600;
+                white-space: nowrap;
+                 cursor: pointer;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                 flex:1;
+                text-align: center;
+                }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; }
+        
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+        .price-row { display: flex; flex-direction: column; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .sold-count { font-size: 11px; color: var(--text-muted); direction: rtl; }
+        .rating { font-size: 10px; color: #f5a623; display: flex; gap: 2px; }
+        .rating span { color: var(--text-muted); font-size: 11px; margin-left: 2px;}
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; 
+            position: absolute; 
+            z-index: 100; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: white; 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%;
+            border-radius: 20px 20px 0 0; 
+            padding: 20px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute; right: 20px; top: 15px; 
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; direction: rtl; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; direction: rtl;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+        .modal-sold { font-size: 13px; color: var(--text-muted); }
+        
+        .add-to-cart-btn { 
+            background: var(--text-main); color: white; border: none; 
+            padding: 15px; border-radius: 25px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        #btn {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn{
+            background-color: #000;
+            color:#fff;
+        }
+        .sheinBtn a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="فساتين">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+       <div class="top-nav" id="topNav">
+            <span ><a href="shoes.html">أحذية</a></span>
+            <span class="active"><a href="women.html">نساء</a></span>
+            <span  > <a href="kids.html">أطفال</a> </span>
+            <span> <a href="index.html">إكسسوارات</a> </span>
+            <span  > <a href="meckup.html">تجميل</a></span>
+            <span>الكل</span>
+            
+        </div>
+    </header>
+
+    <div class="main-content">
+        
+       
+        <div class='mySlides fade'>
+            <img src='women1.jpg' style='width:100%' alt="ad 2">
+        </div>
+        
+        <div class='mySlides fade' style="display: block;">
+            <img src=' first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+         <div class='mySlides fade'>
+            <img src='women2.jpg' style='width:100%' alt="ad 2">
+        </div>
+      
+
+        <div class="filters">
+            <button class="filter-btn "> الأحدث</button>
+            <button class="filter-btn"> ترند</button>
+            <button class="filter-btn"> الأكثر طلباً  </button>
+            <button class="filter-btn active"> لَك </button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+        
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+
+
+
+
+
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+            <img id="modalImg" src="" alt="Product">
+            <h3 id="modalTitle"></h3>
+            
+            <div class="modal-price-row">
+                <span id="modalPrice" class="modal-price"></span>
+                <span id="modalSold" class="modal-sold"></span>
+            </div>
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="">عرض المنتج في شي إن  </a></button>
+
+            <button class="add-to-cart-btn"> <a id="btn" href="">طلب المنتج </a></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. مصفوفة المنتجات المأخوذة من ملف json_prd.json مباشرة
+ const productsData =[
+    {
+        "id": 1,
+        "title": "SHEIN MOD فستان نسائي أنيق أسيمتري الكتف متوسط الطول، فستان كتف واحد أنيق، ملابس خريفية/شتوية للنساء، فستان ، فستان رأس السنة، فستان حفلة، فساتين أنيقة للسيدات، خريفي أنيق، فستان عيد الميلاد",
+        "price": "74.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Apricot-Asymmetric-Shoulder-Midi-Dress-For-Women-One-Shoulder-Dress-Elegant-Fall-Winter-Autumn-Clothes-For-Women-Thanksgiving-Dress-New-Year-Dress-Party-Dress-Elegant-Dresses-For-Ladies-Chic-Autumn-Christmas-Dress-p-316443541.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/12/09/79/1765259197cafa1f6de7117e480d9341c060fff744_thumbnail_600x.webp"
+    },
+    {
+        "id": 2,
+        "title": "Feyla فستان أنيق للنساء بلون أحادي مطوي متوسط الطول",
+        "price": "91.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/Feyla-Women-s-Elegant-Party-Solid-Color-Ruched-Mid-Length-Dress-p-291710210.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/11/19/7a/17635202615eb7731f131726e1ecb41dc995cae72c_thumbnail_600x.webp"
+    },
+    {
+        "id": 3,
+        "title": "Firerie بدلة نسائية صيفية جديدة، أنيقة بسيطة للارتداء اليومي والتنقل، بلوزة بياقة واسعة وكتف مكشوف وبنطلون ساق واسعة",
+        "price": "70.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Firerie-Women-s-Summer-New-Arrival-Simple-Elegant-Daily-Casual-Linen-Commuter-Wide-Collar-Off-Shoulder-Blouse-And-Wide-Leg-Pants-Suit-p-93455486.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/07/23/f1/17532382458a09cd4a205b86d3d4eb33a2e4d04d01_thumbnail_600x.webp"
+    },
+    {
+        "id": 4,
+        "title": "SHEIN بنطال كاجوال بجيب للسيدات الحوامل ذو لون سادة، للاستخدام اليومي",
+        "price": "48.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Pregnant-Women-Solid-Color-Pocket-Casual-Pants-Everyday-Use-p-48956446.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2024/11/28/0a/173279145658a83631f48b5f24cfd208380eb6a70b_thumbnail_600x.webp"
+    },
+    {
+        "id": 5,
+        "title": "INAWLY قميص نسائي بأكمام طويلة فضفاض وذو فتحة كتف مرتخية بلون أحادي مناسب للعطلات والكاجوال، أطقم أكمام طويلة",
+        "price": "29.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/INAWLY-Women-s-Vacation-Casual-Loose-Long-Sleeve-Drop-Shoulder-Solid-Color-Shirt-Long-Sleeve-Tops-Fall-Cloth-For-Women-p-34954487.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/01/05/80/1767594936e8fe5e8e1617b5b49e7b97dbcb6c8aa1_thumbnail_600x.webp"
+    },
+    {
+        "id": 6,
+        "title": "SHEIN MOD فستان نسائي ضيق الجسم بأكمام طويلة وربطة أمامية على الكتف، فستان أحمر بتصميم ذيل السمكة مطرز بالدانتيل، فستان نسائي مقاس S، فستان حفلة، فساتين رسمية لحفلات عيد الحب لضيوف الزفاف، فستان لضيوف الزفاف",
+        "price": "76.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Women-Off-Shoulder-Long-Sleeve-Front-Tie-Bodycon-Dress-Red-Mermaid-Lace-Dress-S-Dress-Women-Party-Dress-Valentine-Day-Formal-Dresses-For-Wedding-Guest-Wedding-Guest-Dress-Maxi-Mermaid-Dress-For-Party-Valentine-s-Day-Dress-Wedding-Elegant-Dresses-Spring-Summer-Outfits-Red-Formal-Dress-Vacation-Outfits-Prom-Dress-Birthday-Dress-p-100160766.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/06/16/6b/1750040001eeb63c15f7fab8658f41319f468b3ad2_thumbnail_600x.webp"
+    },
+    {
+        "id": 7,
+        "title": "SHEIN بنطلون أرجل واسعة كاجوال أبيض للحوامل مع إمكانية ضبط الخصر",
+        "price": "37.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Maternity-Solid-Color-Adjustable-Waist-Wide-Leg-Casual-Pants-p-54546205.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2025/01/23/94/1737609704b3e7ab14f06bedfb89addbe8b7d2728d_thumbnail_600x.webp"
+    },
+    {
+        "id": 8,
+        "title": "SHEIN Holidaya ملابس علوية نسائية صيفية بلون أحادي ذات حافة غير متماثلة وفتحات، ملابس علوية كاجوال نسائية، ملابس علوية شاطئية نسائية، ملابس علوية شبكية صيفية نسائية",
+        "price": "32.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Holidaya-Women-s-Vacation-Solid-Color-Asymmetric-Hem-Hollow-Out-Sweater-Women-Casual-Outfits-Women-s-Beach-Cover-Up-Women-s-Summer-Outfits-Mesh-Top-Cover-Up-Women-s-Tops-For-Summer-Knitted-Blouse-For-Women-Knitted-Cover-Up-Top-Crochet-Knit-Top-Crochet-Tops-For-Women-p-433069811.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2026/03/30/04/17748631336f8fea0a76ed31f6f04172f47d9f3020_thumbnail_600x.webp"
+    },
+    {
+        "id": 9,
+        "title": "Sweetra بنطلون نسائي ذو سُمعة راقية ذو طيات منسدلة علي شكل جاكار للخريف/الشتاء",
+        "price": "50.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Retro-Elegant-Jacquard-Crimp-Pleated-Wide-Leg-Pants-Autumn-Winter-Fall-Cloth-For-Women-p-47131565.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2024/11/08/9c/1731063483c081895b04d19e38e25e236b8a4d1933_thumbnail_600x.webp"
+    },
+    {
+        "id": 10,
+        "title": "Sweetra 3 قطع/مجموعة قمصان/تيشرتات نسائية ضيقة بفتحة خلفية مثيرة، مصنوعة من خامات قابلة للتنفس ومشربة للرطوبة",
+        "price": "41.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-3pcs-Set-Sexy-Cut-Out-Back-Breathable-Moisture-Wicking-Fitted-Short-Sleeve-Women-Top-Tee-Set-p-66675402.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "https://img.ltwebstatic.com/v4/j/pi/2025/04/13/74/17444736160775968808ffe630e1cf44c3d76d8749_thumbnail_600x.webp"
+    },
+    {
+        "id": 11,
+        "title": "Modelyn فستان أنيق متوسط الطول للنساء بياقة على شكل حرف V وأكمام طويلة وخصر مزين بالدانتيل وزخرفة زهرية ثلاثية الأبعاد",
+        "price": "98.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Modelyn-Women-s-Solid-Color-V-Neck-Long-Sleeve-Lace-Waist-Cinched-Elegant-Midi-Dress-With-3D-Floral-Decor-Elegant-Blue-Maxi-Dress-Blue-Lace-Evening-Gown-Blue-Long-Sleeve-Formal-Dress-p-301952902.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/17/5b/177639139009bf9463e020f85eac8fcad975959ab8_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 12,
+        "title": "Aloruh قميص أنيق بأكمام طويلة وخصر ضيق باللون البرغندي للنساء، بلوزة أنيقة بطراز الشال الأنيق والإلهي المناسب للعمل اليومي البسيط",
+        "price": "47.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Aloruh-Women-s-Elegant-Solid-Color-Waist-Cinching-Long-Sleeve-Shirt-Burgundy-Blouse-For-Women-Elegant-Shawl-Style-Elegant-Goddess-Like-Commuter-Simple-Office-p-323115988.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/11/59/1765433966b800c88924105a34af56fae9c08c28c7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 13,
+        "title": "فستان ماكسي أنيق أصفر من التويد بتصميم ذيل حورية البحر للنساء، فستان رسمي ضيق الجسم بأكمام قصيرة وأزرار أمامية، مناسب لحضور حفلات الزفاف والمناسبات",
+        "price": "90.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Unadoll-Women-s-Summer-Elegant-Yellow-Tweed-Mermaid-Maxi-Dress-Short-Sleeve-Button-Front-Bodycon-Formal-Dress-For-Wedding-Guest-Party-p-119282909.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/26/b2/1758875259a49bfc21abe793575892598de12aba56_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 14,
+        "title": "Qadelle تنورة نسائية مطبوعة بخط الخصر، أنيقة للعطلات والعمل والحياة اليومية",
+        "price": "34.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Qadelle-Women-s-A-Line-Printed-Skirt-Elegant-For-Vacation-Work-And-Daily-Life-Fall-Cloth-For-Women-p-66806580.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/17/de/177371208325cfe7f6432c1091370c3c7bd2d76e4a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 15,
+        "title": "DAZY طقم بلوزة وتنورة قطعتين للنساء، بلوزة ذات رقبة على شكل حرف V وحزام، وتنورة قصيرة على شكل حرف A، للربيع والصيف",
+        "price": "91.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Elegant-Solid-Color-V-Neck-Belted-Shirt-And-A-Line-Skirt-2-Piece-Set-Spring-Summer-p-397988900.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/09/0e/1770603104528ec997fdef65895cb04f16f31deb1e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 16,
+        "title": "Sweetra 3 حبات ملابس علوية قطنية صلبة رقبة مضلعة مناسبة لفصل الصيف",
+        "price": "40.00\n\n300+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-3pcs-Solid-Mock-Neck-Tank-Top-For-Summer-p-37377145.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/06/24/6b/17191936441636a61a12fcf5ab0193dd9ca6580b48_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 17,
+        "title": "SHEIN ICON بنطلون جينز عصري بقصة مستقيمة للسيدات للباس اليومي",
+        "price": "81.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-ICON-Women-s-Casual-Straight-Leg-Jeans-For-Daily-Wear-p-37980582.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/07/02/db/17199218240579f8099fecb5bbb0ca7460d39965fa_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 18,
+        "title": "Livesso بدلة كاجوال للنساء مكونة من قميص مطوي باللون الأحادي وبنطال واسع الساق لموسم الصيف",
+        "price": "144.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Livesso-Women-s-Solid-Color-Pleated-Shirt-And-Wide-Leg-Pants-Casual-Suit-Set-For-Summer-Lounge-Sets-For-Women-p-109521345.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/27/4e/1750991049eb80354c72abe575a7e15e0e238876c0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 19,
+        "title": "Modelyn فستان طويل مناسب مع أكمام شال من الشبك والخيوط اللامعة بدون أحزمة للنساء، للربيع/الخريف",
+        "price": "97.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/Modelyn-Elegant-Mesh-Shiny-Yarn-Strapless-Shawl-Sleeve-Fitted-Long-Dress-For-Women-Spring-Autumn-p-341763895.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/29/25/1766980211ff3ceb79273032fb8be6d1ebb62b64de_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 20,
+        "title": "Siren Gaze بلوزة نسائية ذات كتف غير متماثل جديدة، بلوزة كتف غير متماثلة عصرية من الكتان ذات لون أحادي، قابلة للتحويل مع خصر مطوي، ملابس نسائية كاجوال للخريف والشتاء والربيع",
+        "price": "29.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Siren-Gaze-New-Asymmetrical-Shoulder-Tops-For-Women-Fashionable-Asymmetrical-Shoulder-Solid-Color-Linen-Versatile-Waist-Pleated-Shirt-Autumn-And-Winter-Women-s-Clothing-Casual-Spring-p-192758019.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/27/27/17615323297900cbfeb6cbbfc2acb67ad9b1c1abfd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 21,
+        "title": "Comfortcana طقم كاجوال مكون من قميص بأكمام طويلة مطبوع عليه طبعة فارس وبنطال مخطط قطعتين للنساء",
+        "price": "68.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Comfortcana-Women-s-Knight-Print-Button-Up-Long-Sleeve-T-Shirt-And-Striped-Pants-Casual-2-Piece-Set-p-352136172.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/28/e6/177227687835a07398e09e2d1e014d8cfedf84149c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 22,
+        "title": "Firerie قميص نسائي بربطة الخصر وبنطال فضفاض واسع الساق للتنقل اليومي",
+        "price": "127.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Firerie-Women-s-Elegant-Fashion-Refined-Casual-Daily-Commute-New-Street-Fashion-Linen-Commuter-Striped-Tie-Waist-Wrap-Shirt-And-Loose-Wide-Leg-Pants-Casual-Sets-For-Women-Fall-Outfits-For-Women-Brown-Blouse-And-Pant-Suit-Clothes-For-Women-Winter-Two-Piece-Set-Elegant-Two-Piece-Set-For-Women-Party-Two-Piece-Set-Party-Two-Piece-Set-For-Women-Wedding-Party-Two-Piece-Set-Brown-Stripes-Wide-Leg-Pants-2-Pieces-Set-p-214830246.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/05/3a/17623314365641d84dc28bf330243d756452c2d78c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 23,
+        "title": "Al Najma فستان سهرة أنيق للنساء بأكمام طويلة مطرزة بالخرز والزهور، قصة رقبة على شكل حرف V، قماش شبكي مكشكش، قصة مضيقة وذيل متسع، باللون الوردي",
+        "price": "100.00",
+        "product_link": "https://ar.shein.com/Al-Najma-V-Neck-Beaded-Embroidered-Floral-Ruffle-Mesh-Splice-Fitted-Long-Sleeve-Elegant-Flared-Hem-Women-Evening-Gown-Dress-Pink-p-400579172.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/07/0d/17704638913d71631088cb2b30af373f63397314b4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 24,
+        "title": "SHEIN بناطيل سروال متسع القدمين قابلة للتعديل، بنطلون أمومة بلون أحادي",
+        "price": "47.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Adjustable-Waist-Wide-Leg-Pants-Solid-Color-Maternity-Trousers-p-55289811.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/02/05/9f/17387381027430ea465436685670708c7a9392137a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 25,
+        "title": "Sunnyshic تنورة بوهيمية مطبوعة للنساء، ارتداء كاجوال يومي وللعطلات، ربيع/صيف",
+        "price": "53.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Sunnyshic-Women-s-Bohemian-Printed-Skirt-Casual-Daily-Vacation-Wear-Spring-Summer-p-64142287.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/04/01/75/17434880156ec445430c909fc8331f244d3ed258da_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 26,
+        "title": "Feyla فستان طويل الأكمام مطرز بخرز وشبكة ذو حافة غير متماثلة",
+        "price": "95.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Feyla-Women-s-Mesh-Beaded-Embroidered-Asymmetrical-Hem-Long-Sleeve-Dress-p-339533406.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/08/42/1775644974d58f4417b96fc0f737eb97ba95f40e0f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 27,
+        "title": "Elamini ملابس علوية نسائي ضيق الرقبة بأكمام طويلة مع تصميم من الدانتيل الأسود والتريكو المحبوك، أنيق وعصري للارتداء اليومي والمناسبات، مناسب للربيع والخريف",
+        "price": "29.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/Elamini-Women-s-Black-Ribbed-Knit-Lace-Patchwork-Hlater-Neck-Tie-Front-Long-Sleeve-Bodycon-T-Shirt-Elegant-Vintage-Chic-Casual-Commute-Date-For-Women-Spring-Autumn-Black-Lace-Top-Women-Black-Lace-Top-Skin-Revealing-Fall-Cloth-For-Women-p-127917117.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/16/dd/1752659612b2d152806c43a51a9e47e65aab57fbb9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 28,
+        "title": "SHEIN MOD قميص تي شيرت برغندي متعدد الاستخدامات بياقة طاقم وأكمام واسعة مجعدة وخصر مربوط وحاشية غير متماثلة",
+        "price": "26.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Crew-Neck-Ruched-Flare-Sleeve-Cinched-Waist-Asymmetric-Hem-Burgundy-Versatile-T-Shirt-Red-Top-Fall-Fall-Clothes-For-Women-p-185286610.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/16/21/17580112458bb105ea3a69342ad71d325cef2ca84c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 29,
+        "title": "Sweetra سروال نسائي أرجل واسعة مطوي من جاكار عتيق وأنيق، للخريف/الشتاء، ملابس رمضان",
+        "price": "48.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Vintage-Elegant-Jacquard-Pleated-Wide-Leg-Pants-For-Women-Autumn-Winter-Fall-Cloth-For-Women-p-49943528.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/12/09/5f/17337410338e67b16a460fce2c4d880ccc0a2dd73c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 30,
+        "title": "Sweetra تي شيرت كاجوال للنساء بكتف غير متماثل",
+        "price": "46.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Casual-Asymmetrical-Shoulder-T-Shirt-p-166102380.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/28/55/175638075144c7cf9d8b0e4f1277fcbc3a96782683_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 31,
+        "title": "Feyla فستان أنيق مشدود الخصر ذو طابع أنيق وجذاب للنساء",
+        "price": "79.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Feyla-New-Rose-Flower-Elegant-Charming-Elegant-High-End-Cinched-Waist-Dress-For-Women-p-377412481.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/28/0a/1777345227df32f1dcfb4d8e39602f00c70ae43a44_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 32,
+        "title": "SHEIN Najma فستان ماكسي أنيق بطبعة رقمية ملونة بنمط الكرمة، طويل الأكمام وياقة على شكل حرف V، للربيع والخريف",
+        "price": "54.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Najma-Women-s-Colorful-Vine-Pattern-Digital-Print-V-Neck-Long-Sleeve-Elegant-Arabic-Maxi-Dress-Spring-Autumn-p-307620562.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/14/64/17734932440fef085b86758e9591f2fe2e5e7251e9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 33,
+        "title": "Swim Mulvari مجموعة ملابس سباحة أنيقة ومحافظة للسيدات مطبوعة",
+        "price": "88.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Swim-Mulvari-Printed-Fabric-Elegant-Conservative-Ladies-Swimwear-Set-p-411245139.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/30/8a/17748613205001479d4aea053f0bdbe9f8d5c50818_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 34,
+        "title": "Siren Gaze ملابس علوية نسائي قصير الأكمام بياقة مائلة، تصميم جديد أنيق قابل للارتداء بسهولة في الصيف",
+        "price": "24.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Siren-Gaze-Chic-Oblique-Collar-Short-Sleeve-T-Shirt-New-Stylish-Design-Slim-Fit-Casual-Top-For-Women-Summer-White-p-81020292.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/19/c7/1747621512b7db0ebe75b744466fc62e695befa24b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 35,
+        "title": "Selianne طقم من 3 قطع من لباس علوي النسائية بدون أكمام ذات ياقة على شكل حرف V بلون موحد، مناسبة للإطلالات الكاجوال",
+        "price": "57.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Selianne-3-Pack-Women-s-V-Neck-Solid-Color-Sleeveless-Casual-Elegant-Tank-Tops-Office-Beige-Summer-p-325982787.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/12/05/17732448486a0198c7da1538795c8dc079a67f15fd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 36,
+        "title": "Rafferiza مجموعة من 2 قطعة، فستان مزين بكشكشة الأكمام الناعمة والعقدة الفرنسية الأنيقة وتنورة",
+        "price": "78.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Rafferiza-2pcs-Set-Elegant-French-Style-Lantern-Sleeve-Ruffled-Bowknot-Dress-Skirt-Fall-Cloth-For-Women-p-43110191.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/09/26/63/17273351368964c4c9a9e604352124b344164eae70_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 37,
+        "title": "DAZY بنطلون جينز واسع الخصر مخصر، مستقيم الساق، بسيط وشامل، بنطلون طول الكاحل مريح للنساء",
+        "price": "84.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Loose-High-Waist-Slimming-Straight-Leg-Jeans-Minimalist-Versatile-Comfortable-Ankle-Length-Pants-For-Women-p-209031387.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/28/1d/1764313566785cf0dc9b4fd2137e4e3803036d875a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 38,
+        "title": "Sweetra بلوزة كاجوال ذات أكمام كارن وحزام للخصر بالخطوط للعمل، موديل خريفي",
+        "price": "44.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Casual-Striped-Tie-Waist-Bell-Sleeve-Blouse-For-Work-Autumn-Fall-Cloth-For-Women-p-45486702.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/01/bd/1775033971c3c364a6ee91f18ce54ac9f053aa0e18_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 39,
+        "title": "Modelyn فستان نسائي بياقة عالية وخصر مشدود بالدانتيل باللون الأحمر",
+        "price": "87.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Modelyn-A-Luxurious-And-Elegant-Lace-Dress-Featuring-A-Delicate-High-Collar-And-A-Meticulously-Designed-Cinched-Waist-This-Dress-Is-Charming-And-Has-An-Excellent-Slimming-Effect-Making-It-The-Ideal-Choice-p-245545941.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/28/f8/17616335128105f3dd653ca7fff840d88da3abd06d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 40,
+        "title": "SHEIN Najma فستان مزين بالزهور المخرزة وأكمام مكونة من طبقات متداخلة بالكشكش، من القصة الشرقية للسيدات، طويل الطول للربيع والصيف، فستان تقليدي جلابية حريري للسيدات ، محتشم",
+        "price": "74.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Najma-Women-s-V-Neck-Beaded-Flower-Layered-Ruffle-Sleeve-Arabic-Dress-Spring-Summer-Full-Length-Jalabiya-Women-Casual-Dress-Modest-p-77768420.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/14/33/17471918386ae2c4025bf041bd5ff37ec007c423bc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 41,
+        "title": "Sweetra ملابس علوية كاجوال للنساء بأكمام طويلة وأربطة",
+        "price": "48.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Solid-Color-Casual-Lace-Up-Long-Sleeve-Top-p-249027017.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/29/3a/1761734838cef51a754867b62a027d95d87094e653_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 42,
+        "title": "Al Najma فستان ماكسي كفتان جلابية تقليدي تركي وعربي، ملائم للمحجبات، من قماش الشبكة المطبع بنقوش الزهور الصغيرة الأنيقة",
+        "price": "69.00\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/Al-Najma-Women-s-Elegant-Ditsy-Floral-Mesh-Panel-Turkish-Arabian-Traditional-Maxi-Dress-Kaftan-Jalabiya-Modest-p-53891166.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/01/17/e7/173707743014c9b070bdcf028572e8bb9baae8a7a6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 43,
+        "title": "Elenzga فستان بأكمام بالون مطبوع بالزهور، ربطة أمامية ظهر مكشوف وخصر مربوط، أنيق وأنيق للعطلات والمواعيد العادية",
+        "price": "59.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-New-Floral-Print-Bubble-Sleeve-Tie-Front-Backless-Cinched-Waist-Dress-Elegant-Graceful-For-Vacation-Casual-Dates-p-63286533.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/11/c8/1775912465dd187c3f4d52ef1ef11bba7daee1b16c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 44,
+        "title": "Glimmora تي شيرت قصير الأكمام للنساء بياقة على شكل حرف V وخطوط مطبوعة، ملابس يومية متعددة الاستخدامات",
+        "price": "21.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Glimmora-Women-s-V-Neck-Striped-Letter-Print-Casual-Versatile-Daily-Wear-Short-Sleeve-T-Shirt-Jersey-p-420221114.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/27/5f/1777260679278cce5fef5ff02219659d434c12e8e9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 45,
+        "title": "SHEIN MOD فستان ماكسي بياقة عالية وربطة عنق وخصر مربوط بصبغة البنفسجي، مناسب للرقص والتخرج والرومانسية والصيف والمهرجانات والريف والعطلات الشاطئية وحفلات الشاي والملابس المتواضعة وحفلات التخرج والهاواي والفساتين الشمسية للنساء والملابس البوهيمية",
+        "price": "101.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Stand-Collar-Bowknot-Cinching-Waits-Dye-Maxi-Dress-Purple-Rave-Graduation-Romantic-Summer-Festival-Country-Outfits-Beach-Vacation-Wear-Modest-Prom-Lavender-Hawaiian-Dress-Sun-Dresses-For-Women-Bohemian-Clothes-Spring-Summer-Country-Concert-Outfit-70s-Outfits-Retro-Dress-Tea-Party-Dress-Romantic-Dress-Purple-Dress-Fantasy-Dress-Purple-Organza-Dress-Detachable-Skirt-Dress-Vintage-Dress-Wedding-Elegant-Dresses-p-70214493.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/30/ee/1746008564a52e801fb23aa7f409a4646977966cd7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 46,
+        "title": "SHEIN x Tata & Beatriz Vixey لباس علوي ذات تصميم غير متماثل بقصة غير متماثلة وزر واحد مصنوعة من نسيج مضلع متماسك",
+        "price": "68.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-x-Tata-Beatriz-Vixey-Solid-Textured-Woven-Asymmetrical-Hem-Single-Button-Waistcoat-Top-p-233124658.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/25/f0/17613259613f09e2ce0a7003e1180dd29d2ee0cac0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 47,
+        "title": "Al Najma فستان أنيق فضفاض بياقة على شكل حرف V مزين بالتطريز",
+        "price": "74.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Al-Najma-Modest-Blue-Tunic-Long-Dress-With-Notched-Neckline-And-Regular-Long-Sleeves-Decorated-With-Golden-Plant-Hollow-Out-Details-p-387904843.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/26/c1/1769398410c72d7989060104e71d7e946afb605715_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 48,
+        "title": "Poéselle فستان طويل أنيق للنساء مطبوع بنقاط كبيرة مع أكمام دولمان",
+        "price": "63.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Po-selle-Women-s-Elegant-Polka-Dot-Print-Long-Dress-With-Dolman-Sleeves-Valentine-s-Day-Valentine-s-Day-Outfit-Floral-Lace-Dress-Elegant-Dresses-For-Women-Holiday-Outfits-For-Women-Birthday-Dresses-For-Women-Wedding-Guest-Dress-For-Women-Spring-Summer-White-Vintage-Dress-White-Polka-Dot-Dress-Elegant-Summer-Dresses-For-Women-p-336163004.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/24/a7/1766570981a0e41102796fc75c50f60248b948a2dd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 49,
+        "title": "Sweetra تنورة أنيقة للنساء للتنقل، تصميم منسدل له تأثير مخفف، مناسبة للربيع والخريف",
+        "price": "48.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Elegant-Commuting-Vibe-A-Line-Skirt-Draping-Design-Slimming-Effect-Suitable-For-Spring-And-Autumn-p-177309015.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/14/de/176042716323dd3571e011582fb50ccb450bedd0b7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 50,
+        "title": "SHEIN MOD فستان أنيق بدون أكمام (مع حزام)، موسم العودة إلى المدرسة",
+        "price": "61.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Women-s-Solid-Color-Sleeveless-Dress-With-Belt-Back-To-School-Season-Olive-Dress-p-183046038.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/15/0b/17579047150d444fda18e8d3e7f7735c620b6de0b3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 51,
+        "title": "SHEIN Raffinéa فستان طويل من اللون الخاكي مع أكمام على شكل خفاش وخصر مربوط، أنيق ومناسب للخروج والمناسبات، للربيع والصيف",
+        "price": "73.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Raffin-a-Women-s-Elegant-Refined-Commuting-Outing-Date-Outfit-Batwing-Sleeve-Cinched-Waist-Long-Khaki-Dress-Spring-Summer-p-432428302.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/30/a1/177484231921050e2acc1421cac58bdb1a05b024d3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 52,
+        "title": "Pariaura جمبسوت أنيقة للنساء بتصميم فرنسي بياقة مستديرة وخصر مشدود، جمبسوت كاجوال مشدودة الخصر للشتاء",
+        "price": "76.00",
+        "product_link": "https://ar.shein.com/Pariaura-Women-s-Elegant-French-Design-Round-Neck-Cinched-Waist-Jumpsuit-Waist-Cinching-Casual-Outfit-For-Winter-p-437825282.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/07/75/1775528736d50c8964c0bf0292e81ea71874b15bc9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 53,
+        "title": "Franclia بنطلون نسائي أبيض ذو ساق مستقيمة، بنطلون كاجوال، بنطلون للمكتب، بنطلون شيفون، بنطلون متدلي، بنطلون ناعم، بنطلون بأزرار معدنية، بنطلون متعدد الاستخدامات، بنطلون واسع، بنطلون غير متماثل، ربيع/صيف",
+        "price": "62.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Franclia-Women-s-White-Straight-Leg-Pants-Casual-Trousers-Office-Wear-Pants-Chiffon-Pants-Draping-Pants-Soft-Pants-Metal-Button-Pants-Versatile-Pants-Flowing-Pants-Asymmetric-Pants-Spring-Summer-p-424795664.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/23/00/1774256497f2c92c8ff1776a5d8f8b8d9f90c7a2dc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 54,
+        "title": "MYSTAURA جمبسوت نسائية صيفية كاجوال للاستخدام اليومي، بلون أحادي، مطوية بطيات فضفاضة وواسعة الساق",
+        "price": "50.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/MYSTAURA-Women-s-Summer-Casual-Everyday-Commute-Solid-Color-Fold-Pleated-Loose-Wide-Leg-Jumpsuit-p-149475841.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/08/b9/175461739004dda42984fed3678ae3dd6935d42c97_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 55,
+        "title": "MUSERA بنطلون كاجوال أنيق من الكتان للشاطئ والعطلات الصيفية، أبيض، مناسب للمطار والشاطئ والعطلات الربيعية",
+        "price": "43.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/MUSERA-Tie-Front-Linen-Feel-Beach-Trousers-Elegant-Summer-Vacation-Sun-Casual-Boho-White-Airport-Beach-Pants-Spring-Holiday-p-52925564.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/29/6c/17485157955fc333779370e301c62fd458289a93ad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 56,
+        "title": "Elenzga بنطلون أنيق ذو قطع غير متماثل على الكتف مع إبزيم معدني على الخصر وساق واسعة، مناسب للارتداء اليومي، الزفاف، السهرات، الذهاب للعمل، حفلات التخرج، العطلات، المواعيد، الحفلات، هالوين، عيد الميلاد، رأس السنة، ، حفلات الزفاف، طقم قطعتين للسيدات",
+        "price": "66.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-Elegant-Urban-Chic-New-Women-s-Spring-Summer-Navy-Asymmetric-One-Shoulder-Metal-Buckle-Waist-Wide-Leg-Pants-Suitable-For-Daily-Wear-Weddings-Galas-Commuting-Graduation-Parties-Holidays-Dates-Parties-Halloween-Christmas-New-Year-Thanksgiving-Wedding-Ladies-Two-Pieces-Set-p-391336961.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/14/1f/1778749300876a16adbd6eef7dee0ac5580e0a6f5e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 57,
+        "title": "Modelyn فستان نسائي طويل بياقة مربعة وأكمام فانوس مزخرف بنقشة الزهور الصغيرة، فستان ماكسي أنيق بنقشة الزهور باللون الأزرق الداكن، مناسب للارتداء في الصيف والاستخدام اليومي",
+        "price": "62.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Modelyn-Hibiscus-Ditsy-Floral-Fashion-Square-Neck-Lantern-Sleeve-Women-s-Long-Dress-Summer-Waist-Cinched-Maxi-Elegant-Floral-Patterned-Navy-Blue-Dress-Suitable-For-Summer-Vacation-And-Daily-Wear-p-448892124.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/21/e6/1776743679622cde9da30119d7ab090cd0bb3f013a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 58,
+        "title": "Qadelle 3 قطع تيشيرتات نسائية قصيرة الأكمام ذات لون أحادي بتجاعيد مناسبة للارتداء اليومي والتنقل",
+        "price": "45.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Qadelle-3pcs-Women-s-Casual-Everyday-Commute-Minimalist-Solid-Color-Ruched-Fitted-Short-Sleeve-T-Shirts-Occasion-White-And-Brown-Summer-p-398830422.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/06/8b/1770307350fd886f712c32912f9677329bf41dfa2f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 59,
+        "title": "Sweetra ملابس علوية نسائية ضيقة مصنوعة من قماش الدانتيل والرقعة، ذات كتف غير متماثل وذيل غير متماثل، تصميم أنيق للخريف والشتاء",
+        "price": "35.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Sexy-Lace-Patchwork-Asymmetric-Shoulder-Slim-Fit-Pullover-Top-With-Asymmetrical-Hem-Stylish-Design-For-Women-Autumn-Winter-p-322846281.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/10/f1/176536265948e8e445e6b4609d1b96a9cf95dcd1e0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 60,
+        "title": "Swim Oasis مجموعة بدلة السباحة القطعة الواحدة ذات الزهور البارزة 3D لعطلة الصيف",
+        "price": "68.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Swim-Oasis-Summer-Vacation-3D-Floral-One-Piece-Swimsuit-Set-p-49242897.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/12/02/b0/1733103765e28c9f8d11fb1939f4986630c2a0fd03_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 61,
+        "title": "Al Najma فستان بياقة بولو كم قصير فضفاض مصبوغ بتقنية الربط والصبغ، ربيع/صيف",
+        "price": "63.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Al-Najma-Tie-Dye-Color-Loose-Fit-Short-Sleeve-Polo-Collar-Dress-Spring-Summer-p-88503628.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/28/7e/174841262377676ef2726d8e433d6143055cca2a52_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 62,
+        "title": "Attitoon قميص تي شيرت نسائي كاجوال بياقة على شكل حرف V وربطة عنق، بأكمام قصيرة وألوان متباينة، مناسب للصيف",
+        "price": "28.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Attitoon-Women-s-Casual-Retro-Car-V-Neck-Halter-Tie-Up-Contrast-Color-Short-Sleeve-T-Shirt-Suitable-For-Summer-Carnival-p-335658339.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/29/94/1761703031e01d14dddb0566abafce00db27c65829_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 63,
+        "title": "Sweetra قميص كاجوال أنيق بأكمام طويلة مزين بطباعة الشريط والأزرار الأمامية للنساء",
+        "price": "46.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-Striped-Print-Front-Button-Casual-Long-Sleeve-Shirt-Long-Sleeve-Tops-Fall-Cloth-For-Women-p-42939320.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/29/fc/17774517699c32e1a052219b0d19976cfdc30aa408_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 64,
+        "title": "Siren Gaze قميص نسائي كاجوال أحادي اللون بخصر مشدود وأكمام طويلة، بلوزة نسائية غير متماثلة للخريف/الشتاء، بلوزات نسائية أنيقة مع ربطة الخصر وأكمام طويلة",
+        "price": "71.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Siren-Gaze-Women-s-Casual-Solid-Color-Minimalist-Cinched-Waist-Long-Sleeve-Shirt-Autumn-Winter-Asymmetrical-Blouse-Women-Blouses-Elegant-Waist-Tie-Long-Sleeve-Shirt-Spring-p-215561514.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/10/c3/1765372979a45883b33aed44b279daa6c3fbd369ec_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 65,
+        "title": "Aveloria Modichic بدلة رسمية كاجوال للمرأة تتكون من بليزر بياقة مفرقعة وتصميم خصر ملتوي وأكمام طويلة، وتنورة قلم",
+        "price": "131.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Aveloria-Modichic-Women-s-Solid-Color-Notched-Collar-Twist-Waist-Design-Long-Sleeve-Blazer-And-Pencil-Skirt-Casual-Office-Suit-p-383338873.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/23/26/17691464054cedeffd29a1b54b5e573772c894f048_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 66,
+        "title": "Al Najma فستان حفلة أنيق رومانسي جديد مزين بتطريز الدانتيل الراقي والأنيق",
+        "price": "67.73\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Al-Najma-New-Romantic-Elegant-Lace-Trim-Sophisticated-Graceful-Party-Dress-p-338635753.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/24/2a/1774339024155b4769b451c121cdb8b17ba071d264_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 67,
+        "title": "Sweetra ملابس علوية أنيقة مطبوعة بزهور للنساء مع رقبة غير متماثلة مطوية",
+        "price": "21.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Elegant-Floral-Print-Asymmetrical-Neck-Ruched-Top-p-70215633.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/04/25/93/1745577168ab8967118e1e2ee1dbd1d2bcdd35da95_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 68,
+        "title": "Turnttoni قميص تي شيرت أنيق للنساء بلون أحادي مع تفاصيل دانتيل وذيل غير متماثل",
+        "price": "42.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Turnttoni-Women-s-Elegant-Commuter-Solid-Color-Lace-Asymmetric-Hem-T-Shirt-Lace-Long-Sleeve-Top-p-397757755.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/24/67/17719059109e91b6f83e7fa94bc55bc32d05880071_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 69,
+        "title": "Glimmora ملابس علوية كاجوال للنساء بياقة ملونة وأكمام طويلة 2 في 1",
+        "price": "29.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Glimmora-Women-s-Contrast-Color-Shirt-Collar-Long-Sleeve-Casual-2-In-1-Top-p-186195827.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/23/98/1761216477f8ed4b078a2895c92f15e854559b879b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 70,
+        "title": "Sweetra طقم تي شيرت كاجوال للنساء بأكمام ضيقة مزخرفة وياقة دانتيل على الطراز الفرنسي القديم، خريفي",
+        "price": "66.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Vintage-French-Style-Fitted-Flare-Sleeve-Lace-Collar-Casual-T-Shirt-Set-Autumn-p-254362840.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/31/bc/17618883200d4af4a82725fa15855db7e7bd16c903_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 71,
+        "title": "Rusticease مجموعة بنطال وبلوزة ذات قبة مستديرة وأكمام طويلة فضفاضة المقاس للنساء 2 قطعة",
+        "price": "58.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Rusticease-Women-s-Vacation-Casual-Floral-Asymmetrical-Hem-Shirt-Pants-2-Pieces-Set-Streetwear-Women-Linen-Women-Clothes-Streetwear-Women-p-62534508.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/26/cc/17429548615ba548fe698a4e66a3445416dd9a6dcd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 72,
+        "title": "DAZY بدلة كاجوال من قطعتين تتكون من قميص بأكمام طويلة وربطة جانبية فضفاضة وبنطال ساق واسعة من الجينز، مناسبة للعطلات والأوقات الحرة في المدينة رمضان",
+        "price": "144.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Loose-Side-Tie-Long-Sleeve-Shirt-And-Wide-Leg-Pants-2-Pieces-Casual-Denim-Suit-Vacation-Urban-Leisure-p-139456948.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/30/2a/175386719625457a89d1f99e14ce7aa26ace68e8d4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 73,
+        "title": "%45-\nAl Najma فستان نسائي طويل الأكمام بنقشة زهور، قطع كروشيه، قماش كافتان وجلابية أنيقة وحشمة بقصة A لحفلات المساء/حفلات الزفاف/المناسبات/الاستعمال اليومي",
+        "price": "28.38\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Al-Najma-Women-s-Floral-Print-Crochet-Patchwork-Long-Sleeve-Dress-Modest-Elegant-A-Line-Kaftan-Jalabiya-Dress-For-Evening-Party-Wedding-Guest-Anniversary-Daily-Wear-p-45591546.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/10/22/01/17295861371c690da83d8d27e123c7de306f967584_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 74,
+        "title": "INAWLY قميص نسائي أحادي اللون بأكمام طويلة وتصميم بسيط وعصري",
+        "price": "51.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/INAWLY-Women-s-Solid-Color-Minimalist-Casual-Hollow-Long-Sleeve-Shirt-p-168267716.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/01/46/1756696238845d852de5463bf84ef131d5ef5de7fc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 75,
+        "title": "Elenzga بنطلون نسائي جديد ذو خصر عالي وسحاب جانبي وزر للزينة، ذو ساق واسعة، أنيق للارتداء اليومي الكاجوال، مناسب للربيع والخريف",
+        "price": "46.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-New-Women-s-High-Waist-Side-Zipper-Decor-Button-Design-Wide-Leg-Pants-Elegant-Casual-Daily-Wear-Spring-Autumn-p-150035045.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/11/76/1775880127decb090f553cd71b7ab6f9da9d5c9796_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 76,
+        "title": "Dazy-Less سراويل جينز نسائية ذات لون أحادي وساق مستقيمة، بطراز القديم المال، أناقة كاجوال للعمل",
+        "price": "95.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Dazy-Less-Women-Solid-Color-Straight-Leg-Jeans-Old-Money-Old-Money-Style-Business-Casual-Woman-p-51969596.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/12/30/18/1735524442e2612eb4a44aed54be257ec91befb6f5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 77,
+        "title": "Comfortcana مجموعة من 2 قطعة للنساء، توب كاميسول مزين بالدانتيل وبنطلون مخطط باللون الأزرق والأبيض، مناسب لموسم العودة إلى المدرسة",
+        "price": "69.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Comfortcana-2pcs-Set-Women-Casual-Lace-Trim-Camisole-Top-And-Blue-White-Striped-Pants-Back-To-School-Season-p-367155715.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/29/22/17696801255d8758b386e00a0664f87eea4556d0d5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 78,
+        "title": "Sweetra بلوزة كاجوال ذات نسيج مُنسَّج وذيل غير متماثل مثير",
+        "price": "35.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Sexy-Asymmetric-Hem-Textured-Fabric-Casual-Blouse-p-408626935.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/24/37/17719286935dc037db064543b4072b58439c331b68_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 79,
+        "title": "Firerie بلوزة نسائية من قماش الكتان والخيزران الأبيكوت، ذات ياقة متجعدة وأكمام غير متماثلة وخصر مطوي جانبيًا، قصة ضيقة، مناسبة لجميع المواسم",
+        "price": "29.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Firerie-Women-s-Elegant-Summer-Party-Champagne-Blouse-Crinkle-Collar-Asymmetric-Sleeve-Side-Ruched-Waist-Slim-Fit-Bamboo-Linen-Fabric-p-382218504.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/21/4a/17689794090f58faab1415801a3631d1a6fa91fc54_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 80,
+        "title": "Sunnyshic فستان أنيق للزفاف والكريسماس والحفلات",
+        "price": "68.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Sunnyshic-Elegant-Wedding-Christmas-Party-Dress-p-217542812.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/15/32/17604992876aef8c6f2141aab3ff770e10b4edf033_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 81,
+        "title": "SHEIN ملابس علوية نسائية قصيرة الأكمام مزينة بالدانتيل الحلو، ملابس علوية صيفية جديدة ضيقة بأكمام نصفية وثلاثة أزرار باللون الأصفر",
+        "price": "25.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Sweet-Lace-Trim-Short-Sleeve-T-Shirt-For-Women-New-Summer-Slim-Fit-3-Button-Half-Sleeve-Yellow-Top-p-73378870.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/11/5f/17628492307cc701dfca94b75ee75a274532af94a1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 82,
+        "title": "Glamine تنورة ساتان طويلة حتى الأرض بتصميم الحورية، فستان متعدد الاستخدامات للاستخدام اليومي",
+        "price": "52.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Glamine-Women-s-Satin-Floor-Length-Mermaid-Skirt-Versatile-Everyday-Dress-p-40153486.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/08/06/4b/17229087438e448be6b89fc57a4d5c786c72881fbb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 83,
+        "title": "DAZY فستان أنيق للنساء بأكمام على شكل بتلات الزهور وياقة على شكل حرف V، فستان ماكسي للربيع والصيف",
+        "price": "128.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Elegant-Floral-Petal-Sleeve-V-Neck-Mid-Length-Dress-Spring-Summer-Maxi-Dress-Sundress-p-411410549.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/02/2b/177241501029f745f4ad67af4ce83dce8a2731cda9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 84,
+        "title": "DAZY سراويل جينز نسائية ذات خصر منخفض وذيل جرس، بنطلون جينز كاجوال بسيط وجذاب",
+        "price": "92.00",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Low-Waist-Flared-Jeans-Casual-Sexy-Pure-Simple-Style-Denim-Pants-p-61046881.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/20/e5/1747726215efade05d72a1ecc3482867f960f36d5f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 85,
+        "title": "DAZY بنطلون نسائي بساق واسعة مريحة مع خصر مطاطي منسوج، طول طويل، ملابس خريفية رمضان",
+        "price": "42.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Ladies-Relaxed-Wide-Leg-Pants-With-Textured-Elastic-Waistband-Long-Length-Fall-Clothes-p-33927222.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/04/23/04/1713862934db77c879ebeeb6882a16ca7442a49ddd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 86,
+        "title": "INAWLY قميص نسائي كاجوال رومانسي مطرز بزهور أكمام طويلة بأزرار",
+        "price": "68.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/INAWLY-Women-s-Fashion-Casual-Romantic-Embroidered-Floral-Long-Sleeve-Button-Up-Shirt-p-201684754.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/08/c2/1778232170171410cd6238c515c619f97320e785df_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 87,
+        "title": "Franclia قميص تي شيرت أبيض مطوي بأكمام قصيرة مناسب للنساء، متعدد الاستخدامات وبلون أحادي",
+        "price": "30.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Franclia-Casual-And-Versatile-Solid-Color-Pleated-Slim-Fit-Short-Sleeved-White-Women-s-Romper-Suitable-For-Everyday-Commuting-Elegant-Women-s-Wear-Summer-Wear-Valentine-s-Day-Wear-Party-Top-Elegant-Women-s-Top-Women-s-Casual-Wear-White-Top-Fashionable-Casual-Commuter-Wear-Business-Office-Wear-Versatile-And-Stylish-Everyday-Casual-Wear-Urban-Teacher-s-Professional-Attire-p-321413674.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/05/15/17779536247fde6bfef8405e4c1dc86b489d7908d7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 88,
+        "title": "SHEIN MOD ملابس علوية نسائي أنيق بأكمام متدلية وكتف مكشوف، بتصميم معدني مجعد وأكمام متسعة، ملابس علوية أنيق وأنيق بأكمام",
+        "price": "37.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Elegant-Apricot-Oblique-Shoulder-Metallic-Decor-Ruched-Fitted-Flare-Sleeve-Women-T-Shirt-One-Sleeve-Top-Off-The-Shoulder-Top-Elegant-Tops-Classy-Top-Tops-With-Sleeves-p-138575896.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/28/55/175906414930ed8c81c1b01443648f9fd58e7c1b6f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 89,
+        "title": "SHEIN Najma رمضان فستان عربي نسائي بياقة مربعة مزين بالدانتيل والشراريب وأكمام ثلاثة أرباع متسعة",
+        "price": "99.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-Najma-Square-Neck-Lace-Tassel-3-4-Sleeve-Flared-Women-s-Arabic-Dress-p-359270923.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/09/d8/17679438322cc1057b03aff1588ca21e5426f4c1f5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 90,
+        "title": "Elenzga فستان نسائي متوسط الطول بنسيج ملمس ثنائي اللون مع ربطة على الكتف، أنيق وعصري مناسب للارتداء في المكتب",
+        "price": "48.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-New-Arrival-Tie-Shoulder-Textured-Bicolor-Woven-Midi-Dress-Youthful-Elegant-Versatile-Office-Wear-p-422446535.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/02/77/1775134852b223afbb1ff430dd7802fa24b6f18c69_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 91,
+        "title": "Modelyn فستان صيفي كاجوال للنساء للعطلات والتنقل، لون أحادي، أكمام قصيرة، ياقة بولو، مربوط الخصر",
+        "price": "84.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Modelyn-Womens-Short-Sleeve-Rib-Knit-Polo-Neck-Apricot-Midi-Dress-A-Line-Casual-With-Flared-Hem-Design-Cream-Textured-Polo-Neck-Midi-Dress-Polo-Collar-With-Partial-Button-Placket-Textured-Crinkle-Fabric-Cream-Relaxed-Resort-Style-Summer-Casual-Day-Outings-Shopping-Beach-Trips-Resort-Vacations-Women-Aged-20-40-Summer-Dresses-For-Women-Summer-Holiday-Outfits-p-398860725.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/17/6b/1773738137e202a0ed9ba66879afe676ad6188ea86_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 92,
+        "title": "SOLERSUN بلوزة نسائية أنيقة وكاجوال للخريف والشتاء، ذات أكمام طويلة وياقة غير متماثلة وذيل غير متماثل، طبعة غروب الشمس الأنيقة والعتيقة، أكمام خفافيش، وصول جديد متعدد الاستخدامات للخريف والشتاء والتنقل اليومي والخروج",
+        "price": "34.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/SOLERSUN-Women-s-Autumn-Winter-Casual-Elegant-Asymmetric-Neck-Long-Sleeve-Asymmetrical-Hem-Blouse-Fashionable-Vintage-Sunset-Holiday-Print-Batwing-Sleeve-Tops-New-Arrival-Versatile-Fall-Winter-Daily-Commuting-Going-Out-p-325002998.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/13/73/176561107033ed6ef96af1683eab62fb24a727ed5d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 93,
+        "title": "DAZY تنورة نسائية أنيقة ذات لون أحادي وخصر مطاطي، للربيع/الصيف",
+        "price": "48.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Elegant-Solid-Color-Elastic-Waist-Skirt-Spring-Summer-p-408594508.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/25/37/17719821366683cbd6ff71a0dc43a3f480d5712c5e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 94,
+        "title": "SHEIN MOD تنورة نسائية ذات لون أحادي مطرزة بشكل مجوف وفيونكة",
+        "price": "68.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-Women-s-Vintage-Solid-Color-Hollow-Embroidered-Bowknot-Skirt-p-131942939.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/22/95/17531649125b6902e9568ff652aed8af2ba2b5c211_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 95,
+        "title": "ملابس علوية ملابس علوية قصير أنيق أساسي عادي رائع غير متماثل الياقة للنساء، ملابس علوية قصير مثير ذو كتف مائل مناسب، ملابس علوية صيفي أسود حلو وجذاب",
+        "price": "24.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Elegant-Basic-Casual-Peculiar-Gorgeous-Asymmetrical-Neck-Crop-Top-For-Women-Minimalist-Sexy-Oblique-Shoulder-Fitted-Short-Midriff-Baring-Top-Sweet-Sexy-Black-Summer-p-66608307.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/04/e2/1772613931446be51eb0ffcd95db9a94fdca003bd3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 96,
+        "title": "Lalippa 3 قطع تي شيرتات للنساء ذات قصة ضيقة مطرزة متعددة الألوان",
+        "price": "46.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Lalippa-3pcs-Embroidered-Slim-Fit-Women-T-Shirts-Multicolor-p-121218325.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/07/03/cb/175151839009bb2b50a36d1fea98dfa8f5bee5a950_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 97,
+        "title": "Elenzga بدلة نسائية من قماش سميك بياقة على شكل حرف V باللون المشمشي، مزينة بأزرار تباين باللون الأسود وجيوب وهمية، بتصميم بدلة معلم أنيقة واحترافية، مناسبة لأجواء وعيد الهالوين، موضة خريفية جديدة، بنطلون واسع بخصر مشدود وساق مستقيمة، طقم قطعتين",
+        "price": "99.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-Women-s-Apricot-Thick-Fabric-V-Neck-Blazer-Design-Black-Contrast-Button-Fake-Pocket-Teacher-Uniform-Elegant-Professional-Outfit-Thanksgiving-Halloween-Atmosphere-Autumn-New-Arrival-Fashion-Essential-High-End-Formal-Long-Sleeve-Waist-Cinched-Loose-Straight-Leg-Pants-Two-Pieces-Set-p-191228767.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/22/85/1758531105e0046ab96220bd595ef455e565cf720a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 98,
+        "title": "Heiryn مجموعة قميص وبنطلون كوري بخصر ضيق بطراز رجعي للنساء، متعدد الاستخدامات للتنقل واللبس اليومي، قطعتان",
+        "price": "105.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Heiryn-2pcs-Set-Women-s-Cinched-Waist-Korean-Retro-Style-Shirt-And-Pants-Versatile-For-Commute-And-Everyday-Wear-Cozy-Fall-And-Winter-Clothes-For-Women-p-179315521.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/10/23/1757481537d2972fe1df736be0810bb1bb6aeb558c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 99,
+        "title": "%15-\nSweetra بدلة قميص أكمام بدون أكمام طويل بأزرار ذهبية وتنورة كاجوال قطعتان للنساء في الربيع والصيف، للارتداء الرسمي",
+        "price": "80.75\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Sweetra-Women-s-Spring-Summer-Chic-Golden-Button-Sleeveless-Long-Vest-Casual-Skirt-Two-Pieces-Suit-Professional-Wear-p-92892006.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/06/05/0e/1749102442fa194b38ce6db16d614d21a04ff3b88a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 100,
+        "title": "Elenzga فستان أنيق طويل للنساء من القماش المنسوج المزجج بالشيفون بياقة دائرية وأكمام مكسرة مزينة بالكشكشة وحزام خصر عالي، مناسب للمناسبات الرسمية والعفوية والرحلات الفاخرة",
+        "price": "55.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-New-Women-s-Textured-Woven-Fabric-Round-Neck-Chiffon-Ruffle-Sleeve-Belted-High-Waisted-Maxi-Casual-Dress-Slimming-Elegant-Vacation-Date-Outfit-p-86979532.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/26/be/17482403386be6a6c3f33494b3ed8d31639d620737_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 101,
+        "title": "SHEIN MOD 3 قطعة/مجموعة ملابس علوية نسائية ذات لون واحد مطوية متعددة الاستخدامات، مناسبة للخريف/الشتاء، عيد الميلاد للنساء، رأس السنة، ملابس علوية كتف مكشوف، بلوزات جمالية، للمهرجانات، الريف، ارتداء العطلات الشاطئية، حفلات الشاي، محتشمة، حفلات التخرج، ملابس علوية جميلة",
+        "price": "40.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-MOD-3pcs-Set-Women-s-Solid-Color-Pleated-Versatile-Fashion-Top-Fall-Winter-Christmas-For-Women-New-Year-Off-The-Shoulder-Top-Aesthetic-Tops-Festival-Country-Beach-Vacation-Wear-Tea-Party-Modest-Prom-Top-Cute-Top-p-306682682.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/11/26/50/17641419750ff4df0240f17ea1a27d17f8fcb80952_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 102,
+        "title": "Franclia بنطلون مكتبي أنيق مستقيم الساق للنساء أبيض اللون",
+        "price": "54.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Franclia-Women-s-White-Elegant-Straight-Leg-Office-Pants-p-429863255.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/16/93/1776312073a01dcbd1ee4a1597dbea6e1869bd5b75_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 103,
+        "title": "DAZY طقم ملابس علوية أكمام طويلة بأزرار أمامية وحزام مع بنطلون جينز لون أحادي للنساء",
+        "price": "187.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/DAZY-Women-s-Solid-Color-Belted-Front-Button-Long-Sleeve-Top-And-Jeans-Pants-Set-p-339533305.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/16/db/1768555160e0c1430f49797c1729d28dd34886dc98_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 104,
+        "title": "Franclia قميص نسائي كاجوال فضفاض بأكمام طويلة، بطبعة نمر، بسيط وشامل للارتداء اليومي، خريف/شتاء",
+        "price": "40.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Franclia-Casual-Shirts-Loose-Fit-Long-Sleeve-Shirts-Leopard-Print-Pattern-Shirts-Autumn-Winter-Long-Sleeve-Shirts-Simple-Versatile-Shirts-Everyday-Wear-Shirts-Pairing-Shirts-With-Shirts-Leopard-Print-Cheetah-Print-Blouses-For-Women-p-208703531.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/10/14/57/1760406568e1c9bfe78e43937655a199a74ffbf28b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 105,
+        "title": "SHEIN ICON سراويل جينز سيدات بقصة ساق مستقيمة وفضفاضة، بجيوب مناسبة للاستخدام اليومي",
+        "price": "79.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-ICON-Women-s-Straight-Leg-Loose-Fit-Casual-Versatile-Jeans-With-Pockets-p-73880443.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/07/3f/1746604164204219f3cb2003e8e3d2c2a5940a65ea_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 106,
+        "title": "Celisse تي شيرت أنيق للنساء مطبوع بنقاط متناثرة، صيفي",
+        "price": "21.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Celisse-Women-s-Elegant-Polka-Dot-Print-Asymmetric-T-Shirt-Summer-p-395235409.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/02/52/1770026149b00aef0360124aaae58c9dee9fadede5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 107,
+        "title": "SHEIN x Lina SHEIN ICON بنطال جينز أرجل مستقيمة وخصر متوسط، عتيق بلون مغسول ، كاجوال",
+        "price": "81.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/SHEIN-x-Lina-SHEIN-ICON-Casual-Washed-Retro-Mid-Waist-Straight-Leg-Jeans-p-45813605.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2024/10/25/c8/17298219255ab2738be7a4731fc1b1a260c86a9ade_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 108,
+        "title": "GlowEve ملابس علوية كاجوال بياقة على شكل حرف V وأزرار أمامية مع طبعة زهور للنساء",
+        "price": "29.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/GlowEve-Women-s-Floral-Pattern-V-Neck-Single-Breasted-Casual-Tank-Top-p-406154286.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/04/25/b4/17771220483afdf46b26928e98ec6d09abec8493b9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 109,
+        "title": "%20-\nYasmyna فستان نسائي فضفاض بأكمام طويلة بطراز عربي مزين بتطريز وتصميم متقاطع",
+        "price": "62.40\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/Yasmyna-Women-s-Loose-Long-Sleeve-Arabic-Style-Dress-With-Applique-Decor-And-Criss-Cross-Design-p-332680298.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/22/9f/17663748860f89057dd2f9b5d758c8125dc8175fb3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 110,
+        "title": "Elenzga بنطلون نسائي كاجوال أنيق بتصميم زهري مع إبزيم، فضفاض وواسع الساق، بنطلون كتان طويل باللون الخاكي، مناسب للاحتفال بعيد الشكر وعيد الهالوين والربيع/الصيف",
+        "price": "62.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/Elenzga-New-Women-Casual-Elegant-Fashion-Floral-Buckle-Design-Loose-Wide-Leg-Pants-Linen-Khaki-Color-Long-Trousers-Suitable-For-Thanksgiving-Halloween-Spring-Summer-Long-Skirt-Pants-Wide-Leg-Summer-Pants-Palazzo-Pants-Women-Pleated-Wide-Leg-Pants-Long-Wide-Leg-PantsElegant-Women-s-Long-Wide-Leg-Woven-Fabric-Pants-In-Apricot-With-Zipper-Detail-p-316328787.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/12/03/80/1764764823b961d4668521bbfb0efb3c5995088901_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 111,
+        "title": "شال مُحبوك مُنسدل للنساء، ذو حافة غير متماثلة من قماش خفيف لامع ومنفذ للهواء، بتصميم فضفاض مناسب لمختلف الأشكال، قطعة علوية كاجوال للشاطئ، بأسلوب بوهيمي لإطلالة صيفية",
+        "price": "37.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/FOR-BEAUTY-Summer-New-Women-s-Ribbed-Knit-Shawl-Asymmetric-Hem-Shimmery-Lightweight-Breathable-Fabric-Loose-Fit-Suitable-For-Various-Figures-Beach-Casual-Top-Bohemian-Style-Summer-Outfit-p-393560099.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/ssms/2026/04/03/b9/17752116218844e27d7d6da87e1cffd510c36a920b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 112,
+        "title": "Franclia قميص T أكمام بلا أنثوي بتصميم فيونكة ملونة",
+        "price": "30.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Franclia-Women-s-Casual-Sleeveless-Tops-With-Cute-Bow-Summer-White-Blouse-For-Women-Off-White-Top-White-Blouse-Black-Contrasting-Trim-Top-Elegant-Sleeveless-Fitted-Waist-A-Line-Blouse-For-Women-Summer-Top-Cute-Women-s-Top-Cream-Colored-Top-School-Peplum-Top-Black-And-White-Top-Beach-Outfits-For-Women-Summer-Holiday-Outfits-Peplum-Top-Women-Ruffle-Top-Y2K-Tops-Casual-Blouse-For-Women-Women-s-Vest-Top-p-432813266.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/05/13/17/1778662911fb342cea448ba77419a6f45db73e970b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 113,
+        "title": "%15-\nFranclia مجموعة قميص أنيق بياقة مستديرة وأكمام قصيرة وبنطال كاجوال للنساء، قطعتان",
+        "price": "68.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Franclia-2pcs-Women-s-Fashion-Elegant-Round-Neck-Short-Sleeve-Shirt-Casual-Pants-Set-Sage-Green-Outfit-Blouse-And-Pants-Set-Shirt-And-Pants-Set-Olive-Green-Outfit-Women-Pants-Suit-p-169381733.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/02/08/17/1770523226acce8650d3e8451778c79b0c4f3007e3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 114,
+        "title": "Siren Gaze سراويل صيفية للنساء مخططة، خصر بسحاب، قطع سترايت، فضفاضة، كاجول",
+        "price": "39.00\n\n200+. تم بيع",
+        "product_link": "https://ar.shein.com/Siren-Gaze-Summer-Pants-Women-Striped-Drawstring-Waist-Straight-Loose-Casual-Pants-Chic-p-38465801.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/10/76/1757472104f0f283167564e51902813119882aade5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 115,
+        "title": "MUSERA ملابس علوية كاجوال مخطط بأكمام قصيرة مناسب، مريح وأنيق لحفلات المساء والربيع والشتاء وعيد الحب والصيف",
+        "price": "56.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/MUSERA-Striped-Rib-Knit-Button-Through-Fitted-Short-Sleeve-Top-Cosy-Cute-Casual-Coffee-Club-Winter-Elegant-Evening-Party-Spring-Sweater-Valentines-Day-Summer-p-175206136.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/09/12/b0/1757666184c9bd103e6d575e27a60bc90ccbac9710_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 116,
+        "title": "EMERY ROSE بنطلون جينز متعدد الاستخدامات للنساء بارتفاع الخصر عريض الساق فضفاض منسوج باللون الأسود، مناسب لجميع المواسم",
+        "price": "69.00\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/EMERY-ROSE-Women-s-Casual-All-Match-Black-High-Waisted-Wide-Leg-Loose-Woven-Jeans-Versatile-For-All-Seasons-p-81777290.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/05/19/7e/1747640198d62082d6042d2721b81b53a2c423350e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 117,
+        "title": "Glimmora قميص كاجوال قصير الأكمام للنساء مع لوحة من الدانتيل وأزرار نصف الحقيبة",
+        "price": "22.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Glimmora-Y2KStyle-Women-s-Casual-Commuting-Press-Buttoned-Short-Sleeve-Fitted-T-Shirt-Without-Lining-Summer-p-425473875.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/03/31/a1/1774920108bf33f32d8827c5e4b56b1d35e2e76dbc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 118,
+        "title": "Al Najma فستان أنيق بدون أكمام ذو رقبة دائرية باللون الأحادي للنساء",
+        "price": "72.00\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/Al-Najma-Women-s-Solid-Color-Round-Neck-Elegant-Sleeveless-Arabic-Dress-p-151721269.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2025/08/13/6d/175505069930ce5b5277416c1a45f3a9359a5e74d7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 119,
+        "title": "بلوزة أنيقة طويلة الأكمام من الشبك المطبوع بطبعات الربيع/الصيف، بأسلوب قصر ملكي عتيق، باللون البني، مناسبة للزفاف وعيد الحب والحفلات والتخرج والخروج والعطلات",
+        "price": "78.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Aliao-Spring-Summer-Cashmere-Printed-Mesh-Splice-Sheer-Long-Sleeve-Elegant-Party-Wedding-Vintage-Palace-Style-Brown-Blouse-Suitable-For-Wedding-Valentine-s-Day-Party-Graduation-Outdoor-Wear-Vacation-p-278683529.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/06/c6/17624004009d1f716a8f6a0f9ef598bcf0a1ae32e3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 120,
+        "title": "Poéselle بلوزة أنيقة للنساء ذات ياقة شال بلون واحد",
+        "price": "36.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Po-selle-Women-s-Elegant-Off-White-Shawl-Collar-Blouse-For-Tea-Party-Autumn-p-356900394.html?src_identifier=fc%3DWomen%20Clothing%60sc%3DWomen%20Clothing%60tc%3D0%60oc%3D0%60ps%3Dtab03navbar03%60jc%3DitemPicking_017172961&src_module=topcat&src_tab_page_id=page_select_class1779137567131&mallCode=1&pageListType=4",
+        "image_url": "//img.ltwebstatic.com/v4/j/pi/2026/01/07/62/17677539805db603fa4dacc892bd4bafee386dbaef_thumbnail_405x552.jpg"
+    }
+]  // 2. دالة لحقن وعرض المنتجات ديناميكياً داخل الجريد
+    const productGrid = document.getElementById('productGrid');
+    // غير القيم دي براحتك حسب سعر اليوم والعمولة الحاببها
+const EXCHANGE_RATE = 1200;     // سعر الصرف اليوم (مثلاً الدولار أو الريال مقابل العملة المحلية)
+const FIXED_COMMISSION = 10;   // العمولة الثابتة التي تريد زيادتها لكل منتج
+  productsData.forEach(product => {
+    // 1. تنظيف وفصل السعر عن عدد المبيعات كالمعتاد
+    const priceInfo = product.price.split('\n\n');
+    const soldCount = priceInfo[1] ? priceInfo[1] : '';
+
+    // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+    const originalPrice = parseFloat(priceInfo[0].replace('', '').trim());
+
+    // 3. العملية الحسابية: (السعر الأصلي × سعر الصرف) + العمولة الثابتة
+    const localPriceNumber = (originalPrice + FIXED_COMMISSION) *  EXCHANGE_RATE;
+
+    // 4. تنسيق السعر النهائي ليظهر بشكل أنيق (مثال: ج.س 13,800) بدون كسور
+    const cleanPrice = "ج.س " + Math.round(localPriceNumber).toLocaleString('en-US');
+    
+    // الآن المتغير cleanPrice أصبح يحمل السعر المحلي الجديد وجاهز للعرض في الكارت...
+      let imgUrl = product.image_url.trim().startsWith('//') ? 'https:' + product.image_url.trim() : product.image_url;
+      
+      
+      
+      const cardHTML = `
+            <div class="product-card"
+                 data-title="${product.title}"
+                 data-price="${cleanPrice}"
+                 data-sold="${soldCount}"
+                 data-img="${product.image_url}"
+                  data-link="${product.product_link}">
+
+
+                 
+                 
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${product.title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <div class="rating"></div>
+                    <div class="price-row">
+                        <span class="price">${cleanPrice}</span>
+                        ${soldCount ? `<span class="sold-count">${soldCount}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // --- أكواد القوائم والفلتر الأصلية ---
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // --- كود السلايدر الأصلي ---
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // --- كود النافذة المنبثقة (MODAL JAVASCRIPT) بعد حقن العناصر المضافة حديثاً ---
+    const modal = document.getElementById("productModal");
+    const closeBtn = document.querySelector(".close-modal");
+    const productCards = document.querySelectorAll(".product-card");
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.getAttribute("data-title");
+            const price = this.getAttribute("data-price");
+            const rawImg = this.getAttribute("data-img"); 
+            
+        // 2. جلب وتصحيح رابط شي إن للمنتج (الجديد)
+        const rawLink = this.getAttribute("data-link");
+        const sheinLink = rawLink && rawLink.trim().startsWith('//') ? 'https:' + rawLink.trim() : rawLink;
+
+        // 2. فحص وتعديل الرابط طائراً (السطر السحري)
+        const img = rawImg.trim().startsWith('//') ? 'https:' + rawImg.trim() : rawImg;
+            const sold = this.getAttribute("data-sold");
+            
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalPrice").innerText = price;
+            document.getElementById("modalImg").src = img;
+            document.getElementById("modalSold").innerText = sold;
+                const whatsappMessage = `الاسم: ${title}\n
+                السعر: ${price}\n
+                رابط الصورة: ${img}\n
+                رابط المنتج ${rawLink}`;
+
+            document.getElementById("btn").href = "https://Wa.me/249128039027?text=" + encodeURIComponent(whatsappMessage);
+            document.getElementById("sheinBtn").href = sheinLink;
+            modal.style.display = "block";
+        });
+    });
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
