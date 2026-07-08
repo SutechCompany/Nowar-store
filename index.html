@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-321KZ3G55X"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-321KZ3G55X'); </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نوار - Nowar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="fontawesome-free-7.1.0-web/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+    
+    <style>
+        @import url(‘https://fonts.googleapis.com/css?family=Cairo‘);
+
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo';
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            font-family: Cairo, 'Cairo';
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); }
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+      
+      
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; }
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span ,a { text-decoration: none; font-size: 15px; color: var(--text-muted);margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+     
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px 10%; padding: 15px 10px; background: #fff; margin-bottom: 10px; }
+        .category-item { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .category-item img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .category-item span { font-size: 11px; color: #333; line-height: 1.2; }
+
+        /* Filters */
+        .filters { display: flex;
+            width:100%;
+            padding: 0;
+            margin:0;
+            box-sizing: border-box;}
+        .filter-btn {
+             padding: 6px 15px;
+             border-radius: 20px;
+              background: #fff;
+               border: 1px solid #fff; 
+               font-size: 13px; 
+               font-weight: 600;
+                white-space: nowrap;
+                 cursor: pointer;
+                  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                 flex:1;
+                text-align: center;
+                }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; }
+        
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+        .price-row { display: flex; flex-direction: column; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .sold-count { font-size: 11px; color: var(--text-muted); direction: rtl; }
+        .rating { font-size: 10px; color: #f5a623; display: flex; gap: 2px; }
+        .rating span { color: var(--text-muted); font-size: 11px; margin-left: 2px;}
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; 
+            position: absolute; 
+            z-index: 100; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background-color: white; 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%;
+            border-radius: 20px 20px 0 0; 
+            padding: 20px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal {
+            position: absolute; right: 20px; top: 15px; 
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; direction: rtl; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0; direction: rtl;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+        .modal-sold { font-size: 13px; color: var(--text-muted); }
+        
+        .add-to-cart-btn { 
+            background: var(--text-main); color: white; border: none; 
+            padding: 15px; border-radius: 25px; font-size: 16px; 
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        #btn {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn{
+            background-color: #000;
+            color:#fff;
+        }
+        .sheinBtn a{
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="فساتين">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+         <div class="top-nav" id="topNav">
+            <span ><a href="#">أحذية</a></span>
+            <span ><a href="#">نساء</a></span>
+            <span  > <a href="#">أطفال</a> </span>
+            <span class="active"> <a href="index.html">حقائب</a> </span>
+            <span > <a href="#">تجميل</a></span>
+            <span>الكل</span>
+            
+        </div>
+    </header>
+
+    <div class="main-content">
+        
+        <div class='mySlides fade' style="display: block;">
+            <img src=' first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+        <div class='mySlides fade'>
+            <img src='bags1.png' style='width:100%' alt="ad 2">
+        </div>
+
+        <div class='mySlides fade'>
+            <img src='bags2.png' style='width:100%' alt="ad 2">
+        </div>
+      
+
+        <div class="filters">
+            <button class="filter-btn "> الأحدث</button>
+            <button class="filter-btn"> ترند</button>
+            <button class="filter-btn"> الأكثر طلباً  </button>
+            <button class="filter-btn active"> لَك </button>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+        
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+
+
+
+
+
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+            <img id="modalImg" src="" alt="Product">
+            <h3 id="modalTitle"></h3>
+            
+            <div class="modal-price-row">
+                <span id="modalPrice" class="modal-price"></span>
+                <span id="modalSold" class="modal-sold"></span>
+            </div>
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="">عرض المنتج في شي إن  </a></button>
+
+            <button class="add-to-cart-btn"> <a id="btn" href="">طلب المنتج </a></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. مصفوفة المنتجات المأخوذة من ملف json_prd.json مباشرة
+      const productsData = [
+    {
+        "id": 1,
+        "product_code": "126482213",
+        "title": "%3-\nحقيبة كتف جديدة عبر الحدود مناسبة للاستخدام اليومي للنساء، تصميم سير كتف بسحاب مطبوع بشريط عقدة الفراشة من قماش النايلون الأبيض الناعم، متعددة الاستخدامات وعصرية للصيف",
+        "price": "13.55\n\n100+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-White-Nylon-Fabric-Smooth-Zipper-Bow-Print-Drawstring-Shoulder-Strap-Design-Fashion-Versatile-Casual-Summer-Cross-Border-New-Niche-Shoulder-Bag-Suitable-For-Women-s-Daily-Use-Cream-Bag-Beach-Bag-p-126482213.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/07/14/6e/1752453509b52ca495654aaba6624247f3584d1d55_thumbnail_600x.avif"
+    },
+    {
+        "id": 2,
+        "product_code": "122806117",
+        "title": "حقيبة يد نسائية، حقيبة كتف متعددة الوظائف، حقيبة توت من النايلون، حقيبة سفر عبر الجسم؛ حقيبة كتف زهرية لطيفة، حقيبة تحت الإبط بأسلوب كوري، حقيبة يد ذات ملمس عتيق",
+        "price": "12.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Handbag-Multifunctional-Shoulder-Bag-Nylon-Tote-Bag-Crossbody-Travel-Bag-Cute-Floral-Shoulder-Bag-Korean-Style-Underarm-Bag-Vintage-Textured-Handbag-p-122806117.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/07/09/ee/175207508451751c693f55c7a538499b1933711e4f_thumbnail_600x.avif"
+    },
+    {
+        "id": 3,
+        "product_code": "54972822",
+        "title": "حقيبة يد صغيرة أنيقة باللون الأسود الداكن للنساء، حقيبة كتف هلالية الشكل خفيفة الوزن عالية الجودة وأنيقة",
+        "price": "18.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Mini-Cute-Solid-Black-Handbag-For-Women-Fashionable-High-Quality-Lightweight-Crescent-Shaped-Shoulder-Bag-Cute-p-54972822.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2026/06/30/b3/1782809146679bed71fd16fe009a4fb352e8383aa2_thumbnail_600x.avif"
+    },
+    {
+        "id": 4,
+        "product_code": "265588959",
+        "title": "حقيبة كتف ذات لون سحابة صلبة بألوان الحلوى عصرية جديدة، حقيبة تحت الذراع جميلة، كاواييي",
+        "price": "12.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-New-Candy-Color-Cloud-Shaped-Solid-Color-Shoulder-Bag-Cute-Underarm-Bag-Kawaii-Cream-Bag-p-265588959.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_265588959%7C0-2",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/11/05/a3/1762277322423a4f9543304c2eec52fe52a3915f6e_thumbnail_600x.avif"
+    },
+    {
+        "id": 5,
+        "product_code": "58750164",
+        "title": "%1-\nنمط جديد كاجوال للسيدات، حقيبة كتف من جلد PU باللون الأسود والبيج والكافيه مع عقدة وسحاب معدني تحت الذراع ، محفظة للمستحضرات",
+        "price": "20.74",
+        "product_link": "https://ar.shein.com/New-Fashion-Casual-Shoulder-Women-s-PU-Solid-Black-Khaki-Cafe-Color-Bowknot-Metal-Hardware-Underarm-Zip-Cosmetic-Pouch-Fashionable-Bow-Purse-For-Women-p-58750164.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/12/13/a3/176559046918aa07be6849a3b8de6fc812d67af7d3_thumbnail_600x.avif"
+    },
+    {
+        "id": 6,
+        "product_code": "39715754",
+        "title": "حقيبة كتف نسائية مزينة بفيونكة عصرية، هدية مثالية لعيد الحب لها، وردي،",
+        "price": "17.00\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashion-Ladies-Bow-Decoration-Shoulder-Bag-Perfect-Valentine-s-Day-Gift-For-Her-Pink-p-39715754.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_39715754%7C0-2",
+        "image_url": "https://img.ltwebstatic.com/images3_spmp/2024/07/28/27/17221422024370d859a228e0f94613c10d03a668ee_thumbnail_600x.avif"
+    },
+    {
+        "id": 7,
+        "product_code": "309435991",
+        "title": "حقيبة كتف كاجوال عصرية متعددة الاستخدامات مطبوعة بالفيونكة، وردي",
+        "price": "14.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Versatile-Casual-Bow-Print-Shoulder-Bag-Pink-Beach-Beach-Bag-p-309435991.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "https://img.ltwebstatic.com/v4/j/spmp/2025/11/28/c9/17642894034ce105a0490af610341301c5372c9edb_thumbnail_600x.avif"
+    },
+    {
+        "id": 8,
+        "product_code": "35655351",
+        "title": "حقيبة كتف بيضاء جديدة لعام 2024, ديكور ذو تصميم أنيق معدني بشكل فراشة, حقيبة خفيفة الوزن متعددة الاستخدامات, حقيبة عصرية وأنيقة للفتيات في الشارع",
+        "price": "12.00",
+        "product_link": "https://ar.shein.com/2024-New-White-Shoulder-Bag-Fashion-Elegant-Metal-Butterfly-Decor-Lightweight-Versatile-Handbag-Fresh-Stylish-Girl-Street-Snapshot-Underarm-Bag-p-35655351.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "https://img.ltwebstatic.com/images3_spmp/2024/05/22/fd/1716370668cc1bcd3ed13e11984c8596c332bb8770_thumbnail_600x.avif"
+    },
+    {
+        "id": 9,
+        "product_code": "38026274",
+        "title": "ROMWE Kawaii حقيبة كتف مطبوعة على قماش مزدوج الوجه بنمط الفراشة والقلب مع فيونكة، حقيبة تسوق كبيرة، أفكار إلهام خريفية رائعة، حقيبة يد عصرية للنساء، حقيبة شاطئ",
+        "price": "11.00\n\n90+. تم بيع",
+        "product_link": "https://ar.shein.com/ROMWE-Kawaii-Butterfly-Heart-Pattern-Double-Sided-Printed-Canvas-Shoulder-Bag-With-Bowknot-Tote-Bag-Large-Best-Fall-Inspo-Ideas-Fashionable-Bow-Purse-For-Women-Beach-Bag-p-38026274.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_38026274%7C0-2",
+        "image_url": "https://img.ltwebstatic.com/images3_pi/2024/07/03/f4/172000687817e6c22f73f02582ea63a3e47e60bef5_thumbnail_600x.avif"
+    },
+    {
+        "id": 10,
+        "product_code": "72557477",
+        "title": "حقيبة كروس بودي بلون أحادي أنيقة لطلاب الشارع، متعددة الاستخدامات للصيف، حقيبة خصر متعددة الوظائف مزينة بدب تيدي، حقيبة كتف لهاتف وحقيبة عملات عادية، حقيبة كروس بودي رياضية كبيرة السعة للسفر والخارج، حقيبة خصر يومية أنيقة، هدية مثالية للعطلات، كاواييي",
+        "price": "22.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Cute-Solid-Color-Student-Street-Style-Crossbody-Bag-Versatile-For-Summer-Multifunctional-Waist-Bag-With-Teddy-Bear-Decor-Casual-Phone-Coin-Purse-Shoulder-Bag-Outdoor-Travel-Large-Capacity-Sports-Crossbody-Bag-Fashionable-Daily-Commute-Waist-Pack-Ideal-Gift-For-Holidays-Kawaii-p-72557477.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_72557477%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/03/04/1762106775c827b8558baadec345029314fa99665b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 11,
+        "product_code": "324934002",
+        "title": "مصنوع من مادة PU عالية الجودة وأنيقة، بتصميم علاقة وردية الشكل، مع سحاب معدني، حزام سلسلة معدنية قابل للتعديل في الأعلى، أنيق وعصري، مناسب للكتف أو الحمل باليد أو عبر الجسم، مثالي للتنقل والخروجات والتسوق والمواعيد والأنشطة اليومية للفتيات.",
+        "price": "50.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Pink-Bow-Pendant-Design-Metal-Zipper-Closure-Adjustable-Metal-Chain-Strap-On-Top-And-Stylish-Suitable-For-Shoulder-Perfect-For-Commuting-p-324934002.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/14/d6/178141507196671399a0f197235731678db83a53bd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 12,
+        "product_code": "67541430",
+        "title": "حقيبة يد على الطراز الأميري الغربي، أنيقة وعصرية، بنقش زهري بسيط، تصميم فريد وجذاب، حقيبة كتف جديدة تحفز الدوبامين، مناسبة للتسوق اليومي وحفلات عيد الميلاد وغيرها من المناسبات، مغلقة بسحاب، مناسبة أيضًا كهدية للأصدقاء",
+        "price": "15.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Western-Princess-Style-Handbag-Fashion-Elegant-Minimalist-Floral-Pattern-Cute-Niche-Design-New-Arrival-Dopamine-Shoulder-Bag-Suitable-For-Daily-Shopping-Birthday-Party-And-Other-Occasions-Zipper-Closure-Also-Suitable-As-A-Gift-For-Friends-p-67541430.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_67541430%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/12/60/1744434809d8e8305e63a8417fcb1ccd634ba36b9f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 13,
+        "product_code": "42956872",
+        "title": "%4-\nحقيبة يد صغيرة أنيقة للأميرة قطعة واحدة، للاستخدام اليومي وهدية عيد الميلاد",
+        "price": "15.40\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Cute-Princess-Mini-Handbag-For-Girls-Daily-Use-Birthday-Gift-p-42956872.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/26/72/1742954572c92af25d3e9c5606397cec2ef7d9c3e0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 14,
+        "product_code": "69350755",
+        "title": "%1-\nحقيبة ظهر كمبيوتر محمول من القطيفة ذات اللون الأحادي، حقيبة ظهر صغيرة مقاومة للماء مناسبة للطلاب في المدارس الثانوية والجامعات، حقيبة كتف للسفر مدمجة، حقيبة ظهر للأعمال مقاومة للماء مع جيوب متعددة، ضروري للعودة إلى المدرسة، حقيبة كلية للطلاب، باللون الوردي",
+        "price": "17.74\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Solid-Color-Corduroy-Laptop-Backpack-Women-Mini-Waterproof-Campus-Daypack-Suitable-For-High-School-And-College-Students-Compact-Travel-Shoulder-Bag-Waterproof-Business-Commuter-Backpack-With-Multiple-Pockets-Back-To-School-Essential-Student-College-Bag-Pink-p-69350755.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_69350755%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/16/c9/1750062556e1a79efd6052b38df076d7e8700b3e83_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 15,
+        "product_code": "97021250",
+        "title": "حقيبة كتف نسائية جديدة لفصل الصيف مزينة بشكل قلب وفيونكة، حقيبة عبر الجسم أنيقة للتسوق، حقيبة فيونكة جميلة للنساء، فيونكة، كاواييي",
+        "price": "16.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Summer-New-Bow-Heart-Decor-Shoulder-Women-Handbag-Fashion-Crossbody-Bag-For-Shopping-Cute-Bow-Bag-For-Women-Bow-Kawaii-p-97021250.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_97021250%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/09/23/17494548511722d8220732b8d9b18429e1700a26c9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 16,
+        "product_code": "11179039",
+        "title": "حقيبة سرج ميني مبسط رفرف",
+        "price": "25.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Mini-Minimalist-Flap-Saddle-Bag-Small-Bags-p-11179039.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_11179039%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/18/9e/1766025699660dfce4075ca85f11b989742d3cc1cb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 17,
+        "product_code": "156573130",
+        "title": "حقيبة كتف خفيفة الوزن ذات لون أحادي عصرية، مناسبة لتنقلات المرأة اليومية في الربيع والصيف",
+        "price": "15.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Solid-Color-Casual-Lightweight-Luxury-Shoulder-Bag-Suitable-For-Women-s-Daily-Commute-In-Spring-And-Summer-p-156573130.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/16/a0/1755315356a25c51c55f08048beb75901beeff6b10_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 18,
+        "product_code": "179942235",
+        "title": "حقيبة كتف جديدة مطبوعة بزهور وفيونكة، حلوة ومتعددة الاستخدامات، مع إغلاق بسحاب وحزام مريح، مناسبة للخروجات والمناسبات المختلفة، يمكن أن تستوعب بسهولة الضروريات اليومية، وهي من المفضلات الأنيقة التي تتناسب مع كل شيء.",
+        "price": "14.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-New-Floral-Bow-Print-Shoulder-Bag-Sweet-Versatile-With-Zipper-Closure-And-Comfortable-Strap-Suitable-For-Outings-And-Various-Occasions-Can-Easily-Accommodate-Daily-Necessities-A-Fashionable-Favorite-That-Goes-With-Everything-p-179942235.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_179942235%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/09/b1/1757388235468fe1dcbbc917098f3cafd06de8cb02_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 19,
+        "product_code": "60225530",
+        "title": "حقيبة كتف ذات نمط زهري مميز وعالي الجودة للنساء، 2024 موضة كاجوال بسيطة ذات سعة كبيرة ومطوية",
+        "price": "14.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Unique-High-Quality-Ditsy-Floral-Pattern-Cross-Body-Shoulder-Bag-For-Women-2024-Fashion-Casual-Minimalist-Large-Capacity-Pleated-Handbag-p-60225530.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_60225530%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/07/39/1741327363e11fc61a54cf02373d3c8c6a14d6d5f6_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 20,
+        "product_code": "72581456",
+        "title": "1 قطعة حقيبة كتف كاجوال بطبعة فيونكة بفصوص، من قماش الجينز الناعم والأنيق، مناسبة لاستخدام المرأة اليومي",
+        "price": "14.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1-Pc-Denim-Fabric-Smooth-Zipper-Bow-Print-Casual-Fashionable-Unique-Shoulder-Bag-Suitable-For-Women-s-Daily-Use-p-72581456.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_72581456%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/30/10/1746001339791b9a6f5394151b9382945b913c2d05_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 21,
+        "product_code": "41106629",
+        "title": "حقيبة كتف أنيقة على شكل هلال، حقيبة كاجوال ذات لون أحادي للنساء",
+        "price": "23.00\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/Elegant-Crescent-Underarm-Shoulder-Bag-Women-s-Fashion-Casual-Solid-Color-Underarm-Bag-p-41106629.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_41106629%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/08/17/d5/172389956152d523ed44c2acb6c938354e03f1f243_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 22,
+        "product_code": "41897186",
+        "title": "مجموعة شنطة كروسبودي ذات طبعة أزهار الكرز 2 قطعة",
+        "price": "17.00",
+        "product_link": "https://ar.shein.com/2pcs-Cherry-Blossom-Pattern-Crossbody-Bag-Set-Valentines-p-41897186.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_41897186%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/08/30/8c/17250004342abcaf7721750b377f9e338b2e73c33b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 23,
+        "product_code": "63581533",
+        "title": "حقيبة كتف بشكل سحابة ذات ألوان حلوى عصرية جديدة، حقيبة تحت الذراع جميلة، كاواييي",
+        "price": "12.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-New-Candy-Color-Cloud-Shaped-Shoulder-Bag-Cute-Underarm-Bag-Kawaii-p-63581533.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_63581533%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/19/33/1742390946544ca567a263b0b1520cec60f5b8e5bd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 24,
+        "product_code": "124149830",
+        "title": "%4-\nحقيبة يد صغيرة أنيقة بلون سادة مع حزام كتف قابل للتعديل، هدية مثالية لحفلات الأعياد والرقص والحفلات الراقية، مناسبة لفساتين الحفلات والسهرات، كذلك مناسبة للجامعة/الكلية والمناسبات والعطلات والأنشطة الخارجية والتنزه والسفر وأماكن الرياضة، لحفظ أحمر الشفاه، مناسبة للنساء والفتيات وطالبات الجامعة والسيدات، مدمجة وقابلة للحمل.",
+        "price": "16.40\n\n400+. تم بيع",
+        "product_link": "https://ar.shein.com/Elegant-Solid-Color-Mini-Handbag-With-Adjustable-Shoulder-Strap-Ideal-Gift-Bag-For-Parties-p-124149830.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_124149830%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/07/08/55/1751966409d7e0120e8b9a4f53cec19a38d83caac7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 25,
+        "product_code": "51885523",
+        "title": "حقيبة كروسبودي صغيرة للنساء، حقيبة هاتف مع حزام قابل للتعديل، ديكور على شكل كلب، للاستخدام اليومي العادي، حقيبة هاتف مائلة مخصصة، حقيبة كتف سفر للنساء، حقيبة كروسبودي بسحاب ذات موضة متاحة",
+        "price": "10.00",
+        "product_link": "https://ar.shein.com/Small-Crossbody-Bag-For-Women-Cell-Phone-Bag-With-Adjustable-Strap-Dog-Pattern-Decoration-For-Casual-Everyday-Use-Personalized-Slanted-Phone-Bag-Women-S-Travel-Shoulder-Bag-Available-Zipper-Crossbody-Bag-p-51885523.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/12/13/89/17340881280ad167abe3db721f18b7fb33c4b4c0f7_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 26,
+        "product_code": "31357854",
+        "title": "حقيبة نسائية مطوية صلبة صغيرة ذات لون صلب للسيدات ،حقيبة صغيرة يدوية عارضة للنساء مع شكل هلال الغيم و طابع عارض عصري",
+        "price": "18.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Mini-Solid-Color-Women-s-Folded-Handbag-Ladies-Solid-Color-Cloud-Crescent-Casual-Handheld-Small-Bag-Beach-Bag-p-31357854.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/07/10/1780833861314c9322237cf6a0661d0ae5761c3b8e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 27,
+        "product_code": "10762389",
+        "title": "%2-\nحقيبة خفيف الوزن , عمل يومي نمط زهري سلسلة الى جامعة طالب , & ذوي الياقات البيضاء عامل ممتاز للمكتب , جامعة , عمل , اعمال , يسافر يوميا الى العمل , في الهواء الطلق , السفر , للفتيات المراهقات نساء",
+        "price": "21.51\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Lightweight-Business-Casual-Floral-Pattern-Chain-Bag-For-Teen-Girls-Women-College-Students-Rookies-White-Collar-Workers-Perfect-For-Office-College-Work-Business-Commute-Outdoors-Travel-Outings-Pink-p-10762389.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_10762389%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/06/06/1654479616ec0169bbd625805f56f69121556a9345_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 28,
+        "product_code": "430328125",
+        "title": "حقيبة توت من البولي يوريثان المقلدة تتميز بتصميم قلادة وأجهزة معدنية متطابقة وجيب للعملات المعدنية. إنها حقيبة كتف متعددة الجيوب ذات سعة كبيرة بلون القهوة، مع إغلاق بسحاب وحزام كتف بسلسلة، مثالية للسفر والاستخدام اليومي. هذه الحقيبة الأنيقة ذات الطراز العتيق مناسبة للارتداء العادي والرسمي واليومي؛ حقيبة التنقل وبديل للمحفظة. (النمط عشوائي.)",
+        "price": "17.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/This-Replica-PU-Tote-Bag-Features-A-Pendant-Design-Matching-Hardware-And-A-Coin-Pocket-It-Is-A-Multi-Pocket-Large-Capacity-Shoulder-Bag-In-Coffee-Color-With-A-Zipper-Closure-And-A-Chain-Shoulder-Strap-Perfect-For-Travel-And-Daily-Use-This-Elegant-Vintage-Bucket-Bag-Is-Suitable-For-Casual-Formal-And-Daily-Wear-A-Commuter-Bag-And-Wallet-Alternative-The-Pattern-Is-Random-p-430328125.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_430328125%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/19/df/1773903282fd75753a45d5f115703ef9bf1502dfc1_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 29,
+        "product_code": "426038383",
+        "title": "%2-\n1 حقيبة يد صغيرة أنيقة وجميلة بحزام قابل للتعديل، مناسبة لمختلف المناسبات، عملية جداً. مثالية للأنشطة الخارجية والملابس الكاجوال والتنقل، وهدية مثالية للمراهقين.",
+        "price": "38.40",
+        "product_link": "https://ar.shein.com/1pc-Fashionable-Cute-Adjustable-Strap-Mini-Handbag-Suitable-For-Various-Occasions-Very-Practical-Perfect-For-Outdoor-Activities-Casual-Wear-Commuting-And-A-Perfect-Gift-For-Teenagers-p-426038383.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_426038383%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/16/06/17736433032f158b11607476766a1583232f73cda5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 30,
+        "product_code": "59273016",
+        "title": "حقيبة كتف بسيطة عصرية جديدة، حقيبة نايلون مطرزة، حقيبة كتف فراشة متعددة الاستخدامات، حقيبة كتف سحابة مطوية أنيقة من نمط إنس، حقيبة تسوق كبيرة السعة بطراز كلاسيكي للجامعة",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/1pc-New-Fashion-Simple-Shoulder-Handbag-Nylon-Bag-With-Embroidery-Versatile-Shoulder-Butterfly-Bag-High-End-Ins-Niche-Cute-Pleated-Cloud-Shoulder-Bag-College-Style-Large-Capacity-Retro-Tote-Bag-p-59273016.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_59273016%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/21/bd/17452136038362176d71a2a04eba9e417e88874fe4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 31,
+        "product_code": "11744545",
+        "title": "حقيبة هوبو مبسط نسيج قطن",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/Minimalist-Corduroy-Hobo-Bag-Perfectly-Matching-With-Fall-Outfits-Women-p-11744545.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_11744545%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/10/17/166597110445dfe5bd38e5afc5868a71aa57d32032_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 32,
+        "product_code": "41019956",
+        "title": "%1-\nحقيبة كتف نسائية عصرية متعددة الاستخدامات، مناسبة للحياة اليومية والسفر، وأيضًا مناسبة كهدية لصديقاتك",
+        "price": "11.85",
+        "product_link": "https://ar.shein.com/Fashionable-Minimalist-Versatile-Women-s-Shoulder-Bag-Suitable-For-Daily-Life-And-Travel-Also-Suitable-As-A-Gift-For-Friends-p-41019956.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/08/16/d2/172379887112174823e49993f11e177071b730f71a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 33,
+        "product_code": "263166401",
+        "title": "حقيبة كتف من المخمل المضلع بطراز عتيق، محفظة تحت الإبط مطرزة بفيونكة عصرية، حقيبة يد بسيطة بسحاب للفتيات والمراهقات",
+        "price": "17.00",
+        "product_link": "https://ar.shein.com/Vintage-Corduroy-Shoulder-Bag-Fashionable-Bow-Embroidery-Underarm-Wallet-Girls-Teens-Minimalist-Zipper-Handbag-p-263166401.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/28/8d/1761640295b7626366ba992517ae52d3a5657fb000_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 34,
+        "product_code": "88292984",
+        "title": "%3-\nحقيبة كتف صغيرة جديدة وجميلة بشكل وردة، حقيبة كروس بودي موضة صيفية، حقيبة كتف صغيرة مربعة مناسبة للتسوق والتنقل، حقائب صغيرة، جميلة، وردة، كاواييي",
+        "price": "24.25\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Cute-Bow-Mini-Saddle-Bags-Fashion-Crossbody-Bags-Summer-Stylish-Ins-Shoulder-Bags-Ladies-Small-Square-Bag-Suitable-For-Shopping-Commuting-Small-Bags-Cute-Bow-Kawaii-p-88292984.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/28/30/1764344602acdeca2387b913b201fa2e30d6c0415a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 35,
+        "product_code": "106890173",
+        "title": "%1-\nحقيبة إبطية جديدة من الربيع/الصيف 2024 بتصميم عصري متعدد الاستخدامات من البولي يوريثان ، حقيبة كتف بسلسلة ذات ملمس عالي الجودة ، حقيبة يد",
+        "price": "14.81\n\n60+. تم بيع",
+        "product_link": "https://ar.shein.com/2024-Spring-Summer-New-Minimalist-Versatile-PU-Armpit-Bag-Fashion-Linked-Chain-Shoulder-Bag-With-High-Quality-Feel-Handheld-Bag-Small-Bags-Straw-Bag-White-Bag-p-106890173.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_106890173%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/03/e8/1772522176c57878e85f7c046584692e2979e3812c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 36,
+        "product_code": "64712370",
+        "title": "%5-\nحقيبة كتف نسائية مزينة بفيونكة، حقيبة تحت الإبط ذات طيات على شكل سحابة قطعة واحدة",
+        "price": "23.80",
+        "product_link": "https://ar.shein.com/1pc-Women-s-Pleated-Cloud-Underarm-Bag-Cute-Bow-Decor-Shoulder-Handbag-p-64712370.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_64712370%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/08/26/8b/1756177476354b09e47db08394308495dce92fe95e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 37,
+        "product_code": "297757218",
+        "title": "حقيبة كتف مطبوعة بزهور وفيونكة جديدة، حلوة ومتعددة الاستخدامات، مع إغلاق بسحاب وحزام مريح، مناسبة لمناسبات متنوعة، يمكن أن تستوعب بسهولة المستلزمات اليومية، وهي من المفضلات الأنيقة التي تتناسب مع كل شيء.",
+        "price": "13.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-New-Floral-Bow-Print-Shoulder-Bag-Sweet-Versatile-With-Zipper-Closure-And-Comfortable-Strap-Suitable-For-Various-Occasions-Can-Easily-Accommodate-Daily-Essentials-A-Fashionable-Favorite-That-Goes-With-Everything-p-297757218.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_297757218%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/15/52/176317360302f4f1629fd64f83bc4a34bd3f59c0a9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 38,
+        "product_code": "37404711",
+        "title": "حقيبة كتف أكسفورد قماش أساسية بسيطة للأطفال 1 قطعة، حقيبة كروس بسحاب لون أحادي مناسبة للطلاب الجامعيين/البنات/المراهقين للمهرجانات/العطلات/الجامعة/المدرسة",
+        "price": "13.00",
+        "product_link": "https://ar.shein.com/1pc-Summer-Kids-Oxford-Cloth-Basic-Minimalist-Sling-Bag-Solid-Color-Zipper-Underarm-Crossbody-Bag-Suitable-For-College-Students-Girls-Teenagers-For-Festivals-Vacation-Holiday-University-School-p-37404711.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_37404711%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/05/09/c6/17152415814538663740c9c34de0ad5853af985ed4_thumbnail_405x552.png"
+    },
+    {
+        "id": 39,
+        "product_code": "68026099",
+        "title": "%3-\nحقيبة كاجوال بسحاب مطبوعة بنقوش زهور من النايلون الأبيض، متعددة الاستخدامات وعصرية للنساء لاستخدامها يومياً، قطعة واحدة",
+        "price": "12.59\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-White-Nylon-Floral-Print-Zipper-Casual-Shoulder-Bag-Versatile-Fashionable-For-Women-Daily-Use-Cream-Bag-p-68026099.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_68026099%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/18/eb/17449468512d0a190088557b59be577d4dfc306c80_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 40,
+        "product_code": "99675498",
+        "title": "حقيبة الكتف ذات الشريط السلسلي المنقط",
+        "price": "21.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/Bowknot-Decor-Pleated-Chain-Strap-Shoulder-Bag-Cream-Bag-Beach-Bag-p-99675498.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_99675498%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/10/f2/1749567406e3a4ea4a903aec30c63bb74c3c39d94c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 41,
+        "product_code": "58885284",
+        "title": "%1-\nمجموعة مكونة من 2 قطعة: محفظة عملات صغيرة ذات نمط هندسي مربع وحقيبة كروس بودي كلاسيكية للنساء مع جيب معلق، بتصميم أزهار الكرز",
+        "price": "16.77",
+        "product_link": "https://ar.shein.com/2pcs-Set-Mini-Geometric-Pattern-Square-Coin-Purse-Classic-Women-Crossbody-Bag-With-Hanging-Pouch-Cherry-Blossom-Design-p-58885284.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/23/b6/1750608180a7f07ccf2b84491f76ad9e54140cea61_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 42,
+        "product_code": "15780608",
+        "title": "حقيبة كتف عصرية بلون سادة ناعمة بتصميم سحابة منتفخة ومجعدة، حقيبة متعددة الاستخدامات للتنقل اليومي",
+        "price": "40.00",
+        "product_link": "https://ar.shein.com/Fashion-Solid-Color-Soft-Puff-Cloud-Ruched-Underarm-Bag-Versatile-Everyday-Commute-Shoulder-Bag-p-15780608.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_15780608%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2023/05/08/168350985874a46d45c32cea9a853b51f63f49df31_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 43,
+        "product_code": "56996462",
+        "title": "حقيبة كتف ذات لون سادة بنمط سحابة ذات ألوان حلوى جديدة عصرية، حقيبة تحت الذراع جميلة، فيونكة، كاواييي",
+        "price": "13.00",
+        "product_link": "https://ar.shein.com/Fashionable-New-Candy-Color-Cloud-Pattern-Solid-Color-Shoulder-Bag-Cute-Underarm-Bag-Bow-Kawaii-p-56996462.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_56996462%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/14/6d/173954824605668dcb486650dc2ab7e4e3696f6f15_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 44,
+        "product_code": "395462435",
+        "title": "حقيبة كتف مزينة بسلسلة فراشة بلون موحد، حقيبة يد عصرية، حقيبة كلاتش خفيفة الوزن، حقيبة إبط بسحاب، مناسبة للفتيات والطالبات للاستخدام اليومي والخروجات الكاجوال والتسوق والسفر وتجمعات العطلات",
+        "price": "14.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Solid-Color-Butterfly-Chain-Decor-Shoulder-Bag-Fashion-Handbag-Lightweight-Clutch-Zipper-Underarm-Bag-Suitable-For-Girls-Students-Girls-For-Daily-Use-Casual-Outings-Shopping-Travel-Holiday-Gatherings-p-395462435.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_395462435%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/31/e0/176982886649ff71e16a7cd583fc29bcf94c569382_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 45,
+        "product_code": "32971412",
+        "title": "%1-\nحقيبة يد صغيرة ذات لون أحادي مطوية بعرض 19.5 سم، حقيبة كاجوال جديدة للربيع والصيف بشكل هلال وسحابة باللون الباستيل للنساء",
+        "price": "17.74\n\n70+. تم بيع",
+        "product_link": "https://ar.shein.com/19-5cm-Width-Mini-Solid-Color-Pleated-Handbag-Spring-Summer-New-Pastel-Cloud-Crescent-Shaped-Casual-Tote-Bag-For-Women-p-32971412.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_32971412%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/07/2c/1780833411d6d05481f238fe14b295ab0e28c1d6c3_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 46,
+        "product_code": "68200897",
+        "title": "حقيبة يد نسائية كاجوال متعددة الاستخدامات بتصميم كتلة اللون على شكل كمبوشة، حقيبة يد مربعة بسيطة من النايلون، حقيبة كتف بطراز رجعي مع حزام قابل للفصل، مناسبة للمراهقات وطلاب الجامعة والمهنيين الشباب والمكتب والحرم الجامعي والعمل والتنقل",
+        "price": "25.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-s-Fashion-Casual-Versatile-Color-Block-Dumpling-Shaped-Tote-Bag-Minimalist-Nylon-Square-p-68200897.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_68200897%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/18/50/17449697852fa085c5f7f2f7f078ac6222d9f0b142_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 47,
+        "product_code": "131963375",
+        "title": "حقيبة فاخرة أنيقة للنساء، حقيبة يد موضة جديدة، لون أحمر كلاسيكي حقيبة كتف وحقيبة متقاطعة مربعة صغيرة",
+        "price": "11.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Luxury-Elegant-Box-Bag-For-Women-New-Fashion-Handbag-Retro-Red-Color-Shoulder-Crossbody-Small-Square-Bag-p-131963375.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_131963375%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/14/e4/1760448847b98e8288f75b4a495c9dec7421b8e3c0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 48,
+        "product_code": "27175839",
+        "title": "حقيبة قماشية كبيرة الحجم بتصميم جديد ،حقيبة كتف-كروسبودي ،حقيبة يد عصرية للتنقل والمدرسة",
+        "price": "18.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/New-Arrival-Large-Capacity-Canvas-Tote-Bag-Shoulder-Crossbody-Bag-Fashionable-Handbag-For-Commuting-And-School-p-27175839.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_27175839%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/11/25/cc/1700879959bb581ebca9a1746a8630d44cbe8b1ffc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 49,
+        "product_code": "59016138",
+        "title": "ROMWE Kawaii حقيبة كتف نسائية بطراز Y2K جميلة، حقيبة مثالية لحفلات الهالوين، موضة هالوين وموضة جوتيك، أفضل هدايا هالوين للنساء، جميلة، فيونكة، كاواييي",
+        "price": "59.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/ROMWE-Kawaii-Cute-White-Y2K-Style-Women-s-Shoulder-Bag-Perfect-For-Street-For-Fancy-Party-Best-Gifts-For-Girls-p-59016138.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_59016138%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2025/03/24/38/1742821554f8089dfe345b031302894d678414ea92_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 50,
+        "product_code": "425782559",
+        "title": "هذه حقيبة كتف للنساء مصنوعة من مادة البولي يوريثان ذات نسيج أبيض بسيط. إنها حقيبة يد بيضاء بسيطة للنساء مزينة بتعليقة بشكل قوقعة ذات طابع بحري وزخرفة حرفية. تتميز بتصميم سحاب ناعم، مع مقبض سلسلة وحزام كتف طويل قابل للتعديل مما يتيح حملها على الكتف أو متقاطعة أو باليد.",
+        "price": "44.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/White-Plain-Weave-Women-s-Shoulder-Bag-Attached-Ocean-Themed-Shell-Pendant-Design-And-Letter-Decoration-p-425782559.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/27/66/1779861694a1a0857b9a70308814388d0aec0cccfa_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 51,
+        "product_code": "62264770",
+        "title": "حقيبة صغيرة للبنات بنقشة موجة مزخرفة بالحروف، محفظة للهاتف والعملة قطعة واحدة",
+        "price": "23.00",
+        "product_link": "https://ar.shein.com/1pc-Girls-Mini-Wave-Pattern-Embossed-Letter-Pouch-Phone-Wallet-Coin-Purse-p-62264770.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_62264770%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/19/e3/1742366095955d43d041c1302ab34ceda67d695fef_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 52,
+        "product_code": "64802191",
+        "title": "%3-\nحقيبة كتف واحدة من المخمل المضلع العتيق، محفظة تحت الإبط بسلسلة عصرية، حقيبة يد بسيطة بسحاب للفتيات والمراهقات",
+        "price": "14.51",
+        "product_link": "https://ar.shein.com/Vintage-Corduroy-One-Shoulder-Bag-Fashion-Chain-Underarm-Wallet-Girls-Teens-Minimalist-Zipper-Handbag-p-64802191.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/04/02/a4/17435877620d55a62b62d6247b6a4c6f1f156572ee_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 53,
+        "product_code": "26891898",
+        "title": "XD هذه الحقيبة المصنوعة من فرو الأرنب الاصطناعي على شكل قلب مثالية للفتيات والطالبات. إنها هدية رائعة للفتيات في عيد الحب ورأس السنة",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/XD-This-Artificial-Rabbit-Fur-Heart-Shaped-Bag-Is-Perfect-For-Girls-And-Students-It-s-A-Great-Gift-For-Girls-On-Valentine-s-Day-And-New-Year-p-26891898.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_26891898%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/11/17/86/1700199087cf1ac747afb100be0772b92f6fb04ac5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 54,
+        "product_code": "114799723",
+        "title": "%2-\nحقيبة صغيرة خفيفة الوزن، حقيبة سلسلة، حقيبة مبطنة، حقيبة يد، حقيبة دلو، مناسبة للفتيات وطالبات الجامعة والسيدات العاملات، مثالية للمكتب والجامعة والعمل والتنقل والأنشطة الخارجية والسفر والنزهات، حقيبة يد أنيقة باللون الأصفر الكريمي",
+        "price": "26.51\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Lightweight-Mini-Bag-Chain-Bag-Quilted-Bag-Handbag-Bucket-Bag-Suitable-For-Girls-College-Students-And-Office-Ladies-Ideal-For-Office-University-Work-Commuting-Outdoor-Activities-Travel-And-Picnics-Fashionable-Cream-Yellow-Handbag-p-114799723.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_114799723%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/28/13/177996079805b170afaf14ad699cbb98994417f5bf_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 55,
+        "product_code": "308884516",
+        "title": "حقيبة تسوق بطبعة الفراولة، حقيبة تسوق بطراز جميل، حقيبة كتف واسعة السعة متعددة الاستخدامات للنساء، مصنوعة من الكوردروي، كاواييي",
+        "price": "12.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Strawberry-Print-Tote-Bag-Cute-Style-Tote-Bag-Fashion-Large-Capacity-Versatile-Shoulder-Bag-For-Women-Corduroy-Kawaii-Beach-Canvas-Bag-Pink-Bag-p-308884516.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_308884516%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/11/26/a4/17641384445df46df08711ea1756177292aafeb2ef_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 56,
+        "product_code": "209110938",
+        "title": "%2-\nحقيبة كروس بودي مزخرفة بالأزهار والشريط والفيونكة، خفيفة الوزن من البوليستر، مناسبة للتنقل والسفر، بتصميم أسود وأبيض مع طبعة زهرية وردية، حقيبة مناسبة للتنقل والطباعة الزهرية خفيفة الوزن",
+        "price": "13.77\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Spring-Summer-New-Cute-Floral-Print-Crossbody-Bag-Decorated-With-Ribbon-And-Bow-Lightweight-Polyester-Shoulder-Bag-Suitable-For-Commuting-And-Travel-Black-White-Design-With-Pink-Floral-Pattern-Commuter-Bag-Floral-Print-Lightweight-Bag-Bow-p-209110938.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/10/04/21/175954321130c576d28107cfdbb2538b45946a86a9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 57,
+        "product_code": "42053329",
+        "title": "حقيبة كتف أكسفورد أساسية بسيطة للأطفال في الصيف، حقيبة كروس بودي بسحاب لون سادة مناسبة للطلاب الجامعيين/البنات/المراهقين للمهرجانات/العطلات/الجامعة/المدرسة",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/1pc-Summer-Kids-Oxford-Cloth-Basic-Minimalist-Sling-Bag-Solid-Color-Zipper-Underarm-Crossbody-Bag-Suitable-For-College-Students-Girls-Teenagers-For-Festivals-Vacation-Holiday-University-School-p-42053329.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_42053329%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/05/09/c6/17152415814538663740c9c34de0ad5853af985ed4_thumbnail_405x552.png"
+    },
+    {
+        "id": 58,
+        "product_code": "193489401",
+        "title": "حقيبة كتف أنيقة وعملية من قماش الكوردروي الأسود، مزودة بسحاب وحزام قابل للتعديل، مطرزة بفيونكة، مناسبة للاستخدام اليومي للنساء، تصميم عصري وبسيط مثالي للخريف والشتاء",
+        "price": "15.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Black-Corduroy-Fabric-Smooth-Zipper-Drawstring-Shoulder-Strap-Design-Bow-Embroidered-Fashion-Versatile-Casual-Solid-Color-Minimalist-New-Autumn-Winter-Unique-Shoulder-Bag-Suitable-For-Women-s-Daily-Use-p-193489401.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_193489401%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/09/19/84/17582722524b705d81e0e016d054dab85aef712bc4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 59,
+        "product_code": "430205151",
+        "title": "حقيبة الكتف ذات الشريط السلسلي المنقط",
+        "price": "22.00",
+        "product_link": "https://ar.shein.com/Bowknot-Decor-Pleated-Chain-Strap-Shoulder-Bag-Cream-Bag-p-430205151.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_430205151%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/10/f2/1749567406e3a4ea4a903aec30c63bb74c3c39d94c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 60,
+        "product_code": "29452575",
+        "title": "حقيبة كتف نسائية بسلسلة من الجواهر ذات نمط زهري أنيق، حقيبة هلال هلالية للنساء",
+        "price": "17.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Pearl-Chain-Strap-Shoulder-Bag-With-Floral-Pattern-For-Women-Tready-Crescent-Moon-Bag-For-Women-p-29452575.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_29452575%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/01/22/17/17059113632ea146606ddadfb24b3426dae661a3c2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 61,
+        "product_code": "414290805",
+        "title": "%2-\nحقيبة يد أنيقة محمولة سميكة مزينة بطبعات الفيونكة والقلب، حقيبة سفر",
+        "price": "13.74\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Portable-Tote-Bag-Thickened-Cute-Bow-Heart-Print-Handbag-Travel-Bag-p-414290805.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/04/24/1772608620c8b0784f356e262260e4e773c38bfcbc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 62,
+        "product_code": "14763794",
+        "title": "%3-\nحقيبة كروس بودي نسائية عصرية جديدة بتصميم كتل لونية، حقيبة كتف كاجوال بغطاء وحزام عريض، متعددة الاستخدامات للتنقل والعمل والمدرسة والتسوق والسفر والاستخدام اليومي",
+        "price": "39.80\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-New-Women-s-Crossbody-Bag-Casual-Color-Block-Shoulder-Bag-Flap-Wide-Strap-Women-s-Crossbody-Bag-Women-s-Commute-Work-School-Shopping-Travel-Daily-Versatile-Shoulder-Crossbody-Bag-p-14763794.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_14763794%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/07/03/168835549741d83398ec3405efa71a590474ee4d86_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 63,
+        "product_code": "10861054",
+        "title": "%2-\nحقيبة نمط زهري ديكور سلسلة",
+        "price": "20.62\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Floral-Pattern-Chain-Decor-Bag-p-10861054.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_10861054%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/06/20/16556889414b24f987e511a6c1b47208ef52028acd_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 64,
+        "product_code": "62268932",
+        "title": "حقيبة كتف نسائية كاجوال سهلة ومريحة للاستخدام اليومي من لون أحادي فاخرة وخفيفة",
+        "price": "13.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Women-Daily-Wear-Solid-Color-Lightweight-Luxury-Casual-Shoulder-Bag-White-Bag-p-62268932.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_62268932%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/03/24/76/1742797518d0434908708d56da3a7a1d866a8708d0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 65,
+        "product_code": "100012240",
+        "title": "حقيبة يد مطوية عصرية للبنات قطعة واحدة، مناسبة للرحلات اليومية",
+        "price": "18.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Girls-Fashionable-Ruched-Hand-Held-Tote-Bag-Suitable-For-Daily-Outings-p-100012240.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_100012240%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/p/spmp/2025/06/14/f2/1749864325e39451d5c89f8e373a41248a26a4b49e_thumbnail_405x552.png"
+    },
+    {
+        "id": 66,
+        "product_code": "40888564",
+        "title": "حقيبة كتف هلالية مزينة بفيونكة، بتصميم كلاسيكي بسيط ولون موحد، مثالية للتسوق وحمل المحفظة، تناسب الشابات وطالبات الجامعات والشابات في بداية حياتهن المهنية والعاملات في المكاتب. هذه الحقيبة مناسبة جدًا للمكتب والجامعة والعمل والرحلات والأنشطة الخارجية والسفر. محفظة أنيقة مزينة بفيونكة تضفي لمسة كلاسيكية ساحرة.",
+        "price": "29.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Solid-Color-Retro-Minimalist-Bow-Decor-Crescent-Shoulder-Bag-Suitable-For-Shopping-Wallet-Carrying-Young-Women-College-Students-Career-Starters-And-White-Collar-Workers-This-Bag-Is-Very-Suitable-For-Office-University-Work-Business-Commuting-Outdoor-Activities-Travel-And-Outings-Fashionable-Bow-Wallet-With-A-Vintage-Charm-p-40888564.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/30/24/17697326909506ab451711733a8a3247ab145162ad_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 67,
+        "product_code": "25442309",
+        "title": "حقيبة كروسبودي للنساء بتصميم فراولة بيضاء قطعة واحدة، حقيبة هاتف محمول مصغرة، حقيبة مستحضرات تجميل، حقيبة تخزين، حقيبة قماش مخملي جميلة للطلاب والموظفين والمسافرين، محفظة فراولة أنيقة وجميلة",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/1pc-White-Strawberry-Design-Women-s-Crossbody-Bag-Mini-Cell-Phone-Bag-Cosmetic-Bag-Storage-Bag-Cute-Corduroy-Canvas-Bag-For-Students-Office-Workers-Travelers-Cute-Strawberry-Purse-Valentines-Perfectly-Matching-With-Fall-Outfits-Women-Strawberry-p-25442309.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_25442309%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/10/24/78/169814418234133c6daf6478e4403165b6db65456b_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 68,
+        "product_code": "33392769",
+        "title": "%2-\nحقيبة كتف نسائية مطبعة بالزهور ذات لون واحد متعددة الاستخدامات، حقيبة نايلون مربعة الشكل بسعة كبيرة للسفر مع قلادة، حقيبة جامعية خفيفة جديدة بأسلوب حقيبة رسول للعملات المحمولة بالهاتف الجوال ،حقيبة تسوق عملية يومية للطالب والموظف الأبيض المكتبي والمتنقل",
+        "price": "37.36\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Versatile-Solid-Color-Floral-Print-Shoulder-Bag-Women-s-Nylon-Square-Large-Capacity-Travel-Crossbody-Bag-With-Pendant-New-Lightweight-College-Style-Mobile-Coin-Messenger-Bags-Casual-Daily-Commuter-Shopping-Bag-For-White-Collar-And-Student-p-33392769.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_33392769%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/04/11/4f/1712824970e55966c4fb0c4f8e5285941a6d0ee74f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 69,
+        "product_code": "11300321",
+        "title": "حقيبة يد مربعة الشكل بنمط البلد ثنائي اللون، حقيبة كتف-أسلوب بسيط-خفيفة الوزن-محمولة بسهولة للنساء، المبتدئات والعاملات البيضاء اللون، تناسب الهدايا المدرسية، للفتيات والنساء - حقيبة هدايا العمل، الاعمال، التنقل، التسوق",
+        "price": "21.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Colorblock-Plaid-Pattern-Bag-Handbag-Shoulder-Bag-Minimalist-Casual-Lightweight-Portable-For-Women-Rookies-White-Collar-Workers-For-Teacher-Gifts-For-Girl-For-Woman-Gift-Bag-Work-Business-Commute-Shopping-p-11300321.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2022/05/23/16532840557b6739d4801fe5a161129c1df9922a09_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 70,
+        "product_code": "45668876",
+        "title": "حقيبة كتف مربعة صغيرة مبطنة ومطرزة بشكل V للمراهقات، حقيبة كاميرا عصرية للفتيات",
+        "price": "17.00",
+        "product_link": "https://ar.shein.com/Teens-V-Shape-Embroidered-Quilted-Mini-Square-Shoulder-Bag-Fashion-Camera-Bag-For-Girls-p-45668876.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_45668876%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/10/21/a9/1729482444203c97698a22b57d7ead397538df330a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 71,
+        "product_code": "443520239",
+        "title": "حقيبة كروس بودي بسحاب من القطيفة ذات لون واحد، إكسسوار مثالي لملابس الخريف للنساء، مناسبة لعيد الحب",
+        "price": "10.00",
+        "product_link": "https://ar.shein.com/1pc-Solid-Color-Corduroy-Zipper-Crossbody-Bag-Perfect-Accessory-For-Women-s-Autumn-Outfits-Ideal-For-Valentine-s-Day-p-443520239.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_443520239%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/07/af/1738927619061db71d37bb91b80c359867302b565e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 72,
+        "product_code": "84789343",
+        "title": "حقيبة كتف وسط طراز جديد زهور مبعثرة، حقيبة تسوق عملية مجعدة أنيقة للنساء، سعة كبيرة",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/New-Ditsy-Floral-Crossbody-Shoulder-Bag-Stylish-Casual-Pleated-Tote-Bag-For-Women-Large-Capacity-Pink-p-84789343.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_84789343%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/22/5e/1747899399890b2d64c9d96d745032931600abd05d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 73,
+        "product_code": "15422377",
+        "title": "حقيبة هوبو محمولة بطابع فخم ، أنيق ، رائع للعطلات الصيفية ، مزينة بنقش هندسي و مزودة بسحاب وجيبة للنقود للفتيات المراهقات والطالبات الجامعيات والعاملات البيض والمبتدئات يناسب العمل في المكتب، جلسات خارجية، الحفلات، حفلات التخرج، العشاء، الزفاف، العمل، الأعمال، التنقل، النساء حقيبة مع حقيبة الدايم",
+        "price": "17.00\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/Glamorous-Elegant-Exquisite-Vacation-Old-Money-Portable-Geometric-Print-Hobo-Bag-Zipper-With-Coin-Purse-For-Teen-Girls-Women-College-Students-White-Collar-Workers-Rookies-White-Collar-Workers-Perfect-For-Office-Perfect-For-Outdoors-Perfect-For-Party-Prom-Dinner-Wedding-Work-Business-Commute-Women-Bag-With-Dime-Bag-p-15422377.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_15422377%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/12/18/e5/176602612186aebd0c2eb081637e5b2f7f63348131_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 74,
+        "product_code": "369777949",
+        "title": "حقيبة يد بفيونكة ذات طيات على شكل سحابة بلون أحادي، حقيبة كتف وإبط قطعة واحدة",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/1pc-Solid-Color-Fashion-Cloud-Ruffle-Bow-Handbag-Shoulder-Underarm-Bag-p-369777949.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_369777949%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/05/52/17675940023673f57e490fd7a8d23a7eba1bb5e398_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 75,
+        "product_code": "33979990",
+        "title": "حقيبة تسوق مطبوعة بالفراولة، حقيبة كتف أنيقة وعملية للنساء، مصنوعة من الكوردروي، محفظة فراولة أنيقة وجميلة لعيد الحب، حقائب للطلاب، بها أقسام متعددة، مناسبة للشاطئ والمدرسة والعمل والاستخدام اليومي، حقيبة مدرسية أدبية للمراهقين، حقيبة كتب للنساء أو الطلاب، مناسبة للكتب والتسوق والصيف، كاواييي",
+        "price": "13.00\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Strawberry-Printed-Tote-Bag-Cute-Style-Tote-Bag-Fashionable-And-Versatile-Shoulder-Bag-For-Women-Corduroy-Fashionable-Cute-Strawberry-Purse-Valentines-Tote-Bags-For-Students-Multiple-Compartments-Perfect-For-Beach-School-Work-Daily-Use-Literary-School-Bag-For-Teens-Book-Bag-For-Women-Or-Students-Perfect-For-Books-Shopping-Summer-Kawaii-Vacation-Cream-Bag-Strawberry-Canvas-Bag-p-33979990.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_33979990%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/04/22/73/17137687006dc9b0a94105d81acfa8654ff4d07005_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 76,
+        "product_code": "28905125",
+        "title": "%3-\nحقيبة بحرف ملون على شكل سحابة ، حقيبة كتف بلون سادة ، حقيبة إبط جميلة",
+        "price": "11.70\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Candy-Colored-Cloud-Shape-Purse-Solid-Color-Shoulder-Bag-Cute-Armpit-Bag-Pink-Bag-p-28905125.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_28905125%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/01/08/cc/170472199630733a54dbabe3bd4d69d00ca9ffe7ca_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 77,
+        "product_code": "87976249",
+        "title": "حقيبة كروسبودي بطبعة زهور لربيع/صيف جديد مزينة بشريط وفيونكة، حقيبة كتف خفيفة الوزن من البوليستر، مناسبة للتنقل والسفر، بتصميم أزهار وردي على أبيض وأسود",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/New-Spring-Summer-Floral-Print-Crossbody-Bag-With-Ribbon-Bow-Decor-Lightweight-Polyester-Shoulder-Bag-Suitable-For-Commuting-And-Travel-Black-White-With-Pink-Floral-Design-Cute-Bow-Bag-For-Women-p-87976249.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_87976249%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/05/26/89/174823638114b57662075fcabeaf8ae1483121c85f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 78,
+        "product_code": "107003270",
+        "title": "%2-\nقطعة واحدة، حقيبة كتف نسائية جديدة وفريدة مصممة للاستخدام اليومي من قماش النايلون الأحمر الناعم ، مزينة بسحاب وحبال وأزرار ، مناسبة للصيف والأناقة الكاجوال",
+        "price": "13.74\n\n80+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Red-Nylon-Fabric-Smooth-Zipper-Drawstring-Strap-Button-Decor-Crossbody-Bag-Suitable-For-Daily-Use-For-Women-p-107003270.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/21/6a/17504784135ac034934055b53d3bac41271aed0d35_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 79,
+        "product_code": "387308792",
+        "title": "حقيبة كتف مزينة بالفيونكة والسلسلة المطوية",
+        "price": "21.00",
+        "product_link": "https://ar.shein.com/Bow-Decor-Pleated-Chain-Shoulder-Bag-p-387308792.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/30/2d/1769761580e25bc55662f25bed5e4956b62d0b3988_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 80,
+        "product_code": "41928055",
+        "title": "حقيبة الكتف البسيطة ذات اللون الأحادي الميني، مناسبة للتسوق والمحافظ والتسوق والنساء الشابات وطلاب الجامعة والجدد والموظفين. إنها مناسبة جدًا للمكاتب والجامعات والعمل والأعمال والتنقل والأنشطة الخارجية والسفر والخروجات",
+        "price": "12.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Mini-Fashion-Solid-Color-Simple-Flip-Shoulder-Bag-Suitable-For-Shopping-Wallets-Shopping-Young-Women-College-Students-Newcomers-White-Collar-Workers-They-Are-Very-Suitable-For-Offices-Universities-Work-Business-Commuting-Outdoor-Activities-Travel-And-Outings-New-Year-Old-Money-Cream-Bag-p-41928055.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_41928055%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/08/31/c8/17251104189bccf8fa447d5e922c27d839f839befc_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 81,
+        "product_code": "80535757",
+        "title": "%2-\nحقيبة تسوق بسيطة عتيقة بسحاب، مزينة بجيوب، مقبض مزدوج، مناسبة للنساء للاستخدام اليومي والتنقل والملابس الشارعية والطراز الياباني",
+        "price": "28.51\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Minimalist-Retro-Zipper-Tote-Bag-Decorated-With-Pockets-Dual-Handles-Suitable-For-Women-s-Casual-Commute-Streetwear-And-Japanese-Style-Y2k-p-80535757.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/28/61/17826380686acdedff785cae5d921a6a09c98cbbd9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 82,
+        "product_code": "31714587",
+        "title": "%2-\nحقيبة نسائية بطراز كلاسيكي Y2K مع لوحة ألوان وأنماط نجوم وسلسلة معدنية, مناسبة للفتيات والسيدات والطالبات وعاملات المكاتب والموظفات والمسافرات وحفلات المدرسة, محفظة نسائية عصرية معلمة بالنجوم",
+        "price": "34.44",
+        "product_link": "https://ar.shein.com/Vintage-Y2K-Style-Women-s-Bag-With-Color-Blocking-Star-Pattern-Chain-Strap-Suitable-For-Girls-Ladies-Students-p-31714587.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_31714587%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/05/22/95/1779445971709f9361d36639ae87ee5f076c86ec4e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 83,
+        "product_code": "42004302",
+        "title": "حقيبة كتف مربعة من الجلد الصناعي PU بتصميم الفيونكة، مناسبة للنساء في الحياة اليومية، التسوق، السفر، التجمعات، ليلة البنات، المهرجانات، هدايا عيد الميلاد والحفلات. عيد الحب، محفظة نسائية عصرية بتصميم الفيونكة",
+        "price": "23.00",
+        "product_link": "https://ar.shein.com/Solid-Color-PU-Leather-Patchwork-Bow-Design-Flap-Shoulder-Crossbody-Square-Bag-Suitable-For-Women-s-Daily-Commute-Shopping-Travel-Gathering-Girls-Night-Out-Festivals-Birthday-Gifts-And-Parties-Valentine-s-Day-Fashionable-Bow-Ladies-Wallet-p-42004302.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_42004302%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/22/71/177173737551de551ec035340cd3fd4c089041e23f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 84,
+        "product_code": "55308230",
+        "title": "حقيبة كتف حمل يد بشكلها المطوي العصري للفتيات، مناسبة للخروج اليومي",
+        "price": "27.00",
+        "product_link": "https://ar.shein.com/1pc-Girls-Fashionable-Pleated-HandheldShoulder-Bag-Suitable-For-Daily-Outing-p-55308230.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/04/23/5b/171383590305e32f7d2a0d849ce925d2c367677bdb_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 85,
+        "product_code": "43852655",
+        "title": "حقيبة يد نسائية من القماش بنقشة دب باللون البيج والخاكي والوردي والأزرق الفاتح، حقيبة كتف، حقيبة كروس بودي، هدية عيد ميلاد، 1 قطعة",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/1pc-Women-s-Beige-Khaki-Pink-Light-Blue-Bear-Pattern-Canvas-Tote-Bag-Handbag-Crossbody-Bag-Birthday-Gift-p-43852655.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/09/14/0c/17262872985b6403c2ef8c991cee3575d2d9a9ec26_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 86,
+        "product_code": "37977379",
+        "title": "حقيبة كتف فاخرة خفيفة الوزن ذات لون أحادي للارتداء اليومي",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/Solid-Color-Lightweight-Luxury-Shoulder-Bag-For-Daily-Wear-Pink-p-37977379.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_37977379%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/06/30/a7/171974230974bca7b666afb056a4560252bb13db13_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 87,
+        "product_code": "15612629",
+        "title": "%1-\nحقيبة الرغيف الفرنسي خفيفة الوزن، كاجوال للعمل، حقيبة صغيرة عتيقة من البولي يوريثان للفتيات المراهقات والنساء وطلاب الجامعات والمبتدئين والعمال ذوي الياقات البيضاء مثالية للمكتب والكلية والعمل والأعمال التجارية والتنقل في الهواء الطلق والسفر والنزهات",
+        "price": "20.70\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Lightweight-Business-Casual-Small-Bag-Vintage-Flap-PU-For-Perfect-For-Office-Cream-Bag-p-15612629.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/30/f1/1769731090e8cdaca40e564853e34b038d79076111_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 88,
+        "product_code": "105320451",
+        "title": "حقيبة كتف نسائية مورب للصدر وخصر، حقيبة يد كاجوال",
+        "price": "16.00",
+        "product_link": "https://ar.shein.com/Women-s-Fashion-Oblique-Shoulder-Chest-Bag-Waist-Bag-Casual-Handbag-p-105320451.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/16/7f/175004001058c7b85c536677ec4a0d5a9f929f3f0e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 89,
+        "product_code": "15425744",
+        "title": "حقيبة مربعة صغيرة مزينة بالتطريز الزهري والخرز الاصطناعي والزركون والسلسلة المزينة بالخرز الاصطناعي، أنيقة للحفلات والزفاف والسهرات والعشاء، أحمر شفاه، حقيبة نسائية مزينة بالخرز الاصطناعي",
+        "price": "25.00",
+        "product_link": "https://ar.shein.com/Argyle-Princess-Faux-Pearl-Rhinestone-Chain-Decor-Mini-Square-Bag-Flower-Embroidery-p-15425744.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_15425744%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_pi/2023/04/28/16826595618cc5ade3c33d6238d67a918451fffbe0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 90,
+        "product_code": "107002818",
+        "title": "%3-\nحقيبة يد صغيرة بتصميم ألوان متباينة جديدة، حقيبة كتف من قماش نايلون مقاوم للماء، حقيبة مربعة وحقيبة سلة، مناسبة للتنقل والحفلات والعطلات",
+        "price": "19.32\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Mini-New-Colorblock-Design-Fashion-Handbag-Nylon-Waterproof-Fabric-Shoulder-Bag-Square-Bag-And-Basket-Bag-Suitable-For-Commuting-Parties-And-Vacations-p-107002818.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_107002818%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/16/61/1750062664558525ea857b852fe935bdb22bb1cf80_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 91,
+        "product_code": "516706529",
+        "title": "%15-\nحقيبة كتف نسائية من البولي يوريثان الأسود اللامع، حقيبة تحت الإبط بمشبك معدني وتجاعيد، حقيبة يد هوية كاجوال يومية بحزام قابل للتعديل",
+        "price": "31.59",
+        "product_link": "https://ar.shein.com/Black-Glossy-PU-Shoulder-Bag-For-Women-Metal-Buckle-Ruched-Underarm-Bag-Adjustable-Strap-Casual-Daily-Hobo-Handbag-p-516706529.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_516706529%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/30/9e/17828009709231b8475081e74702d411e2539867b5_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 92,
+        "product_code": "357781764",
+        "title": "%2-\n1 قطعة ربطة عنق بشكل فراشة ذات لون أحادي، حقيبة يد صغيرة مربعة جديدة للسيدات موديل 2026، حقيبة كتف وحقيبة متقاطعة ذات طيات بسيطة وأنيقة",
+        "price": "16.74\n\n20+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Solid-Color-Fashion-New-Bow-Tie-Handbag-2026-New-Ladies-Small-Square-Bag-Stylish-Personalized-Minimalist-Pleated-Shoulder-Crossbody-Bag-p-357781764.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_357781764%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/01/05/9a/1767595717e72b841e33afd12e3f982919c904a406_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 93,
+        "product_code": "55096235",
+        "title": "%2-\nحقيبة رسول نسائية صغيرة متعددة الاستخدامات مزينة بفراشة معدنية، محفظة هاتف محفظة صغيرة من النايلون أحادية اللون بتصميم بسيط",
+        "price": "14.74",
+        "product_link": "https://ar.shein.com/Women-Solid-Color-Nylon-Minimalist-Butterfly-Metal-Decor-Versatile-Messenger-Bag-Small-Purse-Phone-Wallet-Pouch-p-55096235.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_55096235%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/02/12/173848488055aa00c2792d4bad1f1cfc970d499f58_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 94,
+        "product_code": "46004993",
+        "title": "حقيبة كتف جديدة شكل سحابة لون حلوى موحد اللون، حقيبة لطيفة تحت الإبط",
+        "price": "12.00",
+        "product_link": "https://ar.shein.com/New-Fashion-Candy-Color-Cloud-Shape-Solid-Color-Shoulder-Bag-Cute-Underarm-Bag-p-46004993.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_46004993%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/11/12/20/1731413855dc6178f2de035b91167dcf82d492c88a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 95,
+        "product_code": "34961515",
+        "title": "%1-\nحقيبة يد نسائية مربعة الشكل من البولي يوريثان عالية الجودة، حقيبة كتف صغيرة متعددة الوظائف مطبوعة بالكرز، مناسبة للتسوق والمواعدة، حقيبة كروس للفتيات، عناصر كاواييي من الكرز",
+        "price": "40.44",
+        "product_link": "https://ar.shein.com/Fashionable-High-End-Ladies-Square-Shaped-PU-Handbag-Multifunctional-Cute-Cherry-Printed-Shoulder-Bag-Suitable-For-Shopping-Dating-Crossbody-Bag-For-Girls-Kawaii-Cherry-Elements-Valentines-p-34961515.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_34961515%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/05/09/6a/17152630878137f45adc38f71e5af992fc9d0d00d4_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 96,
+        "product_code": "59355575",
+        "title": "%2-\nقطعة واحدة حقيبة كتف نايلون أسود ذات طبعة زهرية، غلق بسوستة، شكل أنيق وعصري مناسب للاستخدام اليومي للنساء",
+        "price": "14.74\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Black-Nylon-Floral-Print-Zipper-Closure-Fashionable-Casual-Shoulder-Bag-Suitable-For-Women-Daily-Use-p-59355575.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_59355575%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/03/03/57/174097273165f1622cafb1a876ad85c1677eb0af3f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 97,
+        "product_code": "113974191",
+        "title": "حقيبة سلسلة خفيفة الوزن صغيرة الحجم حقيبة يد مبطنة حقيبة دلو مناسبة للفتيات وطالبات الجامعة وموظفات المكاتب",
+        "price": "26.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Lightweight-Mini-Chain-Bag-Quilted-Handbag-Bucket-Bag-Suitable-For-Girls-College-Students-And-Office-Workers-p-113974191.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/27/17/17510083928634acd1817f48d81e0477a2bb474f0d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 98,
+        "product_code": "33936798",
+        "title": "1 قطعة حقيبة كتف مطبوعة بالزهور، ناعمة وقابلة للطي بسعة كبيرة للكتب والبقالة والاستخدام اليومي. جميلة للطلاب والنساء، حقيبة يومية رائعة أو هدية",
+        "price": "11.00\n\n40+. تم بيع",
+        "product_link": "https://ar.shein.com/1pc-Flowers-Print-Shoulder-Tote-Soft-Foldable-Large-Capacity-For-Books-Groceries-Daily-Use-Cute-For-Students-Women-Great-Daily-Bag-Or-Gift-p-33936798.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_33936798%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/04/20/24/1713591708424b11d7da868ee5d03cc6b4bf2a71b2_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 99,
+        "product_code": "441324420",
+        "title": "حقيبة كتف مزينة بالفيونكة والسلسلة المطوية",
+        "price": "21.00",
+        "product_link": "https://ar.shein.com/Bow-Decor-Pleated-Chain-Shoulder-Bag-p-441324420.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_441324420%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/04/10/9f/177582165082b86274e4f6417d1ec59e750541f1ee_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 100,
+        "product_code": "56508345",
+        "title": "حقيبة كتف صغيرة بلون أحادي بسيطة، مناسبة للتسوق والمحافظ والنساء الشابات وطلاب الجامعات والموظفين. مناسبة للمكاتب والجامعات والعمل والأعمال والتنقل والأنشطة الخارجية والسفر والخروجات والأعياد الجديدة، باللون الوردي",
+        "price": "12.00",
+        "product_link": "https://ar.shein.com/Mini-Fashion-Solid-Color-Simple-Flip-Shoulder-Bag-Suitable-For-Shopping-Wallets-Shopping-Young-Women-College-Students-Newcomers-White-Collar-Workers-They-Are-Very-Suitable-For-Offices-Universities-Work-Business-Commuting-Outdoor-Activities-Travel-And-Outings-New-Year-Pink-Old-Money-p-56508345.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_56508345%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2025/02/13/be/17394270053c2dc3674ad5ea1b0005bb6f034e169d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 101,
+        "product_code": "238283416",
+        "title": "%2-\nحقيبة كروس بودي جديدة من الجينز الناعم بتصميم كاجوال أنيق متعدد الطبقات مع جيوب متعددة، متعددة الاستخدامات، مناسبة للعمل والتسوق والسفر.",
+        "price": "42.21",
+        "product_link": "https://ar.shein.com/New-Casual-Chic-Soft-Jeans-Multi-Layer-Crossbody-Bag-With-Multiple-Pockets-Versatile-Suitable-For-Work-Shopping-And-Traveling-p-238283416.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_238283416%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/05/a9/17806470622486172c3bb298dab142f52b5d5817b0_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 102,
+        "product_code": "94106958",
+        "title": "حقيبة كتف خفيفة الوزن للنساء مزينة بعقدة ذات لون أحادي",
+        "price": "15.00",
+        "product_link": "https://ar.shein.com/Women-s-Solid-Color-Bow-Decor-Lightweight-Shoulder-Bag-p-94106958.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_94106958%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2025/06/05/5e/17491020309bb0080084f93c79efdb5cdbc5d675cf_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 103,
+        "product_code": "12888543",
+        "title": "%3-\nحقيبة يد مطوية أنيقة باللون الموحد للسيدات، حقيبة كتف للسيدات باللون الموحد بتصميم السحاب والهلال",
+        "price": "20.40\n\n30+. تم بيع",
+        "product_link": "https://ar.shein.com/Mini-Solid-Color-Women-Pleated-Handbag-Women-Solid-Color-Cloud-Crescent-Shoulder-Bag-New-Year-Cream-Bag-White-Bag-p-12888543.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_12888543%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/07/6f/178083329485d5b4e4b24bd241eeb7fcb9a09639a9_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 104,
+        "product_code": "474480774",
+        "title": "حقيبة رياضية للتنقل بنمط معين بسيط وأنيق، حقيبة مكياج، حقيبة هاتف، حقيبة كاميرا، حقيبة كتف للسيدات، حقيبة مربعة صغيرة، جراب هاتف، هدية شخصية، حقيبة جامعة، محفظة، محفظة عملات معدنية نسائية جميلة، حقيبة عطلة نهاية الأسبوع، حقيبة كروس بودي للسيدات، حقيبة قابلة للطي خفيفة الوزن، حقيبة جري، حقيبة سفر، هدية عيد الحب مخصصة، محفظة، حقيبة كروس بودي، محفظة بطراز الجامعة، محفظة عملات معدنية، حقيبة أحمر شفاه، جراب مفاتيح للطلاب",
+        "price": "18.00",
+        "product_link": "https://ar.shein.com/Fashionable-Minimalist-Casual-Rhombus-Pattern-Commuter-Sports-Bag-Makeup-Bag-Phone-Bag-Camera-Bag-Women-s-Shoulder-Bag-Small-Square-Bag-Phone-Pouch-Personalized-Gift-Campus-Bag-Wallet-Cute-Women-s-Coin-Purse-Weekend-Bag-Women-s-Crossbody-Bag-Lightweight-Foldable-Bag-Running-Bag-Luggage-Valentine-s-Day-Customized-Gift-Wallet-Crossbody-Bag-Campus-Style-Wallet-Coin-Purse-Lipstick-Bag-Student-Key-Pouch-p-474480774.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_474480774%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/12/f4/1781245147f11ee7dccbf04fac39f14704ef5a844d_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 105,
+        "product_code": "31728517",
+        "title": "حقيبة كتف عصرية بسيطة ، حقيبة كتف نسائية للسفر والزيارة والتصوير والاستخدام اليومي مع مساحة لتخزين الهاتف المحمول",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/Fashion-Minimalist-Shoulder-Bag-Women-s-Shoulder-Bag-For-Traveling-Visiting-Photography-Daily-With-Storage-For-Cellphone-p-31728517.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_31728517%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/03/16/f8/17105887267070a37cd0b8a49b81efde42eeb5749f_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 106,
+        "product_code": "514405166",
+        "title": "%12-\nحقيبة يد نسائية فرنسية عتيقة جديدة 2026، حقيبة مربعة صغيرة متعددة الاستخدامات، حقيبة كروس بودي كاجوال موضة صيفية",
+        "price": "56.04",
+        "product_link": "https://ar.shein.com/2026-New-French-Niche-Vintage-Handbag-For-Women-Versatile-Small-Square-Bag-Summer-Fashion-Casual-Crossbody-Bag-p-514405166.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_514405166%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/06/24/6d/1782291688b1d10e6573ed095d5953283f0d9c2b7e_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 107,
+        "product_code": "436785107",
+        "title": "حقيبة كاجوال متعددة الاستخدامات بألوان متباينة للنساء",
+        "price": "43.00\n\n10+. تم بيع",
+        "product_link": "https://ar.shein.com/Fashionable-Versatile-Contrast-Color-Casual-Tote-Bag-For-Women-p-436785107.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_436785107%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/03/23/01/17742548416c1a4863dd312d8751263f457e79c522_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 108,
+        "product_code": "27932635",
+        "title": "حقيبة صدر/ خصر للنساء مطبوعة بالفراولة البيضاء، حقيبة قماش للسفر محتوية على جيوب بسوستة وحقيبة صغيرة للهاتف المحمول، حقيبة خصر عصرية وجذابة للمدرسة في أول يوم دراسيرمضان",
+        "price": "14.00",
+        "product_link": "https://ar.shein.com/White-Strawberry-Printed-Women-s-Chest-Bag-Waist-Bag-Coin-Purse-Canvas-Travel-Bag-With-Zipper-Pockets-And-Small-Mobile-Phone-Bag-Preppy-Bum-Bag-For-The-First-Day-Of-School-Cute-Strawberry-Purse-Valentines-Strawberry-p-27932635.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_27932635%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/12/17/41/1702785676930675ff1c1fa4ffd5fb8627e103f57a_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 109,
+        "product_code": "15095257",
+        "title": "حقيبة مبتكرة صغير مع تعليقة حقيبة بتصميم سحابة سستة جلد صناعي",
+        "price": "46.00",
+        "product_link": "https://ar.shein.com/Small-Novelty-Bag-With-Bag-Charm-Cloud-Design-Zipper-PU-p-15095257.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_15095257%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2023/06/11/1686461640edce176a7e91ac4bae149d3e97628722_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 110,
+        "product_code": "41106835",
+        "title": "حقيبة كتف أنيقة على شكل هلال، حقيبة كاجوال ذات لون أحادي للنساء",
+        "price": "25.00\n\n50+. تم بيع",
+        "product_link": "https://ar.shein.com/Elegant-Crescent-Underarm-Shoulder-Bag-Women-s-Fashion-Casual-Solid-Color-Underarm-Bag-p-41106835.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_41106835%7C0-2",
+        "image_url": "//img.ltwebstatic.com/images3_spmp/2024/08/17/bb/17238995737a14c4cc8b4916dbb8f27d9438744c1c_thumbnail_405x552.jpg"
+    },
+    {
+        "id": 111,
+        "product_code": "36767746",
+        "title": "حقيبة كتف مربعة من الجلد الصناعي PU بتصميم الفيونكة، مناسبة للنساء في الحياة اليومية، التسوق، السفر، التجمعات، ليلة البنات، المهرجانات، هدايا عيد الميلاد والحفلات. عيد الحب، محفظة نسائية عصرية بتصميم الفيونكة",
+        "price": "23.00",
+        "product_link": "https://ar.shein.com/Solid-Color-PU-Leather-Patchwork-Bow-Design-Flap-Shoulder-Crossbody-Square-Bag-Suitable-For-Women-s-Daily-Commute-Shopping-Travel-Gathering-p-36767746.html?src_identifier=st%3D5%60sc%3D%D8%B4%D9%86%D8%B7%20%D9%83%D8%A7%D8%AC%D9%88%D8%A7%D9%84%20%D8%B5%D8%BA%D9%8A%D8%B1%D9%87%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_home1783092183114&mallCode=1&pageListType=4&detailBusinessFrom=0-1_36767746%7C0-2",
+        "image_url": "//img.ltwebstatic.com/v4/j/spmp/2026/02/22/b9/1771737403e0187403d07a74f754dd5515146501cb_thumbnail_405x552.jpg"
+    }
+];
+// 2. دالة لحقن وعرض المنتجات ديناميكياً داخل الجريد
+    const productGrid = document.getElementById('productGrid');
+    // غير القيم دي براحتك حسب سعر اليوم والعمولة الحاببها
+const EXCHANGE_RATE = 1200;     // سعر الصرف اليوم (مثلاً الدولار أو الريال مقابل العملة المحلية)
+const FIXED_COMMISSION = 3;   // العمولة الثابتة التي تريد زيادتها لكل منتج
+  productsData.forEach(product => {
+    // 1. تنظيف وفصل السعر عن عدد المبيعات كالمعتاد
+    const priceInfo = product.price.split('\n\n');
+    const soldCount = priceInfo[1] ? priceInfo[1] : '';
+
+    // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+      // 2. استخراج الرقم الصافي من السعر (يمسح الرمز الغريب ويحول النص إلى رقم حقيقي)
+    const originalPrice = parseFloat(priceInfo[0].replace('', '').trim());
+
+    // === الكود الصغير تضيفه هنا بالظبط ===
+    let finalBasePrice = originalPrice *1.45;
+    if (/^%\d+-/.test(product.title.trim())) {
+        finalBasePrice = originalPrice * 1.45;
+    }
+    const localPriceNumber = finalBasePrice* 1600;
+    // ===================================
+    
+    // 4. تنسيق السعر النهائي ليظهر بشكل أنيق (مثال: ج.س 13,800) بدون كسور
+    const cleanPrice = "ج.س " + Math.round(localPriceNumber).toLocaleString('en-US');
+    
+    // الآن المتغير cleanPrice أصبح يحمل السعر المحلي الجديد وجاهز للعرض في الكارت...
+      let imgUrl = product.image_url.trim().startsWith('//') ? 'https:' + product.image_url.trim() : product.image_url;
+      
+      
+      
+      const cardHTML = `
+            <div class="product-card"
+            
+                 data-title="${product.title}"
+                 data-price="${cleanPrice}"
+                 data-sold="${soldCount}"
+                 data-img="${product.image_url}"
+                  data-link="${product.product_link}"
+                  data-code="${product.product_code}"
+                  
+                  >
+
+
+                 
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${product.title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <div class="rating"></div>
+                    <div class="price-row">
+                        <span class="price">${cleanPrice}</span>
+                        ${soldCount ? `<span class="sold-count">${soldCount}</span>` : ''}
+                    </div>
+                
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // --- أكواد القوائم والفلتر الأصلية ---
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // --- كود السلايدر الأصلي ---
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // --- كود النافذة المنبثقة (MODAL JAVASCRIPT) بعد حقن العناصر المضافة حديثاً ---
+    const modal = document.getElementById("productModal");
+    const closeBtn = document.querySelector(".close-modal");
+    const productCards = document.querySelectorAll(".product-card");
+
+    productCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const title = this.getAttribute("data-title");
+            const price = this.getAttribute("data-price");
+            const rawImg = this.getAttribute("data-img"); 
+            const code = this.getAttribute("data-code"); 
+            
+        // 2. جلب وتصحيح رابط شي إن للمنتج (الجديد)
+        const rawLink = this.getAttribute("data-link");
+        const sheinLink = rawLink && rawLink.trim().startsWith('//') ? 'https:' + rawLink.trim() : rawLink;
+
+        // 2. فحص وتعديل الرابط طائراً (السطر السحري)
+        const img = rawImg.trim().startsWith('//') ? 'https:' + rawImg.trim() : rawImg;
+            const sold = this.getAttribute("data-sold");
+            
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalPrice").innerText = price;
+            document.getElementById("modalImg").src = img;
+            document.getElementById("modalSold").innerText = sold;
+                const whatsappMessage = `الاسم: ${title}\n
+                السعر: ${price}\n
+                 رابط الصورة : ${img}\n
+                رابط المنتج : ${rawLink}\n
+                كود المنتج : ${code}`;
+
+            document.getElementById("btn").href = "https://Wa.me/249128039027?text=" + encodeURIComponent(whatsappMessage);
+            document.getElementById("sheinBtn").href = sheinLink;
+            modal.style.display = "block";
+        });
+    });
+
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
