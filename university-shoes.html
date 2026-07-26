@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-321KZ3G55X"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-321KZ3G55X');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر نوار | جامعي -  جزم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Cairo|Tajawal&display=swap" rel="stylesheet" >
+  
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --text-main: #ff99af;
+            --text-muted: #666;
+            --accent-red: #ff4c4c;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Cairo, 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Mobile Container Simulation */
+        .app-container {
+            width: 100%;
+            max-width: 414px;
+            height: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- HEADER --- */
+        header { background: #fff; padding: 10px 15px 0; z-index: 10; width:100%;}
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; direction: rtl;}
+        .header-top i { font-size: 20px; color: var(--text-main); }
+        .search-bar { flex: 1; display: flex; align-items: center; background: var(--bg-color); border-radius: 20px; padding: 8px 15px; border: 1px solid var(--border-color); direction: rtl;}
+        .search-bar input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-size: 14px; direction: rtl; }
+    
+        .top-nav { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 10px; scrollbar-width: none; direction: rtl;}
+        .top-nav::-webkit-scrollbar { display: none; }
+        .top-nav span, .top-nav a { text-decoration: none; font-size: 15px; color: var(--text-muted); margin-right:5px; white-space: nowrap; cursor: pointer; padding-bottom: 5px; font-weight: 600; }
+        .top-nav span.active { color: var(--text-main); border-bottom: 2px solid var(--text-main); }
+   
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .main-content { flex: 1; overflow-y: auto; background-color: var(--bg-color); padding-bottom: 70px; }
+
+        /* تعديل الـ Filters لتدعم السكرول اليمين والشمال وتظهر بشكل منسق */
+        .filters {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 15px;
+            margin: 0;
+            box-sizing: border-box;
+            direction: rtl;
+       }
+       
+        .filters::-webkit-scrollbar {
+           display: none;  /* إخفاء سكرول بار في كروم وسفاري */
+        }
+        .filter-btn {
+            padding: 6px 20px;
+            border-radius: 20px;
+            background: #fff;
+            border: 1px solid #fff;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .filter-btn.active { background: #f1718c; color: #fff; border-color: #f1718c; }
+
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; margin-top: 5%; direction: rtl;}
+      
+        .product-card { background: #ffffff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s; }
+        .product-card:active { transform: scale(0.98); }
+
+        .product-img-wrapper { position: relative; padding-top: 130%; }
+        .product-img-wrapper img { position: absolute; top: 0; right: 0; width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .product-title { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .discount-tag { background: #ffebeb; color: var(--accent-red); font-size: 11px; padding: 2px 4px; border-radius: 2px; font-weight: bold; display: inline-block; width: fit-content; }
+      
+        /* New CSS for prices and tags */
+        .price-row { display: flex; align-items: center; justify-content: space-between; gap: 2px; }
+        .price { font-size: 15px; font-weight: bold; color: var(--accent-red); }
+        .old-price { text-decoration: line-through; color: #999; font-size: 11px; margin-right: 5px; }
+        .home-belt { background: #F93A00; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; display: inline-block; width: fit-content; margin-bottom: 5px; }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 10px 0 15px; border-top: 1px solid var(--border-color); z-index: 10; direction: ltr;}
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); cursor: pointer; font-size: 10px; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--text-main); font-weight: bold; }
+
+        /* --- السلايدر --- */
+        .mySlides { margin-top: 5%; display: none; }
+        .fade { animation-name: fade; animation-duration: 1.5s; }
+        @keyframes fade { from {opacity: .4} to {opacity: 1} }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none;
+            position: absolute;
+            z-index: 100;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+            direction: rtl;
+        }
+
+        .modal-content {
+            background-color: white;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            animation: slideUp 0.3s ease-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-modal, .close-order-modal {
+            position: absolute; left: 20px; top: 15px;
+            font-size: 24px; color: #999; cursor: pointer;
+            background: #f4f4f4; border-radius: 50%;
+            width: 30px; height: 30px; display: flex;
+            align-items: center; justify-content: center;
+        }
+
+        #modalImg { width: 100%; max-height: 250px; object-fit: contain; border-radius: 10px; }
+      
+        /* Modal Gallery */
+        .modal-images-gallery { display: flex; gap: 10px; overflow-x: auto; margin-top: 10px; padding-bottom: 5px; }
+        .modal-images-gallery::-webkit-scrollbar { height: 5px; }
+        .modal-images-gallery::-webkit-scrollbar-thumb { background: #ccc; border-radius: 5px; }
+        .modal-images-gallery img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid var(--border-color); }
+        .modal-images-gallery img.active-img { border: 2px solid var(--accent-red); }
+
+        #modalTitle { font-size: 14px; color: #333; line-height: 1.4; margin-top: 10px; text-align: right;}
+        .modal-price-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0;}
+        .modal-price { font-size: 22px; font-weight: bold; color: var(--accent-red); }
+      
+        .add-to-cart-btn {
+            background: var(--text-main); color: white; border: none;
+            padding: 15px; border-radius: 25px; font-size: 16px;
+            font-weight: bold; cursor: pointer; width: 100%;
+            margin-top: 10px;
+        }
+        .add-to-cart-btn a {
+            color:#fff;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+        .sheinBtn { background-color: #000; }
+
+        /* نموذج الطلب */
+        .order-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .order-input:focus {
+            border-color: var(--text-main);
+        }
+        .note-text {
+            font-size: 12px;
+            color: var(--accent-red);
+            text-align: right;
+            margin-top: 10px;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+    </style>
+
+    <script src="price.js">
+
+
+    </script>
+</head>
+<body>
+
+<div class="app-container">
+    <!--
+  <div id="header"></div>
+
+  <script>
+
+    fetch('header.html')
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('header').innerHTML = data;
+  })
+  .catch(error => console.error('Error loading header:', error));
+  </script> -->
+  
+    <header>
+        <div class="header-top">
+            <div class="search-bar">
+                <i class="fas fa-search" style="color: #999;"></i>
+                <input type="text" placeholder="بحث...">
+                <i class="fas fa-camera" style="color: #999;"></i>
+            </div>
+        </div>
+         <div class="top-nav" id="topNav">
+            <span>الكل</span>
+            <span > <a href="meckup-tools.html">تجميل</a></span>
+            <span> <a href="index.html">حقائب</a> </span>
+            <span > <a href="accsesrioes - jumlaa.html">إكسسوارات</a> </span>
+            <span class="active"  > <a href="accsesrioes - jumlaa.html">جامعي</a> </span>
+
+            <span ><a href="#">نساء</a></span>
+        </div>
+    </header>
+
+    <div class="main-content">
+      
+        <div class='mySlides fade' style="display: block;">
+            <img src='first banner.jpg' style='width:100%' alt="ad 1">
+        </div>
+       
+        <div class='mySlides fade'>
+            <img src='university.png' style='width:100%' alt="ad 3">
+        </div>
+        <div class='mySlides fade'>
+            <img src='university1.png' style='width:100%' alt="ad 3">
+        </div>
+
+        <div class="filters">
+           <a href="university-terah.html"><button class="filter-btn "> طرح </button></a>
+           <a href="university-bagsholder.html"><button class="filter-btn  "> حقائب كتف </button></a>
+           <a href="university-zahr.html"><button class="filter-btn "> حقائب ظهر </button></a>
+           <a href="university-topclothes.html"> <button class="filter-btn "> ملابس علوية</button></a>
+           <a href="university-tras.html"><button class="filter-btn ">   بناطلين </button></a>
+            <a href="university-skirt.html">   <button class="filter-btn ">  سكيرتات </button></a>
+            <a href="university-shoes.html">   <button class="filter-btn active ">  جزم </button></a>
+            <a href="university-glasses.html">   <button class="filter-btn ">  فريمات </button></a>
+            <a href="university-joraeb.html">   <button class="filter-btn ">  جوارب </button></a>
+            
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+      
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+        <div class="nav-item active"><i class="fas fa-home"></i><span>Shop</span></div>
+        <div class="nav-item"><i class="fas fa-search"></i><span>Category</span></div>
+        <div class="nav-item"><i class="fas fa-location-arrow"></i><span>Trends</span></div>
+        <div class="nav-item"><i class="fas fa-shopping-cart"></i><span>Cart</span></div>
+        <div class="nav-item"><i class="far fa-user"></i><span>Me</span></div>
+    </nav>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal"><i class="fas fa-times"></i></span>
+          
+            <img id="modalImg" src="" alt="Product">
+            <div id="modalGallery" class="modal-images-gallery"></div>
+          
+            <h3 id="modalTitle"></h3>
+          
+            <div class="modal-price-row">
+                <div>
+                    <span id="modalPrice" class="modal-price"></span>
+                    <span id="modalOldPrice" class="old-price"></span>
+                </div>
+                <span id="modalDiscount" class="discount-tag" style="display:none;"></span>
+            </div>
+          
+            <button class="add-to-cart-btn sheinBtn"> <a id="sheinBtn" href="" target="_blank">عرض المنتج في شي إن</a></button>
+            <button class="add-to-cart-btn" id="openOrderModalBtn">طلب المنتج</button>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-order-modal"><i class="fas fa-times"></i></span>
+            <h3 style="text-align: right; margin-bottom: 10px; color: #333;">بيانات الطلب</h3>
+           
+            <input type="text" id="customerName" class="order-input" placeholder="الاسم" required>
+            <input type="text" id="customerState" class="order-input" placeholder="الولاية" required>
+            <input type="tel" id="customerPhone" class="order-input" placeholder="رقم التلفون" required>
+           
+            <p class="note-text">ملاحظة: قد يكون هناك زيادة او نقصان في السعر الموضح بحسب اختلاف المقاس او عدد القطع.</p>
+           
+            <button class="add-to-cart-btn" id="confirmOrderBtn">تأكيد وإرسال الطلب</button>
+        </div>
+    </div>
+
+</div>
+<script src="u-shoes.js">
+</script>
+<script>
+  
+  const productGrid = document.getElementById('productGrid');
+    let currentSelectedProduct = {};
+
+    // حقن المنتجات
+    productsData.forEach(product => {
+        let salePriceUSD = parseFloat(product.salePrice.usdAmount);
+        const retailPriceUSD = parseFloat(product.retailPrice.usdAmount);
+
+        const discountPrice = parseFloat(product.discountPrice.usdAmount);
+      
+// التحقق من أن اسم المنتج يحتوي على علامة سالب (-) يتبعها رقم أو نسبة مئوية ورقم
+                    // التعبير الجديد يبحث عن الرقم مع علامة السالب والنسبة المئوية بأي ترتيب كان (%5- أو -%5)
+                const discountRegex = /(%?\d+-)|(-%?\d+)/;
+                const hasDiscount = discountRegex.test(product.goods_name);
+        if(salePriceUSD < 15){
+                salePriceUSD +=4;
+            }else if(salePriceUSD < 10){
+                salePriceUSD +=10;
+            }
+
+                // تحديد السعر بناءً على وجود الخصم في الاسم
+                const targetUsdAmount = hasDiscount ?salePriceUSD+3 : salePriceUSD;
+
+                // تمرير السعر النهائي للدالة لحسابه
+                const cleanPrice = getCalculatedPrice(targetUsdAmount);
+        // تحويل قيم التجزئة والخصم إلى أرقام
+            const retailAmount = parseFloat(product.retailPrice.usdAmount);
+            const discountAmount = parseFloat(product.discountPrice.usdAmount);
+
+            // جمع القيمتين معاً
+            const targetOldPrice = retailAmount + discountAmount;
+
+            // تمرير المجموع كـنص (String) إلى الدالة
+            const oldPriceLocal = getCalculatedPrice(targetOldPrice.toString());
+
+        let imgUrl = product.goods_img.startsWith('//') ? 'https:' + product.goods_img : product.goods_img;
+        let title = product.goods_name;
+        let discount = product.unit_discount ? `%${product.unit_discount}-` : "";
+        let extraImages = product.detail_image ? JSON.stringify(product.detail_image) : "[]";
+        let productLink = `https://ar.shein.com/pd-${product.goods_id}.html`;
+
+        const cardHTML = `
+            <div class="product-card"
+                 data-title="${title}"
+                 data-price="${cleanPrice}"
+                 data-old-price="${oldPriceLocal}"
+                 data-discount="${discount}"
+                 data-img="${imgUrl}"
+                 data-images='${extraImages}'
+                 data-link="${productLink}"
+                 data-code="${product.goods_id}">
+               
+                <div class="product-img-wrapper">
+                    <img src="${imgUrl}" alt="${title}">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${title}</span>
+                    <div class="price-row">
+                        <div>
+                            <span class="price">${cleanPrice}</span><br>
+                            ${salePriceUSD < retailPriceUSD ? `<span class="old-price">${oldPriceLocal}</span>` : ''}
+                        </div>
+                        ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+        productGrid.insertAdjacentHTML('beforeend', cardHTML);
+    });
+
+    // أكواد تفاعل الأزرار (القوائم العلوية)
+    const topNavSpans = document.querySelectorAll('#topNav span');
+    topNavSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            document.querySelector('#topNav span.active').classList.remove('active');
+            span.classList.add('active');
+        });
+    });
+
+    // تفعيل تفاعل أزرار الفلاتر الجديدة بعد الإضافة والتمرير
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    const bottomNavItems = document.querySelectorAll('#bottomNav .nav-item');
+    bottomNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelector('#bottomNav .nav-item.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+
+    // السلايدر
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        if(slides.length === 0) return;
+        for (i = 0; i < slides.length; i++) { slides[i].style.display = "none"; }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000);
+    }
+
+    // النوافذ المنبثقة
+    const productModal = document.getElementById("productModal");
+    const orderModal = document.getElementById("orderModal");
+    const closeModalBtn = document.querySelector(".close-modal");
+    const closeOrderModalBtn = document.querySelector(".close-order-modal");
+
+    document.querySelectorAll(".product-card").forEach(card => {
+        card.addEventListener('click', function() {
+            currentSelectedProduct = {
+                title: this.getAttribute("data-title"),
+                price: this.getAttribute("data-price"),
+                oldPrice: this.getAttribute("data-old-price"),
+                discount: this.getAttribute("data-discount"),
+                img: this.getAttribute("data-img"),
+                code: this.getAttribute("data-code"),
+                link: this.getAttribute("data-link")
+            };
+            const imagesArr = JSON.parse(this.getAttribute("data-images"));
+
+            document.getElementById("modalTitle").innerText = currentSelectedProduct.title;
+            document.getElementById("modalPrice").innerText = currentSelectedProduct.price;
+            document.getElementById("modalImg").src = currentSelectedProduct.img;
+          
+            const oldPriceEl = document.getElementById("modalOldPrice");
+            const discountEl = document.getElementById("modalDiscount");
+          
+            if (currentSelectedProduct.price !== currentSelectedProduct.oldPrice) {
+                oldPriceEl.innerText = currentSelectedProduct.oldPrice;
+                oldPriceEl.style.display = "inline";
+            } else {
+                oldPriceEl.style.display = "none";
+            }
+
+            if (currentSelectedProduct.discount) {
+                discountEl.innerText = currentSelectedProduct.discount;
+                discountEl.style.display = "inline-block";
+            } else {
+                discountEl.style.display = "none";
+            }
+
+            const gallery = document.getElementById("modalGallery");
+            gallery.innerHTML = "";
+            const allImages = [currentSelectedProduct.img, ...imagesArr.map(img => img.startsWith('//') ? 'https:' + img : img)];
+            const uniqueImages = [...new Set(allImages)];
+
+            uniqueImages.forEach((imgUrl, index) => {
+                const imgEl = document.createElement("img");
+                imgEl.src = imgUrl;
+                if (index === 0) imgEl.classList.add("active-img");
+              
+                imgEl.onclick = function() {
+                    document.getElementById("modalImg").src = this.src;
+                    document.querySelectorAll(".modal-images-gallery img").forEach(el => el.classList.remove("active-img"));
+                    this.classList.add("active-img");
+                };
+                gallery.appendChild(imgEl);
+            });
+
+            document.getElementById("sheinBtn").href = currentSelectedProduct.link;
+            productModal.style.display = "block";
+        });
+    });
+
+    closeModalBtn.onclick = function() { productModal.style.display = "none"; }
+    closeOrderModalBtn.onclick = function() { orderModal.style.display = "none"; }
+
+    document.getElementById("openOrderModalBtn").onclick = function() {
+        productModal.style.display = "none";
+        orderModal.style.display = "block";
+    };
+
+    document.getElementById("confirmOrderBtn").onclick = function() {
+        const name = document.getElementById("customerName").value.trim();
+        const state = document.getElementById("customerState").value.trim();
+        const phone = document.getElementById("customerPhone").value.trim();
+
+        if(!name || !state || !phone) {
+            alert("الرجاء تعبئة جميع الحقول قبل إرسال الطلب.");
+            return;
+        }
+
+        const msg = `طلب جديد:\nالاسم: ${name}\nالولاية: ${state}\nرقم التلفون: ${phone}\n\nتفاصيل المنتج:\nالاسم: ${currentSelectedProduct.title}\nالسعر: ${currentSelectedProduct.price}\n(السعر قبل الخصم: ${currentSelectedProduct.oldPrice})\nرابط المنتج: ${currentSelectedProduct.link}\nكود المنتج: ${currentSelectedProduct.code}`;
+       
+        const whatsappUrl = "https://Wa.me/249909082242?text=" + encodeURIComponent(msg);
+        window.open(whatsappUrl, "_blank");
+
+        orderModal.style.display = "none";
+        document.getElementById("customerName").value = "";
+        document.getElementById("customerState").value = "";
+        document.getElementById("customerPhone").value = "";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == productModal) { productModal.style.display = "none"; }
+        if (event.target == orderModal) { orderModal.style.display = "none"; }
+    }
+</script>
+
+</body>
+</html>
